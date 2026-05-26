@@ -1,0 +1,54 @@
+# @package _global_
+dataset_name: clinical
+dataset_dir: "datasets/sepsis_clinical_28"
+hf_repo: "hellxhell/sepsis-clinical-28"
+sepsis_boost: 5.0
+sampler_target: outcome
+subset_pct: 1.0
+
+module:
+  _target_: spectra.modules.clinical.ClinicalSPECTRAModule
+  engine:
+    _target_: spectra.engine.optimizers.StandardEngine
+
+model:
+  backbone: shared_trunk
+  input_dim: 28
+  d_model: 512
+  hidden_layers: 4
+  dropout: 0.2
+
+tasks:
+  - name: outcome
+    type: classification
+    loss: bce
+    num_classes: 1
+    manifold: expert
+    weight: 1.0
+    pos_weight: 3.0
+
+  - name: phase
+    type: classification
+    loss: cross_entropy
+    num_classes: 3
+    manifold: planner
+    weight: 1.0
+
+train:
+  save_ckpt: false
+  epochs: 100
+  batch_size: 64
+  lr: 0.00005
+  min_lr: 0.000001
+  warmup_steps: 300
+  weight_decay: 0.0001
+  grad_clip: 1.0
+  precision: 32
+  log_every_n_steps: 10
+
+  checkpoint_every_minutes: 0
+  selection_metric: val/total_loss
+  selection_mode: min
+  early_stop: true
+  early_stop_patience: 3
+  early_stop_min_delta: 0.001

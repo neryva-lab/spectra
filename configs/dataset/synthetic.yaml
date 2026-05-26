@@ -1,0 +1,74 @@
+# @package _global_
+dataset_name: synthetic
+
+module:
+  _target_: spectra.modules.synthetic.SyntheticSPECTRAModule
+  engine:
+    _target_: spectra.engine.optimizers.StandardEngine
+
+model:
+  backbone: shared_trunk
+  input_dim: 20
+  d_model: 128
+  hidden_layers: 3
+  n_heads: 8
+  dropout: 0.1
+
+tasks:
+  - name: mse_high
+    type: regression
+    loss: mse
+    manifold: planner
+
+  - name: mse_med
+    type: regression
+    loss: mse
+    manifold: planner
+
+  - name: mse_low
+    type: regression
+    loss: mse
+    manifold: planner
+
+  - name: bce_0
+    type: classification
+    loss: bce
+    manifold: expert
+
+  - name: bce_1
+    type: classification
+    loss: bce
+    manifold: expert
+
+  - name: bce_2
+    type: classification
+    loss: bce
+    manifold: expert
+
+  - name: mse_aux
+    type: regression
+    loss: mse
+    manifold: planner
+
+train:
+  save_ckpt: false
+  epochs: 100
+  batch_size: 256
+  lr: 0.001
+  min_lr: 0.00001
+  warmup_steps: 200
+  weight_decay: 0.0001
+  grad_clip: 1.0
+  precision: 32
+  num_workers: auto
+  log_every_n_steps: 50
+  checkpoint_every_minutes: 0
+  selection_metric: val/total_loss
+  selection_mode: min
+  early_stop: true
+  early_stop_patience: 20
+  early_stop_min_delta: 0.0001
+
+data:
+  n_train: 20000
+  n_val: 5000

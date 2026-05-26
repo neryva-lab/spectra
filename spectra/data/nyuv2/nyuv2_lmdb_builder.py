@@ -1,0 +1,506 @@
+"""
+NYUv2 LMDB data preparation pipeline.
+
+This module streams the Hugging Face dataset `tanganke/nyuv2`, writes train and
+validation splits to LMDB, records metadata, and optionally removes the staging
+cache after generation.
+"""
+
+import os
+import sys
+import json
+import lmdb
+import shutil
+import logging
+import numpy as np
+import torch
+from pathlib import Path
+from datasets import load_dataset
+from tqdm.auto import tqdm
+from typing import Dict, Any, List, Optional, Tuple
+
+# Keep Hugging Face cache files inside the project-local staging directory.
+_PROJECT_ROOT = Path(__file__).parent.parent.parent.parent
+STAGING_DIR = _PROJECT_ROOT / "data" / "staging_nyuv2"
+os.environ["HF_HOME"] = str(STAGING_DIR.absolute())
+os.environ["HF_DATASETS_CACHE"] = str(STAGING_DIR.absolute())
+os.environ["HUGGINGFACE_HUB_CACHE"] = str(STAGING_DIR.absolute())
+os.environ["HF_HUB_CACHE"] = str(STAGING_DIR.absolute())
+
+DATASET_REPO = "tanganke/nyuv2"
+OUTPUT_DIR = _PROJECT_ROOT / "datasets" / "nyuv2_lmdb"
+LMDB_MAP_SIZE = 5 * 1024 * 1024 * 1024  # 5 GB
+COMMIT_FREQ = 100
+MIN_FREE_SPACE_GB = 3.0
+NUM_CLASSES = 13
+IGNORE_INDEX = 255
+CLEANUP_STAGING = True  # Toggle to False to keep staged data for future runs
+
+logging.basicConfig(level=logging.INFO, format="%(asctime)s | %(levelname)s | %(message)s")
+logger = logging.getLogger("spectra.data.nyuv2.lmdb")
+
+class WelfordSpatialEngine:
+    """Online statistics for spatial feature maps (Mean/Std in FP64)."""
+    def __init__(self, channels: int):
+        self.n = 0
+        self.mean = np.zeros(channels, dtype=np.float64)
+        self.m2 = np.zeros(channels, dtype=np.float64)
+    
+    def update(self, x_hwc: np.ndarray):
+        """Update with an [H, W, C] array using vectorized Welford's."""
+        flat = x_hwc.reshape(-1, x_hwc.shape[-1]).astype(np.float64)
+        m = flat.shape[0]
+        if m == 0: return
+
+        batch_mean = np.mean(flat, axis=0)
+        batch_m2 = np.sum((flat - batch_mean)**2, axis=0)
+
+        n_new = self.n + m
+        delta = batch_mean - self.mean
+        
+        self.mean = self.mean + delta * (m / n_new)
+        self.m2 = self.m2 + batch_m2 + (delta**2) * (self.n * m / n_new)
+        self.n = n_new
+            
+    def finalize(self) -> Tuple[np.ndarray, np.ndarray]:
+        if self.n < 2:
+            return self.mean.astype(np.float32), np.ones_like(self.mean, dtype=np.float32)
+        variance = self.m2 / (self.n - 1)
+        std = np.sqrt(variance)
+        std[std < 1e-6] = 1.0 
+        return self.mean.astype(np.float32), std.astype(np.float32)
+
+def ensure_contiguous_hwc(array: np.ndarray) -> np.ndarray:
+    """Aligns array to [H, W, C] format. Transposes if [C, H, W] is detected."""
+    _CHANNEL_SIZES = {1, 3, 4}
+    if array.ndim == 3:
+        # If last dim is a typical channel count, assume already HWC
+        if array.shape[-1] in _CHANNEL_SIZES:
+            pass  # Already [H, W, C]
+        # If first dim is a typical channel count AND last dim is NOT, assume CHW
+        elif array.shape[0] in _CHANNEL_SIZES and array.shape[-1] not in _CHANNEL_SIZES:
+            array = np.transpose(array, (1, 2, 0))
+        # Fallback: if first dim is small and last dim is large, likely CHW
+        elif array.shape[0] <= 4 and array.shape[0] < min(array.shape[1], array.shape[2]):
+            array = np.transpose(array, (1, 2, 0))
+    return np.ascontiguousarray(array)
+
+class PhysicsEngine:
+    """
+    Geometric & Numerical Validation Engine.
+    Handles depth clamping, normal normalization, and shape consistency.
+    """
+    DEPTH_MAX = 10.0
+    DEPTH_MIN = 0.0
+    EPS = 1e-8
+
+    @staticmethod
+    def validate_shape_consistency(img: np.ndarray, depth: np.ndarray, normal: np.ndarray, label: np.ndarray):
+        """Ensures all modalities share the same spatial dimensions."""
+        h, w = img.shape[:2]
+        if depth.shape[:2] != (h, w) or normal.shape[:2] != (h, w) or label.shape[:2] != (h, w):
+            raise ValueError(f"Shape Mismatch: img {(h, w)}, depth {depth.shape[:2]}, normal {normal.shape[:2]}, label {label.shape[:2]}")
+
+    @staticmethod
+    def process_depth(depth: np.ndarray) -> np.ndarray:
+        """Clamps depth to [0, 10] meters, handles NaNs, and ensures contiguous HWC."""
+        depth = np.nan_to_num(depth.astype(np.float32), nan=0.0, posinf=PhysicsEngine.DEPTH_MAX, neginf=PhysicsEngine.DEPTH_MIN)
+        depth = ensure_contiguous_hwc(depth)
+        if depth.ndim == 2: depth = depth[:, :, np.newaxis]
+        return np.clip(depth, PhysicsEngine.DEPTH_MIN, PhysicsEngine.DEPTH_MAX)
+
+    @staticmethod
+    def process_normal(normal: np.ndarray) -> np.ndarray:
+        """Enforces L2 unit-length normalization on surface normals and handles NaNs."""
+        normal = np.nan_to_num(normal.astype(np.float32), nan=0.0)
+        normal = ensure_contiguous_hwc(normal)
+        mag = np.linalg.norm(normal, axis=-1, keepdims=True)
+        safe_normal = np.where(mag > PhysicsEngine.EPS, normal / mag, 0.0)
+        return safe_normal.astype(np.float32)
+
+class StatsReservoir:
+    """Reservoir sampling for stable quantile estimation (P01/P99)."""
+    def __init__(self, channels: int, max_size: int = 1000):
+        self.max_size = max_size
+        self.reservoir = []
+        self.channels = channels
+        self.rng = np.random.default_rng(42)
+
+    def update(self, x_hwc: np.ndarray):
+        """Adds a random spatial subset to the reservoir with a memory compaction guard."""
+        flat = x_hwc.reshape(-1, self.channels)
+        n_points = max(1, len(flat) // 100)
+        # Quantile estimation does not require unique draws. Sampling with
+        # replacement is much cheaper than `np.random.choice(..., replace=False)`
+        # on large flattened images and keeps generation throughput higher.
+        indices = self.rng.integers(0, len(flat), size=n_points)
+        self.reservoir.append(flat[indices])
+
+        if len(self.reservoir) > self.max_size:
+            big_block = np.concatenate(self.reservoir, axis=0)
+            keep_idx = np.random.choice(len(big_block), 500_000, replace=False)
+            self.reservoir = [big_block[keep_idx]]
+
+    def get_quantiles(self) -> Tuple[List[float], List[float]]:
+        """Returns P01 and P99 per channel with NaN resilience."""
+        if not self.reservoir:
+            return [0.0] * self.channels, [1.0] * self.channels
+        
+        data = np.concatenate(self.reservoir, axis=0)
+        data = data[~np.isnan(data).any(axis=1)]
+        if len(data) == 0:
+            return [0.0] * self.channels, [1.0] * self.channels
+
+        p01 = np.percentile(data, 1, axis=0).tolist()
+        p99 = np.percentile(data, 99, axis=0).tolist()
+        return p01, p99
+
+class DiskGuard:
+    """Safety check for disk availability."""
+    @staticmethod
+    def check_space(min_gb: float = MIN_FREE_SPACE_GB, path: str = None):
+        check_path = Path(path or str(OUTPUT_DIR.parent.absolute()))
+        # Walk up to the nearest existing ancestor; disk_usage requires one.
+        while not check_path.exists():
+            check_path = check_path.parent
+        _, _, free = shutil.disk_usage(str(check_path))
+        free_gb = free / (1024**3)
+        if free_gb < min_gb:
+            logger.critical(f"DISK SPACE FAILURE: {free_gb:.1f}GB available, need {min_gb}GB.")
+            sys.exit(1)
+        logger.info(f"Disk Guard: {free_gb:.1f}GB available. Space check PASSED.")
+
+class QualityIngestionEngine:
+    def __init__(self):
+        DiskGuard.check_space(path=str(OUTPUT_DIR.parent.absolute()))
+        
+        OUTPUT_DIR.mkdir(parents=True, exist_ok=True)
+        self.envs = {}
+        self.indices = {}
+        
+        self.stats = {
+            "image": WelfordSpatialEngine(3),
+            "depth": WelfordSpatialEngine(1),
+            "normal": WelfordSpatialEngine(3)
+        }
+        self.reservoirs = {
+            "image": StatsReservoir(3),
+            "depth": StatsReservoir(1),
+            "normal": StatsReservoir(3)
+        }
+        self.total_written = 0
+
+    def _init_split_env(self, target_name: str):
+        """Initializes a specific LMDB environment for a split."""
+        split_dir = OUTPUT_DIR / target_name
+        split_dir.mkdir(parents=True, exist_ok=True)
+        lmdb_path = split_dir / "data.lmdb"
+        
+        # Keep writemap disabled for Windows filesystem stability.
+        env = lmdb.open(str(lmdb_path), map_size=LMDB_MAP_SIZE, subdir=False, 
+                        map_async=True, writemap=False, meminit=False,
+                        metasync=False, sync=False)
+        self.envs[target_name] = env
+        return env
+
+
+    def process_split(self, ds_split: Any, split_name: str, limit: Optional[int] = None):
+        """Process one source split and write it to the target LMDB split."""
+        sn_lower = split_name.lower()
+        if "train" in sn_lower:
+            target_name = "train"
+            total_estimate = 795
+        elif any(x in sn_lower for x in ["val", "test", "eval"]):
+            target_name = "val"
+            total_estimate = 654
+        else:
+            target_name = split_name
+            total_estimate = None
+            
+        logger.info(f"Stage 2: Streaming Split: {split_name} -> {target_name} (Limit: {limit})")
+        
+        if target_name not in self.indices:
+            self.indices[target_name] = []
+
+        env = self.envs.get(target_name) or self._init_split_env(target_name)
+        txn = env.begin(write=True)
+        
+        pbar_total = limit if limit else (total_estimate or 0)
+        pbar = tqdm(total=pbar_total if pbar_total > 0 else None, desc=f"Streaming {target_name}")
+        try:
+            for i, sample in enumerate(ds_split):
+                if limit is not None and i >= limit:
+                    break
+                img = np.array(sample["image"])
+                lbl = np.array(sample["segmentation"]).astype(np.uint8)
+                depth_raw = np.array(sample["depth"])
+                norm_raw = np.array(sample["normal"])
+
+                img = ensure_contiguous_hwc(img)
+                depth_raw = ensure_contiguous_hwc(depth_raw)
+                norm_raw = ensure_contiguous_hwc(norm_raw)
+                lbl = np.ascontiguousarray(lbl)
+
+                PhysicsEngine.validate_shape_consistency(img, depth_raw, norm_raw, lbl)
+                
+                if img.dtype != np.uint8:
+                    if img.max() <= 1.01: img = (img * 255)
+                    img = img.astype(np.uint8)
+                
+                depth = PhysicsEngine.process_depth(depth_raw)
+                norm = PhysicsEngine.process_normal(norm_raw)
+                
+                lbl = np.where(lbl < NUM_CLASSES, lbl, IGNORE_INDEX).astype(np.uint8)
+                
+                img_chw = np.ascontiguousarray(np.transpose(img, (2, 0, 1)))
+                depth_chw = np.ascontiguousarray(np.transpose(depth, (2, 0, 1)))
+                norm_chw = np.ascontiguousarray(np.transpose(norm, (2, 0, 1)))
+                depth_fp16 = depth.astype(np.float16)
+                norm_fp16 = norm.astype(np.float16)
+                depth_chw_fp16 = depth_chw.astype(np.float16)
+                norm_chw_fp16 = norm_chw.astype(np.float16)
+
+                if target_name == "train":
+                    img_normalized = img.astype(np.float32) / 255.0
+                    self.stats["image"].update(img_normalized)
+                    self.stats["depth"].update(depth)
+                    self.stats["normal"].update(norm)
+                    
+                    self.reservoirs["image"].update(img_normalized)
+                    self.reservoirs["depth"].update(depth)
+                    self.reservoirs["normal"].update(norm)
+                
+                keys = {
+                    "img": f"{target_name}_{i}_img",
+                    "lbl": f"{target_name}_{i}_lbl",
+                    "dpt": f"{target_name}_{i}_dpt",
+                    "nrm": f"{target_name}_{i}_nrm"
+                }
+                
+                txn.put(keys["img"].encode('ascii'), img_chw.tobytes())
+                txn.put(keys["lbl"].encode('ascii'), lbl.tobytes())
+                txn.put(keys["dpt"].encode('ascii'), depth_chw_fp16.tobytes())
+                txn.put(keys["nrm"].encode('ascii'), norm_chw_fp16.tobytes())
+                
+                self.indices[target_name].append({
+                    "idx": i,
+                    "image_key": keys["img"],
+                    "label_key": keys["lbl"],
+                    "depth_key": keys["dpt"],
+                    "normal_key": keys["nrm"],
+                    "shape_hw": [img.shape[0], img.shape[1]]
+                })
+                
+                self.total_written += 1
+                if (i + 1) % COMMIT_FREQ == 0:
+                    txn.commit()
+                    txn = env.begin(write=True)
+                pbar.update(1)
+                
+            txn.commit()
+            pbar.close()
+        except Exception as e:
+            logger.error(f"FATAL ERROR during split {target_name} ingestion: {e}", exc_info=True)
+            txn.abort()
+            raise e
+        
+        logger.info(f"Stage 2: {target_name} Ingestion COMPLETE (Total: {len(self.indices[target_name])})")
+
+    def finalize(self):
+        """Write split manifests and close all LMDB environments."""
+        logger.info("Stage 2: Finalizing statistics and separate manifests...")
+        img_m, img_s = self.stats["image"].finalize()
+        depth_m, depth_s = self.stats["depth"].finalize()
+        norm_m, norm_s = self.stats["normal"].finalize()
+        
+        img_p01, img_p99 = self.reservoirs["image"].get_quantiles()
+        depth_p01, depth_p99 = self.reservoirs["depth"].get_quantiles()
+        norm_p01, norm_p99 = self.reservoirs["normal"].get_quantiles()
+
+        metadata = {
+            "version": "SPECTRA-NYUv2-LMDB-v6.1-AXE",
+            "storage": {
+                "image_layout": "chw",
+                "depth_layout": "chw",
+                "normal_layout": "chw",
+                "label_dtype": "uint8",
+            },
+            "sanitized": {
+                "runtime_safe_finite": True,
+            },
+            "stats": {
+                "image": {
+                    "mean": img_m.tolist(), "std": img_s.tolist(),
+                    "p01": img_p01, "p99": img_p99
+                },
+                "depth": {
+                    "mean": depth_m.tolist(), "std": depth_s.tolist(),
+                    "p01": depth_p01, "p99": depth_p99
+                },
+                "normal": {
+                    "mean": norm_m.tolist(), "std": norm_s.tolist(),
+                    "p01": norm_p01, "p99": norm_p99
+                },
+            }
+        }
+
+        for split_name, entries in self.indices.items():
+            manifest = {
+                "metadata": metadata,
+                "episodes": entries
+            }
+            out_path = OUTPUT_DIR / f"{split_name}_index.json"
+            with open(out_path, 'w') as f:
+                json.dump(manifest, f, indent=2)
+            logger.info(f"Manifest saved: {out_path}")
+
+        for name, env in self.envs.items():
+            env.close()
+            logger.info(f"LMDB Environment closed: {name}")
+            
+        logger.info(f"Stage 2: SUCCESS. Multi-split LMDB built at {OUTPUT_DIR.absolute()}")
+
+def cleanup():
+    """Stage 3: Cleanup."""
+    logger.info("Stage 3: Automated Cleanup...")
+    if CLEANUP_STAGING and STAGING_DIR.exists():
+        logger.info(f"Removing Staging Directory: {STAGING_DIR}")
+        shutil.rmtree(STAGING_DIR, ignore_errors=True)
+    elif not CLEANUP_STAGING:
+        logger.info(f"CLEANUP_STAGING is OFF. Staging kept at {STAGING_DIR}")
+    
+    logger.info("Hint: Run 'huggingface-cli delete-cache' to reclaim additional global space.")
+    logger.info("Stage 3: COMPLETED.")
+
+def validate_lmdb():
+    """Reads back first and last samples from all LMDB splits to verify integrity."""
+    logger.info("Stage 2.5: Verifying LMDB Integrity across splits...")
+    
+    for split in ["train", "val"]:
+        split_dir = OUTPUT_DIR / split
+        if not (split_dir / "data.lmdb").exists():
+            logger.warning(f"Validation: {split} LMDB not found at {split_dir}")
+            continue
+        
+        index_path = OUTPUT_DIR / f"{split}_index.json"
+        last_idx = 0
+        if index_path.exists():
+            with open(index_path) as f:
+                manifest = json.load(f)
+            episodes = manifest.get("episodes", [])
+            if episodes:
+                last_idx = episodes[-1]["idx"]
+
+        env = lmdb.open(str(split_dir / "data.lmdb"), readonly=True, subdir=False)
+        with env.begin() as txn:
+            for check_idx in [0, last_idx]:
+                for suffix in ["img", "lbl", "dpt", "nrm"]:
+                    key = f"{split}_{check_idx}_{suffix}"
+                    data = txn.get(key.encode())
+                    if data:
+                        logger.info(f"Integrity Check [{split}]: {key} found ({len(data)} bytes).")
+                    else:
+                        logger.warning(f"Integrity Check [{split}]: {key} NOT found.")
+        env.close()
+    
+    logger.info("Stage 2.5: Validation COMPLETED.")
+
+def run_pipeline(
+    limit: Optional[int] = None,
+    seed: int = 42,
+    skip_validation: bool = False,
+    keep_staging: bool = False,
+    force: bool = False,
+):
+    """
+    Single entry point for the full NYUv2 data generation pipeline.
+
+    All scripts (CLI, generate_nyuv2.py, tests) should call this function.
+    No logic is duplicated outside this function.
+
+    Args:
+        limit: Max samples per split (None = all). For smoke tests.
+        seed: Global random seed for reproducibility.
+        skip_validation: Skip post-ingestion LMDB integrity check.
+        keep_staging: Keep HuggingFace cache after generation.
+        force: Regenerate even if LMDB data already exists.
+    """
+    if not force:
+        exists = True
+        for split in ["train", "val"]:
+            if not (OUTPUT_DIR / split / "data.lmdb").exists() or not (OUTPUT_DIR / f"{split}_index.json").exists():
+                exists = False
+                break
+        if exists:
+            logger.info("LMDB data already exists for both splits. Use --force to regenerate.")
+            return
+
+    np.random.seed(seed)
+    torch.manual_seed(seed)
+    logger.info(f"Global seed set to {seed}")
+
+    engine = QualityIngestionEngine()
+    success = False
+
+    try:
+        logger.info(f"Phase 1: Streaming dataset from {DATASET_REPO}...")
+        ds = load_dataset(DATASET_REPO, streaming=True)
+
+        available_splits = list(ds.keys())
+        logger.info(f"Phase 2: Ingesting streaming splits: {available_splits}")
+
+        for split_key in available_splits:
+            engine.process_split(ds[split_key], split_key, limit=limit)
+
+        success = True
+    except (Exception, KeyboardInterrupt) as e:
+        logger.critical(f"UNRECOVERABLE FAILURE OR ABORT: {type(e).__name__}: {e}")
+        for name, env in engine.envs.items():
+            env.close()
+        raise
+    finally:
+        if success:
+            engine.finalize()
+        else:
+            logger.warning("Execution did not complete. Manifests were NOT generated.")
+
+    if not skip_validation:
+        validate_lmdb()
+    else:
+        logger.info("Validation skipped (--skip-validation).")
+
+    if keep_staging:
+        logger.info(f"Staging kept at {STAGING_DIR} (--keep-staging).")
+    else:
+        cleanup()
+
+    logger.info("="*60)
+    logger.info("NYUv2 data generation complete. Ready for training.")
+    logger.info("="*60)
+
+
+def main():
+    import argparse
+    parser = argparse.ArgumentParser(description="SPECTRA NYUv2 Data Generation")
+    parser.add_argument("--limit", type=int, default=None, help="Limit samples per split (for testing)")
+    parser.add_argument("--seed", type=int, default=42, help="Random seed (default: 42)")
+    parser.add_argument("--skip-validation", action="store_true", help="Skip LMDB integrity check")
+    parser.add_argument("--keep-staging", action="store_true", help="Keep HuggingFace cache after generation")
+    parser.add_argument("--force", action="store_true", help="Regenerate even if data exists")
+    args = parser.parse_args()
+
+    logger.info("="*60)
+    logger.info("SPECTRA NYUv2 DATA GENERATION")
+    logger.info("="*60)
+
+    run_pipeline(
+        limit=args.limit,
+        seed=args.seed,
+        skip_validation=args.skip_validation,
+        keep_staging=args.keep_staging,
+        force=args.force,
+    )
+
+
+if __name__ == "__main__":
+    main()

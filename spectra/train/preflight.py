@@ -1,0 +1,156 @@
+"""
+Pre-training configuration validation.
+Validates all prerequisites before launching the runner to save compute.
+"""
+
+from typing import List
+from pathlib import Path
+import torch
+import logging
+from omegaconf import DictConfig
+from spectra.data.nyuv2.dataset import resolve_nyuv2_root
+from spectra.data.qm9.dataset import resolve_qm9_root
+from spectra.data.rf1.dataset import resolve_rf1_root
+from spectra.data.yeast.dataset import resolve_yeast_root
+from spectra.train.artifacts import resolve_artifact_dir, resolve_resume_checkpoint
+
+logger = logging.getLogger("spectra.preflight")
+
+def preflight_check(cfg: DictConfig, output_dir: Path) -> None:
+    """
+    Validate all training prerequisites BEFORE allocating GPU compute.
+    Principle: Fail fast and informatively.
+    """
+    errors: List[str] = []
+
+
+    dataset_name = cfg.get("dataset_name", cfg.get("dataset", {}).get("name", ""))
+    if dataset_name == "nyuv2":
+        root = cfg.get("root") or cfg.get("dataset", {}).get("root")
+        if not root:
+             errors.append("NYUv2 dataset selected but 'root' directory not defined.")
+        else:
+            resolved_root = resolve_nyuv2_root(root)
+            lmdb_train = resolved_root / "train" / "data.lmdb"
+            lmdb_val   = resolved_root / "val"   / "data.lmdb"
+            index_train = resolved_root / "train_index.json"
+            index_val   = resolved_root / "val_index.json"
+            if not lmdb_train.exists():
+                errors.append(f"NYUv2 train LMDB missing: {lmdb_train}\n  → Run: python scripts/execution/experiment_runner.py nyuv2_generate")
+            if not lmdb_val.exists():
+                errors.append(f"NYUv2 val LMDB missing: {lmdb_val}\n  → Run: python scripts/execution/experiment_runner.py nyuv2_generate")
+            if not index_train.exists():
+                errors.append(f"NYUv2 train index missing: {index_train}\n  → Run: python scripts/execution/experiment_runner.py nyuv2_generate")
+            if not index_val.exists():
+                errors.append(f"NYUv2 val index missing: {index_val}\n  → Run: python scripts/execution/experiment_runner.py nyuv2_generate")
+    elif dataset_name == "rf1":
+        root = cfg.get("root") or cfg.get("dataset", {}).get("root")
+        if not root:
+            errors.append("RF1 dataset selected but 'root' directory not defined.")
+        else:
+            resolved_root = resolve_rf1_root(root)
+            for required in (
+                resolved_root / "metadata.json",
+                resolved_root / "train" / "data.npz",
+                resolved_root / "val" / "data.npz",
+            ):
+                if not required.exists():
+                    errors.append(
+                        f"RF1 prepared data missing: {required}\n"
+                        "  → Run: python -m spectra.data.rf1.ingest or python scripts/data/rf1_generate.py"
+                    )
+    elif dataset_name == "yeast":
+        root = cfg.get("root") or cfg.get("dataset", {}).get("root")
+        if not root:
+            errors.append("Yeast dataset selected but 'root' directory not defined.")
+        else:
+            resolved_root = resolve_yeast_root(root)
+            for required in (
+                resolved_root / "metadata.json",
+                resolved_root / "train" / "data.npz",
+                resolved_root / "val" / "data.npz",
+            ):
+                if not required.exists():
+                    errors.append(
+                        f"Yeast prepared data missing: {required}\n"
+                        "  → Run: python -m spectra.data.yeast.ingest or python scripts/data/yeast_generate.py"
+                    )
+    elif dataset_name == "qm9":
+        root = cfg.get("root") or cfg.get("dataset", {}).get("root")
+        if not root:
+            errors.append("QM9 dataset selected but 'root' directory not defined.")
+        else:
+            resolved_root = resolve_qm9_root(root)
+            for required in (
+                resolved_root / "metadata.json",
+                resolved_root / "train" / "data.npz",
+                resolved_root / "val" / "data.npz",
+            ):
+                if not required.exists():
+                    errors.append(
+                        f"QM9 prepared data missing: {required}\n"
+                        "  → Run: python -m spectra.data.qm9.ingest or python scripts/data/qm9_generate.py"
+                    )
+
+
+    tasks = list(cfg.get("tasks", []))
+    if not tasks:
+        errors.append("cfg.tasks is empty — no tasks configured. Check your dataset config.")
+
+    train_cfg = cfg.get("train", {})
+    deterministic = bool(train_cfg.get("deterministic", False))
+    batch_augmentation = cfg.get("batch_augmentation", cfg.get("dataset", {}).get("batch_augmentation", "disabled"))
+    if dataset_name == "nyuv2" and deterministic and str(batch_augmentation).lower() == "cuda":
+        errors.append(
+            "NYUv2 deterministic mode is incompatible with batch_augmentation=cuda. "
+            "PyTorch documents CUDA backward for grid_sample as nondeterministic. "
+            "Use batch_augmentation=cpu or disabled for reproducible runs."
+        )
+
+
+    valid_methods = {"bpgs", "kendall", "uwso", "pcgrad", "gradnorm_proxy", "static"}
+    method_name = cfg.get("method_name") or cfg.get("method", {}).get("name", "unknown")
+    if method_name not in valid_methods:
+        errors.append(f"Unknown method: '{method_name}'. Valid: {sorted(valid_methods)}")
+
+
+    valid_losses = {"mse", "l1", "bce", "cross_entropy", "cosine", "masked_l1", "cosine_dense"}
+    for task_cfg in tasks:
+        loss_name = task_cfg.get("loss", "mse")
+        if loss_name not in valid_losses:
+            errors.append(f"Task '{task_cfg.get('name', '?')}': unknown loss '{loss_name}'. Valid: {sorted(valid_losses)}")
+
+
+    artifact_dir = resolve_artifact_dir(cfg)
+    raw_resume = cfg.get("resume_from", None)
+    ckpt_path = resolve_resume_checkpoint(cfg, artifact_dir)
+    if raw_resume not in (None, "", False) and str(raw_resume).strip().lower() != "auto" and ckpt_path is not None and not ckpt_path.exists():
+        errors.append(f"Resume checkpoint not found: {ckpt_path}\n  → Check the path or remove 'resume_from' from config.")
+    if str(raw_resume).strip().lower() == "auto" and not bool(train_cfg.get("save_ckpt", True)):
+        errors.append("resume_from=auto requires train.save_ckpt=true so last.ckpt can exist.")
+
+
+    require_cuda = bool(cfg.get("require_cuda", False))
+    if require_cuda and not torch.cuda.is_available():
+        errors.append("CUDA is required for this run, but no GPU is available.")
+
+    if torch.cuda.is_available():
+        free_mem_gb = torch.cuda.get_device_properties(0).total_memory / 1e9
+        batch_size  = cfg.train.get("batch_size", 8)
+        if dataset_name == "nyuv2" and batch_size > 8 and free_mem_gb < 16.0:
+            logger.warning(
+                f"[PreFlight] batch_size={batch_size} on {free_mem_gb:.1f}GB GPU. "
+                f"NYUv2/SegNet may OOM. Consider batch_size<=8 or train.accumulate_grad_batches=2."
+            )
+        num_gpus = torch.cuda.device_count()
+        if num_gpus > 1:
+            logger.info(f"[PreFlight] Multi-GPU detected: {num_gpus} GPUs. Using DDP strategy.")
+
+
+    if errors:
+        logger.error("[PreFlight] FAILED with the following errors:")
+        for i, e in enumerate(errors, 1):
+            logger.error(f"  [{i}] {e}")
+        raise SystemExit(f"\n\nPre-flight check FAILED ({len(errors)} error(s)). Fix all errors above before training.")
+
+    logger.info("Pre-flight checks passed.")

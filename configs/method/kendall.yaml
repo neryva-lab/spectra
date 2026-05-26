@@ -1,0 +1,8 @@
+# @package _global_
+method_name: kendall
+
+method:
+  name: kendall
+
+train:
+  grad_clip: 1.0
