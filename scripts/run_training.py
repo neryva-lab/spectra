@@ -14,6 +14,17 @@ root_dir = str(Path(__file__).resolve().parent.parent)
 if root_dir not in sys.path:
     sys.path.append(root_dir)
 
+# --- Python 3.14 + Hydra compatibility patch ---
+import argparse
+def _patched_check_help(self, action):
+    try:
+        if action.help is not None and '%' not in action.help:
+            pass
+    except TypeError:
+        pass  # Ignore LazyCompletionHelp TypeError in Python 3.14
+argparse.ArgumentParser._check_help = _patched_check_help
+# -----------------------------------------------
+
 import hydra
 from omegaconf import DictConfig
 from hydra.core.hydra_config import HydraConfig
