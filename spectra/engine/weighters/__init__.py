@@ -7,6 +7,7 @@ from spectra.baselines import (
     BaseWeighter,
     StaticWeighter,
     KendallWeighter,
+    NormalizedKendallWeighter,
     UWSOWeighter,
     PCGradWeighter,
     GradNormProxyWeighter,
@@ -16,6 +17,7 @@ from spectra.baselines import (
 
 __all__ = [
     "BaseWeighter", "StaticWeighter", "KendallWeighter",
+    "NormalizedKendallWeighter",
     "UWSOWeighter", "PCGradWeighter", "GradNormProxyWeighter",
     "WEIGHTER_REGISTRY", "build_weighter",
 ]

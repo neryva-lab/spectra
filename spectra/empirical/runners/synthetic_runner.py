@@ -12,6 +12,7 @@ import torch.nn as nn
 from torch.utils.data import DataLoader
 
 from spectra.baselines.kendall import KendallWeighter
+from spectra.baselines.normalized_kendall import NormalizedKendallWeighter
 from spectra.baselines.pcgrad import PCGradWeighter
 from spectra.baselines.static import StaticWeighter
 from spectra.baselines.uwso import UWSOWeighter
@@ -175,6 +176,8 @@ class SyntheticExperimentRunner(BaseRunner):
             return PCGradWeighter(num_tasks=num_tasks)
         if method == "kendall":
             return KendallWeighter(num_tasks=num_tasks)
+        if method == "normalized_kendall":
+            return NormalizedKendallWeighter(num_tasks=num_tasks)
         if method == "bpgs":
             return BPGS(
                 num_tasks=num_tasks,
@@ -264,7 +267,7 @@ class SyntheticExperimentRunner(BaseRunner):
         weighter = self._build_weighter(len(task_specs)).to(self.config.device)
         model_optimizer = torch.optim.Adam(model.parameters(), lr=self.config.learning_rate, weight_decay=self.config.weight_decay)
         aux_optimizer = None
-        if method == "kendall":
+        if method == "kendall" or method == "normalized_kendall":
             model_optimizer = torch.optim.Adam(
                 list(model.parameters()) + list(weighter.parameters()),
                 lr=self.config.learning_rate,
@@ -352,7 +355,7 @@ class SyntheticExperimentRunner(BaseRunner):
                         spec.name: float(epoch_metrics.get(f"{method}/weight_{index}", 1.0 / len(task_specs)))
                         for index, spec in enumerate(task_specs)
                     }
-                    if method == "kendall":
+                    if method == "kendall" or method == "normalized_kendall":
                         last_latent_state = {f"log_var_{index}": float(weighter.log_vars[index].detach().cpu().item()) for index in range(len(task_specs))}
                     else:
                         last_latent_state = {}

@@ -26,11 +26,11 @@ if str(PROJECT_ROOT) not in sys.path:
 HYDRA_TRAINING_MODULE = "scripts.run_training"
 
 METHODS_BY_DATASET: Dict[str, List[str]] = {
-    "synthetic": ["static", "kendall", "uwso", "gradnorm_proxy", "pcgrad", "bpgs"],
-    "nyuv2": ["static", "kendall", "uwso", "gradnorm_proxy", "pcgrad", "bpgs"],
-    "rf1": ["static", "kendall", "uwso", "gradnorm_proxy", "pcgrad", "bpgs"],
-    "yeast": ["static", "kendall", "uwso", "gradnorm_proxy", "pcgrad", "bpgs"],
-    "qm9": ["static", "kendall", "uwso", "gradnorm_proxy", "pcgrad", "bpgs"],
+    "synthetic": ["static", "kendall", "normalized_kendall", "uwso", "gradnorm_proxy", "pcgrad", "bpgs"],
+    "nyuv2": ["static", "kendall", "normalized_kendall", "uwso", "gradnorm_proxy", "pcgrad", "bpgs"],
+    "rf1": ["static", "kendall", "normalized_kendall", "uwso", "gradnorm_proxy", "pcgrad", "bpgs"],
+    "yeast": ["static", "kendall", "normalized_kendall", "uwso", "gradnorm_proxy", "pcgrad", "bpgs"],
+    "qm9": ["static", "kendall", "normalized_kendall", "uwso", "gradnorm_proxy", "pcgrad", "bpgs"],
     "clinical": ["bpgs"],
 }
 
