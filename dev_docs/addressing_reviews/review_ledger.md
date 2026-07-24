@@ -17,7 +17,7 @@ rebuttal or cover letter).
   add a note (e.g. `Status: Done — see exp_09_normalization_ablation`).
 
 **Progress snapshot (update manually as you go):**
-- Work items: 2 / 19 complete
+- Work items: 5 / 19 complete
 - Atomic issues addressed: 0 / 68
 
 ---
@@ -45,7 +45,7 @@ rebuttal or cover letter).
   **Resolves:** MR-1 (partial), MR-9 (partial), MKod-2 (partial), AqnD-16 (partial), TA-1
   **Status:** Done - proof report written; see `dev_docs/addressing_reviews/review_task_completed/wi-2_invariance_proof_report.md`
 
-- [ ] **WI-3. Re-run the Kendall + L1-normalization ablation correctly.**
+- [x] **WI-3. Re-run the Kendall + L1-normalization ablation correctly.**
   Requirements for a valid version of this experiment:
   - Full ×1 / ×10 / ×100 / ×1000 grid — not a single endpoint.
   - Same metric as Table 1 (macro score) — not a different metric set (R², RMSE, Total Val Loss).
@@ -56,7 +56,7 @@ rebuttal or cover letter).
   normalization — this is the single result that determines how the paper's contribution should be
   framed going forward.
   **Resolves:** MKod-1, AqnD-7, AqnD-8, AqnD-9, AqnD-23, TA-2
-  **Status:** Open (a first attempt was made but had methodological gaps — see prior notes; needs redo)
+  **Status:** Done - correct ablation completed; see `dev_docs/addressing_reviews/review_task_completed/wi-3_normalization_ablation_report.md`
 
 ---
 
