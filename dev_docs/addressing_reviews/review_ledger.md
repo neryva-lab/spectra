@@ -17,7 +17,7 @@ rebuttal or cover letter).
   add a note (e.g. `Status: Done — see exp_09_normalization_ablation`).
 
 **Progress snapshot (update manually as you go):**
-- Work items: 7 / 19 complete
+- Work items: 9 / 19 complete
 - Atomic issues addressed: 0 / 68
 
 ---
@@ -156,19 +156,19 @@ rebuttal or cover letter).
 
 ### Tier 4 — Writing, positioning, presentation
 
-- [ ] **WI-16. Rewrite Section 2 (Related Work) positioning.**
+- [x] **WI-16. Rewrite Section 2 (Related Work) positioning.**
   Sharpen exactly how BPGS differs from GradNorm, dynamic task prioritization, PCGrad, CAGrad, and
   Sener–Koltun's Pareto-based approach. State the novelty claim at the size the evidence actually
   supports — a scale-robustness-focused refinement of uncertainty weighting, not a general
   multi-task optimization advance.
   **Resolves:** MR-3, MR-5, AqnD-20, AqnD-21, AqnD-23 (partial), MKod-1 (partial)
-  **Status:** Open
+  **Status:** Done - related work rewritten to distinguish uncertainty weighting from gradient-surgery and Pareto methods, and scope BPGS narrowly
 
-- [ ] **WI-17. Add intuition and motivation prose throughout Section 3 (Method).**
+- [x] **WI-17. Add intuition and motivation prose throughout Section 3 (Method).**
   Explain *why* each design choice exists (the bounded chart, batch-conditioning, the split
   optimization) in plain language surrounding the formulas, not just the formulas themselves.
   **Resolves:** MR-1 (partial), MR-2
-  **Status:** Open
+  **Status:** Done - added motivation paragraphs for the bounded chart, first-batch calibration, split optimization, and batch-conditional boundedness
 
 - [ ] **WI-18. Fix the appendix/supplementary layout.**
   Separate figures and results tables from the NeurIPS checklist section (currently interleaved);
