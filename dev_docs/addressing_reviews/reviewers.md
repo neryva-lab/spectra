@@ -98,28 +98,28 @@ Summary of the review:
 - The reviewer treats the work as an incremental refinement rather than a major conceptual advance.
 
 Issues raised:
-- **AqnD-1**: The code contains a `100x` gradient scaling on `theta` that is not described in the paper.
+- **AqnD-1**: The code contains a 100x gradient scaling on `theta` that is not described in the paper.
 - **AqnD-2**: The published equations do not fully describe the actual optimizer used in code.
-- **AqnD-3**: Reproducing the method from Eqs. (5)–(10) would not reproduce Table 2 as implemented.
+- **AqnD-3**: Reproducing the method from Eqs. (5)-(10) would not reproduce Table 2 as implemented.
 - **AqnD-4**: The paper does not analyze `theta` saturation.
 - **AqnD-5**: The paper proves that `s` is bounded, but does not address whether `theta` remains learnable at the boundary.
 - **AqnD-6**: The review argues that once the latent variable saturates, the gradient factor can collapse and recovery may be impossible.
-- **AqnD-7**: The statement that the method “matches classical homoscedastic uncertainty weighting” is seen as misleading.
+- **AqnD-7**: The statement that the method "matches classical homoscedastic uncertainty weighting" is seen as misleading.
 - **AqnD-8**: The reviewer argues that matching algebraic form is not the same as matching fixed-point structure.
-- **AqnD-9**: The reviewer claims Kendall’s optimum is reachable, whereas BPGS’s is not when the target lies outside the bounded interval.
+- **AqnD-9**: The reviewer claims Kendall's optimum is reachable, whereas BPGS's is not when the target lies outside the bounded interval.
 - **AqnD-10**: The paper and code disagree on NYUv2 hyperparameters, including `120/8` versus `80/4`.
 - **AqnD-11**: The paper and code disagree on the validation selection metric, including `val/total_loss` versus hard-coded `val/miou`.
 - **AqnD-12**: The paper and code disagree on gradient clipping details.
-- **AqnD-13**: These mismatches matter because the paper’s central claim concerns reproducibility under scale mismatch.
+- **AqnD-13**: These mismatches matter because the paper's central claim concerns reproducibility under scale mismatch.
 - **AqnD-14**: The experimental scope is narrow: one dense-prediction benchmark, two tabular benchmarks, and synthetic stress tests.
 - **AqnD-15**: Only three seeds are used.
-- **AqnD-16**: The abstract’s emphasis on robustness is seen as supported mainly by synthetic rescaling diagnostics, even though Table 4 itself honestly reports BPGS is not best on RF1.
+- **AqnD-16**: The abstract's emphasis on robustness is seen as supported mainly by synthetic rescaling diagnostics, even though Table 4 itself honestly reports BPGS is not best on RF1.
 - **AqnD-17**: Eq. (10) is said to omit the stop-gradient on batch statistics that the text describes.
 - **AqnD-18**: The paper and released code disagree in non-trivial places beyond the main optimizer description.
 - **AqnD-19**: The supplementary material is poorly laid out, with figures wedged into the NeurIPS checklist.
 - **AqnD-20**: The method is viewed as another option among many adaptive weighting schemes, not a paradigm shift.
 - **AqnD-21**: No single benchmark shows BPGS clearly dominating.
-- **AqnD-22**: The paper lacks comparison against stronger or more recent SOTA methods (reviewer notes the most recent cited reference is from 2021).
+- **AqnD-22**: The paper lacks comparison against stronger or more recent SOTA methods.
 - **AqnD-23**: The reviewer characterizes the contribution as engineering refinement rather than conceptual novelty.
 
 Additional comments captured in the review:
@@ -131,7 +131,7 @@ Limitations called out:
 - The formatting/layout of the supplementary material is treated as a paper-quality issue.
 
 Formatting / anonymity concerns:
-- **AqnD-F1**: The reviewer states the released code repository violates NeurIPS double-blind anonymity requirements — `spectra/__init__.py` contains the author's real name, and the `LICENSE`, `setup.py`, and `pyproject.toml` files identify the affiliation as "Neryva Lab." **This is independently actionable and unrelated to the scientific content of the paper.**
+- **AqnD-F1**: The reviewer states the released code repository violates NeurIPS double-blind anonymity requirements: `spectra/__init__.py` contains the author's real name, and the `LICENSE`, `setup.py`, and `pyproject.toml` files identify the affiliation as "Neryva Lab." This is independently actionable and unrelated to the scientific content of the paper.
 
 ## Reviewer MKod
 
@@ -144,19 +144,19 @@ Metadata:
 - Confidence: `4`
 
 Positive observations:
-- **MKod-S1**: The problem is well-motivated — sensitivity of adaptive weighting methods to arbitrary loss scaling is a realistic concern in dense prediction and heterogeneous multi-output learning.
-- **MKod-S2**: The method is simple but intuitive — it modifies the uncertainty parameterization rather than introducing complex gradient surgery or multi-objective optimization; the bounded sigmoid chart is seen as an intuitive mechanism against precision collapse/explosion.
-- **MKod-S3**: The synthetic loss-rescaling experiment is convincing — BPGS is near-invariant from ×1 to ×1000 (macro score ≈ 0.777–0.778) while Kendall degrades substantially (0.780 → 0.637).
+- **MKod-S1**: The problem is well-motivated - sensitivity of adaptive weighting methods to arbitrary loss scaling is a realistic concern in dense prediction and heterogeneous multi-output learning.
+- **MKod-S2**: The method is simple but intuitive - it modifies the uncertainty parameterization rather than introducing complex gradient surgery or multi-objective optimization; the bounded sigmoid chart is seen as an intuitive mechanism against precision collapse/explosion.
+- **MKod-S3**: The synthetic loss-rescaling experiment is convincing - BPGS is near-invariant from x1 to x1000 (macro score about 0.777-0.778) while Kendall degrades substantially (0.780 -> 0.637).
 
 Issues raised:
-- **MKod-1**: BPGS is largely a constrained reparameterization of Kendall-style uncertainty weighting with batch-wise affine normalization, rather than a fundamentally new weighting objective or optimization strategy; the paper's own text (re: Eq. 10) states the objective "matches the scalar uncertainty objective used by classical homoscedastic uncertainty weighting," differing only in the chart mapping — the reviewer sees the conceptual gap from Kendall as narrower than the paper's presentation implies.
+- **MKod-1**: BPGS is largely a constrained reparameterization of Kendall-style uncertainty weighting with batch-wise affine normalization, rather than a fundamentally new weighting objective or optimization strategy; the paper's own text (re: Eq. 10) states the objective "matches the scalar uncertainty objective used by classical homoscedastic uncertainty weighting," differing only in the chart mapping - the reviewer sees the conceptual gap from Kendall as narrower than the paper's presentation implies.
 - **MKod-2**: The main formal statement is only batch-conditional boundedness; deeper properties such as invariance guarantees or convergence characteristics of the split objective are not analyzed.
 - **MKod-3**: Reliance on batch statistics (log-loss mean/std) introduces potential sensitivity to batch size, with no explicit analysis of this dependency.
 - **MKod-4**: The role of stop-gradient, while motivated, is not ablated independently from the bounded/batch-aware chart.
 - **MKod-5**: The paper does not compare against several recent strong baselines, including CAGrad, Nash-MTL, and Auto-Lambda, leaving it unclear whether BPGS offers advantages beyond older uncertainty-weighting and gradient-surgery approaches.
-- **MKod-6**: Only one dense-prediction benchmark (NYUv2) is tested at full scale; claims of real-world competitiveness rest heavily on a single well-studied dataset. The reviewer suggests testing at least one additional dense-prediction benchmark (e.g., Cityscapes, or a medical imaging multi-task setup) to strengthen the generalization claim.
-- **MKod-7**: No computational overhead analysis is provided — BPGS introduces additional computation via batch-wise log-loss statistics, normalization, and a separate uncertainty optimization step, but runtime/memory overhead is not quantified.
-- **MKod-8** (minor): Presentation issue — several figures and results are interleaved with the NeurIPS checklist in the appendix, making the supplementary material harder to follow; page 9 has substantial unused space that could have held clearer experimental details or additional analysis.
+- **MKod-6**: Only one dense-prediction benchmark (NYUv2) is tested at full scale; claims of real-world competitiveness rest heavily on a single well-studied dataset.
+- **MKod-7**: No computational overhead analysis is provided - BPGS introduces additional computation via batch-wise log-loss statistics, normalization, and a separate uncertainty optimization step, but runtime/memory overhead is not quantified.
+- **MKod-8**: Presentation issue - several figures and results are interleaved with the NeurIPS checklist in the appendix, making the supplementary material harder to follow; page 9 has substantial unused space that could have held clearer experimental details or additional analysis.
 
 Questions raised:
 - None beyond the issues above; the review directs readers to the Weaknesses section for detail.
