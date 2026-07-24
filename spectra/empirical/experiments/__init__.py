@@ -21,6 +21,7 @@ from spectra.empirical.experiments.exp_05_multiclass_behavior import run as run_
 from spectra.empirical.experiments.exp_06_orchestrator import run as run_exp_06
 from spectra.empirical.experiments.exp_07_pure_loss_rescaling import run as run_exp_07
 from spectra.empirical.experiments.exp_08_heterogeneous_regime import run as run_exp_08
+from spectra.empirical.experiments.exp_09_kendall_norm_ablation import run as run_exp_09
 
 EXPERIMENT_REGISTRY = {
     "exp_01_correlation_sweep": run_exp_01,
@@ -31,6 +32,7 @@ EXPERIMENT_REGISTRY = {
     "exp_06_orchestrator": run_exp_06,
     "exp_07_pure_loss_rescaling": run_exp_07,
     "exp_08_heterogeneous_regime": run_exp_08,
+    "exp_09_kendall_norm_ablation": run_exp_09,
 }
 
 __all__ = ["EXPERIMENT_REGISTRY"]

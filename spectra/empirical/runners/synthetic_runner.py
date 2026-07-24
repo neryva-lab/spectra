@@ -12,6 +12,7 @@ import torch.nn as nn
 from torch.utils.data import DataLoader
 
 from spectra.baselines.kendall import KendallWeighter
+from spectra.baselines.kendall_norm import KendallNormWeighter
 from spectra.baselines.pcgrad import PCGradWeighter
 from spectra.baselines.static import StaticWeighter
 from spectra.baselines.uwso import UWSOWeighter
@@ -175,6 +176,8 @@ class SyntheticExperimentRunner(BaseRunner):
             return PCGradWeighter(num_tasks=num_tasks)
         if method == "kendall":
             return KendallWeighter(num_tasks=num_tasks)
+        if method == "kendall_norm":
+            return KendallNormWeighter(num_tasks=num_tasks)
         if method == "bpgs":
             return BPGS(
                 num_tasks=num_tasks,
@@ -262,16 +265,27 @@ class SyntheticExperimentRunner(BaseRunner):
     ) -> Tuple[List[Dict[str, object]], Dict[str, np.ndarray], Dict[str, np.ndarray]]:
         method = self.config.method.lower()
         weighter = self._build_weighter(len(task_specs)).to(self.config.device)
-        model_optimizer = torch.optim.Adam(model.parameters(), lr=self.config.learning_rate, weight_decay=self.config.weight_decay)
+        model_params = [param for param in model.parameters() if param.requires_grad]
+        weighter_params = [param for param in weighter.parameters() if param.requires_grad]
+        model_optimizer = torch.optim.Adam(model_params, lr=self.config.learning_rate, weight_decay=self.config.weight_decay)
         aux_optimizer = None
         if method == "kendall":
             model_optimizer = torch.optim.Adam(
-                list(model.parameters()) + list(weighter.parameters()),
+                model_params + weighter_params,
+                lr=self.config.learning_rate,
+                weight_decay=self.config.weight_decay,
+            )
+        elif method == "kendall_norm":
+            aux_optimizer = torch.optim.Adam(
+                weighter_params,
                 lr=self.config.learning_rate,
                 weight_decay=self.config.weight_decay,
             )
         elif method == "bpgs":
-            aux_optimizer = torch.optim.Adam(weighter.parameters(), lr=self.config.learning_rate)
+            aux_optimizer = torch.optim.Adam(
+                weighter_params,
+                lr=self.config.learning_rate,
+            )
 
         history: List[Dict[str, object]] = []
         for epoch in range(self.config.epochs):
@@ -341,6 +355,32 @@ class SyntheticExperimentRunner(BaseRunner):
                         f"theta_{index}": float(value.item())
                         for index, value in enumerate(detached_theta)
                     })
+                elif method == "kendall_norm":
+                    if aux_optimizer is None:
+                        raise RuntimeError("Kendall+L1-normalization requires an auxiliary optimizer.")
+                    model_optimizer.zero_grad(set_to_none=True)
+                    aux_optimizer.zero_grad(set_to_none=True)
+                    loss_list = [scaled_losses[name] for name in task_names]
+                    loss_net = weighter.network_loss(loss_list)
+                    loss_unc = weighter.uncertainty_loss(loss_list)
+                    total_loss = loss_net + loss_unc
+                    total_loss.backward()
+                    nn.utils.clip_grad_norm_(model_params, self.config.gradient_clip_norm)
+                    nn.utils.clip_grad_norm_(weighter_params, self.config.gradient_clip_norm)
+                    model_optimizer.step()
+                    aux_optimizer.step()
+                    total_loss = total_loss.detach()
+                    with torch.no_grad():
+                        detached_weights = weighter.normalized_weights().detach().cpu()
+                        detached_log_vars = weighter.log_vars.detach().cpu()
+                    last_task_weights = {
+                        spec.name: float(value.item())
+                        for spec, value in zip(task_specs, detached_weights)
+                    }
+                    last_latent_state = {
+                        f"log_var_{index}": float(value.item())
+                        for index, value in enumerate(detached_log_vars)
+                    }
                 else:
                     model_optimizer.zero_grad(set_to_none=True)
                     total_loss, metrics = weighter(losses_tensor)

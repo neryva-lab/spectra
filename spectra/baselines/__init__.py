@@ -3,6 +3,7 @@
 from spectra.baselines.base import BaseWeighter
 from spectra.baselines.static import StaticWeighter
 from spectra.baselines.kendall import KendallWeighter
+from spectra.baselines.kendall_norm import KendallNormWeighter
 from spectra.baselines.uwso import UWSOWeighter
 from spectra.baselines.pcgrad import PCGradWeighter
 from spectra.baselines.gradnorm_proxy import GradNormProxyWeighter
@@ -11,6 +12,7 @@ from spectra.baselines.gradnorm_proxy import GradNormProxyWeighter
 WEIGHTER_REGISTRY = {
     "static": StaticWeighter,
     "kendall": KendallWeighter,
+    "kendall_norm": KendallNormWeighter,
     "uwso": UWSOWeighter,
     "pcgrad": PCGradWeighter,
     "gradnorm_proxy": GradNormProxyWeighter,
@@ -48,6 +50,7 @@ __all__ = [
     "BaseWeighter",
     "StaticWeighter",
     "KendallWeighter",
+    "KendallNormWeighter",
     "UWSOWeighter",
     "PCGradWeighter",
     "GradNormProxyWeighter",

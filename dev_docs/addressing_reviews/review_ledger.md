@@ -72,14 +72,14 @@ rebuttal or cover letter).
   **Resolves:** AqnD-1, AqnD-2, AqnD-3, AqnD-10, AqnD-11, AqnD-12, AqnD-13, AqnD-17, AqnD-18
   **Status:** Open
 
-- [ ] **WI-5. Analyze and document θ / z_i saturation behavior empirically.**
+- [x] **WI-5. Analyze and document θ / z_i saturation behavior empirically.**
   Add a companion analysis to the existing Figure 7 (task-weight dynamics): plot the underlying
   θ_i or z_i values (not just the derived α_i weight) across all main-paper runs (NYUv2, Yeast,
   RF1), and report whether any task's z_i approaches ±τ_T within the tested epoch budgets. Report
   the outcome either way, with a specific named conclusion rather than a generic "no convergence
   guarantees" statement.
   **Resolves:** AqnD-4, AqnD-5, AqnD-6, AqnD-C1, AqnD-C2, MKod-2 (partial), TA-6
-  **Status:** Open
+  **Status:** Done - saturation check report written; see `dev_docs/addressing_reviews/review_task_completed/wi-5_saturation_check_report.md`
 
 - [x] **WI-6. Derive or explicitly justify τ_T (Eq. 4).**
   Either derive why `τ_T = √(T−1) + 0.1` is the correct functional form, or state plainly that it's
