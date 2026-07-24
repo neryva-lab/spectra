@@ -38,7 +38,7 @@ benchmark settings fully explicit.
 - `configs/method/static.yaml`
 - `working/paper/appendix/A_reproducibility_details.tex`
 - `docs/studies.md`
-- `dev_docs/temp/resolved.md`
+- `dev_docs/temp/wi4_reconciliation_findings.md`
 
 ## What Changed
 
