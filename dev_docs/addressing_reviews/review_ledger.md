@@ -17,7 +17,7 @@ rebuttal or cover letter).
   add a note (e.g. `Status: Done — see exp_09_normalization_ablation`).
 
 **Progress snapshot (update manually as you go):**
-- Work items: 0 / 19 complete
+- Work items: 2 / 19 complete
 - Atomic issues addressed: 0 / 68
 
 ---
@@ -26,24 +26,24 @@ rebuttal or cover letter).
 
 ### Tier 0 — Independent, no dependencies, do first
 
-- [ ] **WI-1. Scrub the anonymity violation from the code repository.**
+- [x] **WI-1. Scrub the anonymity violation from the code repository.**
   Remove the real author name from `spectra/__init__.py` and the "Neryva Lab" affiliation from
   `LICENSE`, `setup.py`, and `pyproject.toml`. Check git history too — editing the files alone
   leaves old commits exposed; a fresh orphan branch or new anonymized repo is safer.
   **Resolves:** AqnD-F1
-  **Status:** Open
+  **Status:** Done - repo content scrubbed; see `dev_docs/addressing_reviews/review_task_complete_report/wi-1_anonymity_fix_report.md`
 
 ---
 
 ### Tier 1 — Foundational (the outcome of these determines how much of the rest changes)
 
-- [ ] **WI-2. Formalize the rescaling-invariance result as a proven proposition, not an empirical table.**
+- [x] **WI-2. Formalize the rescaling-invariance result as a proven proposition, not an empirical table.**
   Add a numbered proposition + short proof: under uniform rescaling, μ(L) shifts by log c, ς̄(L) is
   unchanged (centered moment), z_i(θ_i) is untouched, so s_i shifts uniformly and the L1-normalization
   in Eq. 8 cancels it exactly — BPGS is *exactly* invariant to uniform rescaling by construction.
   Reframe Table 1 as confirmatory evidence of the proposition, not as the primary empirical claim.
   **Resolves:** MR-1 (partial), MR-9 (partial), MKod-2 (partial), AqnD-16 (partial), TA-1
-  **Status:** Open
+  **Status:** Done - proof report written; see `dev_docs/addressing_reviews/review_task_completed/wi-2_invariance_proof_report.md`
 
 - [ ] **WI-3. Re-run the Kendall + L1-normalization ablation correctly.**
   Requirements for a valid version of this experiment:
@@ -81,12 +81,12 @@ rebuttal or cover letter).
   **Resolves:** AqnD-4, AqnD-5, AqnD-6, AqnD-C1, AqnD-C2, MKod-2 (partial), TA-6
   **Status:** Open
 
-- [ ] **WI-6. Derive or explicitly justify τ_T (Eq. 4).**
+- [x] **WI-6. Derive or explicitly justify τ_T (Eq. 4).**
   Either derive why `τ_T = √(T−1) + 0.1` is the correct functional form, or state plainly that it's
   a heuristic choice and support that with a small sensitivity sweep (e.g., τ_T scaled by 0.5×, 1×,
   2× the current value) showing the method isn't fragile to this specific constant.
   **Resolves:** MR-4, TA-5
-  **Status:** Open
+  **Status:** Done - justification report written; see `dev_docs/addressing_reviews/review_task_completed/wi-6_tau_t_justification_report.md`
 
 - [ ] **WI-7. Increase statistical rigor on the scale-stress result (Table 5) and reframe the claim to match it.**
   Every current BPGS-vs-Kendall gap in Table 5 is smaller than one combined standard deviation at

@@ -31,7 +31,7 @@ venue's reviewers respond.
 
 ## Track A — This submission's rebuttal (now through Aug 3)
 
-### Step 1 (Jul 24–26): do only the rebuttal-eligible items
+### Step 1 (Jul 24–26): do the rebuttal-eligible items first, then take whatever extra fast reruns fit
 
 | WI | Feasible by Jul 27? | What to actually do |
 |---|---|---|
@@ -39,12 +39,14 @@ venue's reviewers respond.
 | WI-2 (invariance proof) | Yes — pure math, no experiment needed | Write the 5-line derivation directly into the rebuttal text. |
 | WI-6 (τ_T justification) | Mostly yes | Give the reasoning in text; add a quick 0.5×/1×/2× τ_T sensitivity run if time allows. |
 | WI-4 (code/paper mismatches) | Partially | Can't re-run and fix Table 2 by Aug 3 — but you can state clearly, per mismatch, which is correct (paper or code), and commit to full reconciliation next revision. |
-| WI-3 (normalization ablation) | Partially, if compute allows | Even a partial version (fewer seeds, or 2–3 grid points instead of the full 4) reported honestly as preliminary is worth having — this is the single highest-value thing ready in time, since it directly answers AqnD's and MKod's "incremental" critique with data. |
+| WI-3 (normalization ablation) | Partially, if compute allows | This is the highest-value experiment to prioritize first. Run the clean Kendall + L1-normalization ablation exactly as specified below; if the full 4-point grid and 3 seeds fit, do them. If not, record the partial result honestly as preliminary and keep it clearly separated from the final claim. |
 | WI-5 (saturation check) | Maybe | Only if θ/z_i were already logged during training — this would be analysis of existing logs, not new runs. Check quickly. |
 
 Everything else (WI-7 through WI-19, minus the pieces above) is **not achievable before Aug 3** —
 either the experiment takes longer than days, or it requires editing the paper, which isn't
-allowed this cycle at all, on any timeline.
+allowed this cycle at all, on any timeline. If you discover that NYUv2 reruns are also fast in
+your setup, reassess whether the WI-3 ablation and WI-6 / WI-12 / WI-13 style checks can be
+completed for the rebuttal window. Do not let that decision delay starting WI-3.
 
 ### Step 2 (Jul 27): post one rebuttal per review
 
@@ -89,5 +91,7 @@ This track has no "rebuttal" step of its own until you submit to a new venue and
 reviewers respond — at which point you'll run a smaller version of this same Step 1→4 process
 under whatever that venue's specific rules turn out to be.
 
-Target venue and timing depend on how much of Tier 3 is realistically finishable — worth checking
-the next ICML deadline closer to the time, since Tier 3 alone is plausibly several weeks of work.
+Target venue and timing depend on how much of Tier 3 is realistically finishable. Since you have
+time now, use this window to complete as much of Track A as possible and to pre-stage the highest-
+value Track B items that do not require a paper upload. Tier 3 alone is plausibly several weeks of
+work, so the next ICML deadline should still be checked closer to the time.

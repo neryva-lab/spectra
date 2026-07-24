@@ -7,7 +7,7 @@ setup(
         "SPECTRA: Frequency-Decoupled Manifolds and Projected Bayesian "
         "Scaling for Massive Multi-Task Learning"
     ),
-    author="Neryva Lab",
+    author="Anonymous",
     packages=find_packages(),
     python_requires=">=3.9",
     install_requires=[
