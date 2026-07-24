@@ -17,7 +17,7 @@ rebuttal or cover letter).
   add a note (e.g. `Status: Done — see exp_09_normalization_ablation`).
 
 **Progress snapshot (update manually as you go):**
-- Work items: 6 / 19 complete
+- Work items: 7 / 19 complete
 - Atomic issues addressed: 0 / 68
 
 ---
@@ -97,13 +97,13 @@ rebuttal or cover letter).
   **Resolves:** Mxe9-9, Mxe9-10, AqnD-15, TA-3
   **Status:** Open
 
-- [ ] **WI-8. Fix the RF1 reporting language in the abstract and §5.4.**
+- [x] **WI-8. Fix the RF1 reporting language in the abstract and §5.4.**
   Replace "RF1 RMSE and MAE within 0.562 and 0.450 of the leading baseline" with an accurate
   statement — BPGS has the *worst* RMSE (30.158) and *worst* MAE (23.548) of all six compared
   methods on RF1 (though second-best on R², behind UWSO). State this plainly rather than in a
   near-parity framing.
   **Resolves:** AqnD-16 (partial), TA-4
-  **Status:** Open
+  **Status:** Done - wording corrected in abstract, introduction, and RF1 results section
 
 ---
 
