@@ -87,6 +87,7 @@ Both files explicitly describe these studies as supporting evidence rather than 
 | Study | Type | Definition file | Purpose |
 |------|------|------------------|---------|
 | `04_qm9_regime_check` | Training | `experiments/bpgs_study/optional/configs/04_qm9_regime_check.yaml` | Optional QM9 support study |
+| `09_nyuv2_overhead` | Training | `experiments/bpgs_study/optional/configs/09_nyuv2_overhead.yaml` | Optional half-NYUv2 runtime and memory overhead study for BPGS versus Kendall |
 | `05_nyuv2_full_final` | Training | `experiments/bpgs_study/optional/configs/05_nyuv2_full_final.yaml` | Optional full NYUv2 seeded comparison for the paper table |
 
 These are intentionally marked optional in the study definitions and should be interpreted that way in the paper workflow.

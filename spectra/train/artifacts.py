@@ -335,6 +335,10 @@ def save_run_summary(
         "checkpoint_registry": checkpoint_registry,
     }
 
+    for key, value in summary.items():
+        if key not in normalized_summary:
+            normalized_summary[key] = value
+
     summary_path = artifact_dir / "run_summary.json"
     with summary_path.open("w", encoding="utf-8") as handle:
         json.dump(normalized_summary, handle, indent=2, default=str)

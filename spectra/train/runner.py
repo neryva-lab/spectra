@@ -12,7 +12,7 @@ from pytorch_lightning.callbacks import LearningRateMonitor, TQDMProgressBar
 from hydra.utils import instantiate
 
 from spectra.data.datamodule import SPECTRADataModule
-from spectra.engine.callbacks import GradientHealthCallback
+from spectra.engine.callbacks import GradientHealthCallback, RuntimeOverheadCallback
 
 from spectra.utils.callbacks import build_checkpoints, build_early_stopping
 from spectra.utils.progress import build_progress_bar
@@ -85,12 +85,18 @@ def execute_training_mission(cfg: DictConfig, output_dir: Path):
     model = instantiate(cfg.module, cfg=cfg, engine=engine, _recursive_=False)
 
 
+    runtime_overhead_callback = None
+    if cfg.train.get("measure_overhead", False):
+        runtime_overhead_callback = RuntimeOverheadCallback()
+
     callbacks = [
         *build_checkpoints(cfg, artifact_dir),
         GradientHealthCallback(check_interval=50),
         LearningRateMonitor(logging_interval="step"),
         build_progress_bar(cfg),
     ]
+    if runtime_overhead_callback is not None:
+        callbacks.append(runtime_overhead_callback)
     es_cb = build_early_stopping(cfg)
     if es_cb is not None:
         callbacks.append(es_cb)
@@ -202,6 +208,8 @@ def execute_training_mission(cfg: DictConfig, output_dir: Path):
             "global_step": int(trainer.global_step),
             "checkpoint_registry": checkpoint_registry,
         }
+        if runtime_overhead_callback is not None:
+            summary_payload["runtime_overhead"] = runtime_overhead_callback.build_summary()
         run_summary_path = save_run_summary(cfg, artifact_dir, summary_payload)
         wandb_session.update_summary(summary_payload)
         logger.info(f"Run summary saved to: {run_summary_path}")

@@ -117,7 +117,7 @@ rebuttal or cover letter).
   Report wall-clock and memory overhead introduced by the batch-wise log-loss statistics,
   normalization, and the separate uncertainty-objective optimization pass.
   **Resolves:** Mxe9-11, Mxe9-12, Mxe9-Q4, MKod-7
-  **Status:** Open
+  **Status:** In Progress - half-NYUv2 overhead study scaffolded; runtime/memory runs still pending
 
 - [ ] **WI-11. Ablate the stop-gradient design choice independently from the bounded/batch-aware chart.**
   Isolate whether the split-optimization stop-gradient is doing independent work, rather than only

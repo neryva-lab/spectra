@@ -3,6 +3,7 @@ Gradient health monitoring callback.
 """
 
 import logging
+import time
 from typing import Any, Dict
 
 import torch
@@ -161,3 +162,95 @@ class GradientHealthCallback(pl.Callback):
 
 # Backward-compatible alias (train.py imports this name)
 NTKGradExplosionTracker = GradientHealthCallback
+
+
+class RuntimeOverheadCallback(pl.Callback):
+    """Measure per-epoch wall-clock time and peak CUDA memory.
+
+    This callback is intended for lightweight overhead studies where we
+    want to compare methods like BPGS and Kendall under identical
+    benchmark settings.
+    """
+
+    def __init__(self) -> None:
+        super().__init__()
+        self._epoch_start_time: float | None = None
+        self._epoch_seconds: list[float] = []
+        self._peak_cuda_mem_bytes: list[int] = []
+        self._trainable_param_count: int | None = None
+        self._total_param_count: int | None = None
+        self._device: str | None = None
+
+    def on_fit_start(self, trainer: pl.Trainer, pl_module: pl.LightningModule) -> None:
+        self._trainable_param_count = sum(
+            p.numel() for p in pl_module.parameters() if p.requires_grad
+        )
+        self._total_param_count = sum(p.numel() for p in pl_module.parameters())
+        device = getattr(pl_module, "device", None)
+        self._device = str(device) if device is not None else None
+
+    def on_train_epoch_start(self, trainer: pl.Trainer, pl_module: pl.LightningModule) -> None:
+        if torch.cuda.is_available() and getattr(pl_module, "device", None) is not None:
+            device = pl_module.device
+            if str(device).startswith("cuda"):
+                torch.cuda.reset_peak_memory_stats(device)
+                torch.cuda.synchronize(device)
+        self._epoch_start_time = time.perf_counter()
+
+    def on_train_epoch_end(self, trainer: pl.Trainer, pl_module: pl.LightningModule) -> None:
+        if self._epoch_start_time is None:
+            return
+
+        if torch.cuda.is_available() and getattr(pl_module, "device", None) is not None:
+            device = pl_module.device
+            if str(device).startswith("cuda"):
+                torch.cuda.synchronize(device)
+                peak_bytes = int(torch.cuda.max_memory_allocated(device))
+            else:
+                peak_bytes = 0
+        else:
+            peak_bytes = 0
+
+        elapsed = time.perf_counter() - self._epoch_start_time
+        self._epoch_seconds.append(float(elapsed))
+        self._peak_cuda_mem_bytes.append(peak_bytes)
+        self._epoch_start_time = None
+
+    def build_summary(self) -> Dict[str, Any]:
+        """Return aggregated runtime-overhead statistics."""
+        if self._epoch_seconds:
+            epoch_arr = torch.tensor(self._epoch_seconds, dtype=torch.float64)
+            mean_seconds = float(epoch_arr.mean().item())
+            median_seconds = float(epoch_arr.median().item())
+            std_seconds = float(epoch_arr.std(unbiased=False).item())
+            max_seconds = float(epoch_arr.max().item())
+            min_seconds = float(epoch_arr.min().item())
+        else:
+            mean_seconds = None
+            median_seconds = None
+            std_seconds = None
+            max_seconds = None
+            min_seconds = None
+
+        if self._peak_cuda_mem_bytes:
+            peak_bytes = max(self._peak_cuda_mem_bytes)
+            peak_mb = float(peak_bytes / (1024 ** 2))
+        else:
+            peak_mb = None
+
+        return {
+            "epoch_seconds": list(self._epoch_seconds),
+            "peak_cuda_mem_mb_per_epoch": [
+                float(v / (1024 ** 2)) for v in self._peak_cuda_mem_bytes
+            ],
+            "mean_epoch_seconds": mean_seconds,
+            "median_epoch_seconds": median_seconds,
+            "std_epoch_seconds": std_seconds,
+            "min_epoch_seconds": min_seconds,
+            "max_epoch_seconds": max_seconds,
+            "peak_cuda_mem_mb": peak_mb,
+            "trainable_param_count": self._trainable_param_count,
+            "total_param_count": self._total_param_count,
+            "device": self._device,
+            "num_epochs": len(self._epoch_seconds),
+        }
