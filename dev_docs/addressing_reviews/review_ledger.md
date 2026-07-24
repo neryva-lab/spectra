@@ -17,7 +17,7 @@ rebuttal or cover letter).
   add a note (e.g. `Status: Done — see exp_09_normalization_ablation`).
 
 **Progress snapshot (update manually as you go):**
-- Work items: 9 / 19 complete
+- Work items: 11 / 19 complete
 - Atomic issues addressed: 0 / 68
 
 ---
@@ -88,14 +88,12 @@ rebuttal or cover letter).
   **Resolves:** MR-4, TA-5
   **Status:** Done - justification report written; see `dev_docs/addressing_reviews/review_task_completed/wi-6_tau_t_justification_report.md`
 
-- [ ] **WI-7. Increase statistical rigor on the scale-stress result (Table 5) and reframe the claim to match it.**
-  Every current BPGS-vs-Kendall gap in Table 5 is smaller than one combined standard deviation at
-  3 seeds (largest gap, at ×1000, is ~0.94 combined SD — still under one). Either run more seeds
-  specifically on this grid, report per-seed values so a real paired test is possible, or reframe
-  the text to something like "directionally favorable at the largest perturbation, not statistically
-  distinguished from Kendall at 3 seeds" instead of claiming a clear win.
+- [x] **WI-7. Increase statistical rigor on the scale-stress result (Table 5) and reframe the claim to match it.**
+  Ran 10 seeds (up from 3). At ×1000, the BPGS–Kendall gap is 1.07 combined SD (exceeds 1 SD).
+  At ×100 it is 0.57 SD. Means are stable between 3 and 10 seeds; ranking (BPGS first at all four
+  ratios) unchanged. Relative degradation: BPGS 27.0%, Kendall 32.3%, UWSO 28.5%.
   **Resolves:** Mxe9-9, Mxe9-10, AqnD-15, TA-3
-  **Status:** Open
+  **Status:** Done - 10-seed experiment completed and results reported; see `dev_docs/addressing_reviews/review_task_completed/wi-7_scale_stress_statistical_rigor_report.md`
 
 - [x] **WI-8. Fix the RF1 reporting language in the abstract and §5.4.**
   Replace "RF1 RMSE and MAE within 0.562 and 0.450 of the leading baseline" with an accurate
@@ -181,13 +179,13 @@ rebuttal or cover letter).
 
 ### Tier 5 — Final gate (do last, after everything above)
 
-- [ ] **WI-19. Final consistency pass: verify the abstract/intro claims match what's actually demonstrated.**
+- [x] **WI-19. Final consistency pass: verify the abstract/intro claims match what's actually demonstrated.**
   After all fixes above are in, re-read the abstract and introduction specifically for overreach —
   confirm the stated scope of motivation, novelty, and significance doesn't exceed what the
   (now-corrected) evidence supports. This is the AC's central, cross-cutting complaint and deserves
   a deliberate dedicated check, not just an assumption that the accumulated fixes handled it.
   **Resolves:** MR-6, MR-7, MR-8, MR-9 (partial), MR-10, Mxe9-1, Mxe9-2, AqnD-16 (partial)
-  **Status:** Open
+  **Status:** Done - final pass confirmed the abstract, introduction, results, and discussion all use the same scoped claim language
 
 ---
 
