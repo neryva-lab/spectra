@@ -35,13 +35,13 @@ Define the detached log-loss statistics:
 $$
 \widetilde{L}_i = \max(L_i, \varepsilon_{\log}),
 \qquad
-\mu(L) = \frac{1}{T}\sum_{i=1}^{T}\log \widetilde{L}_i
+\mu(L) = \frac{1}{T}\sum_{i=1}^{T}\operatorname{sg}[\log \widetilde{L}_i]
 $$
 
 $$
 \bar{\sigma}(L) =
 \max\left(
-\sqrt{\frac{1}{T}\sum_{i=1}^{T}\left(\log \widetilde{L}_i - \mu(L)\right)^2},
+\sqrt{\frac{1}{T}\sum_{i=1}^{T}\left(\operatorname{sg}[\log \widetilde{L}_i] - \mu(L)\right)^2},
 \varepsilon_{\mathrm{std}}
 \right)
 $$
@@ -60,7 +60,7 @@ $$
 | `s_min`, `s_max` | Stateless chart bounds | `self.s_min`, `self.s_max` |
 | `eps_log` | Log clamp | `self.eps_clip` |
 | `eps_std` | Std floor | `1e-4` in `_update_batch_stats()` |
-| `gamma_theta` | Gradient scale applied to `theta` | `self.theta_grad_scale` via `GradScale` |
+| `gamma_theta` | Gradient scale applied to `theta` (default 100.0) | `self.theta_grad_scale` via `GradScale` |
 | `tau_T` | Latent radius | `self.topological_limit` |
 | `theta_i` | Uncertainty coordinate | `self.theta[i]` |
 | `mu(L)` | Mean detached log-loss | `log_losses.mean()` |

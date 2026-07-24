@@ -17,7 +17,7 @@ rebuttal or cover letter).
   add a note (e.g. `Status: Done — see exp_09_normalization_ablation`).
 
 **Progress snapshot (update manually as you go):**
-- Work items: 5 / 19 complete
+- Work items: 6 / 19 complete
 - Atomic issues addressed: 0 / 68
 
 ---
@@ -62,7 +62,7 @@ rebuttal or cover letter).
 
 ### Tier 2 — Scientific correctness fixes
 
-- [ ] **WI-4. Reconcile the paper's equations/text with the actual released code.**
+- [x] **WI-4. Reconcile the paper's equations/text with the actual released code.**
   Specifically: the undocumented 100× gradient scale on θ; the NYUv2 hyperparameter mismatch
   (paper vs. code disagree on epoch/batch settings, reported as 120/8 vs 80/4); the validation
   selection metric (`val/total_loss` in text vs. hard-coded `val/miou` in code); gradient-clipping
@@ -70,7 +70,7 @@ rebuttal or cover letter).
   update the equations/text to match what the code does, or update the code to match the paper and
   rerun any affected experiments (this affects Table 2 specifically, per AqnD).
   **Resolves:** AqnD-1, AqnD-2, AqnD-3, AqnD-10, AqnD-11, AqnD-12, AqnD-13, AqnD-17, AqnD-18
-  **Status:** Open
+  **Status:** Done - reconciliation report written; see `dev_docs/addressing_reviews/review_task_completed/wi-4_paper_code_reconciliation_report.md`
 
 - [x] **WI-5. Analyze and document θ / z_i saturation behavior empirically.**
   Add a companion analysis to the existing Figure 7 (task-weight dynamics): plot the underlying

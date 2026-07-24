@@ -61,6 +61,8 @@ python experiments/bpgs_study/run.py --study 03_yeast_regime_check --set train.b
 
 This study may include a preparation stage that materializes deterministic NYUv2 subset files through `experiments/bpgs_study/nyuv2_subsets.py`.
 
+**Subset parameters:** The ablation study (`01_nyuv2_ablation`) uses `subset_budget: "50"` (50% = 398 of 795 training images), `subset_seed: 11`, `use_subset_file: true`. Subsets are generated via **stratified sampling** by majority semantic class and depth quartile, using `random.Random(seed)` for reproducibility. The generated JSON files contain the selected index list and metadata including SHA-256 of the source manifest. Subset files are written to `experiments/bpgs_study/assets/nyuv2_subsets/v1/` with IDs of the form `nyuv2_train_p{budget}_s{seed}_v1.json`. The script generates 9 subsets total (3 budgets × 3 seeds: 25%/50%/75% × seeds 11/22/33), though the ablation study only uses budget=50%, seed=11.
+
 ### Stress
 
 | Study | Type | Definition file | Purpose |
