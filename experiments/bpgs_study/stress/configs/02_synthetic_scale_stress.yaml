@@ -8,27 +8,27 @@ variants:
     experiment: exp_03_imbalance_robustness
     family: imbalance
     methods: [bpgs, uwso, kendall]
-    seeds: [42, 43, 44]
+    seeds: [42, 43, 44, 45, 46, 47, 48, 49, 50, 51]
     overrides:
       - experiment.generator.imbalance_ratio=1.0
   - label: x10
     experiment: exp_03_imbalance_robustness
     family: imbalance
     methods: [bpgs, uwso, kendall]
-    seeds: [42, 43, 44]
+    seeds: [42, 43, 44, 45, 46, 47, 48, 49, 50, 51]
     overrides:
       - experiment.generator.imbalance_ratio=10.0
   - label: x100
     experiment: exp_03_imbalance_robustness
     family: imbalance
     methods: [bpgs, uwso, kendall]
-    seeds: [42, 43, 44]
+    seeds: [42, 43, 44, 45, 46, 47, 48, 49, 50, 51]
     overrides:
       - experiment.generator.imbalance_ratio=100.0
   - label: x1000
     experiment: exp_03_imbalance_robustness
     family: imbalance
     methods: [bpgs, uwso, kendall]
-    seeds: [42, 43, 44]
+    seeds: [42, 43, 44, 45, 46, 47, 48, 49, 50, 51]
     overrides:
       - experiment.generator.imbalance_ratio=1000.0
