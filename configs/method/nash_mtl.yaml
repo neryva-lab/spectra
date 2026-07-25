@@ -3,7 +3,6 @@ method_name: nash_mtl
 
 method:
   name: nash_mtl
-  params: {}
 
 module:
   engine:
