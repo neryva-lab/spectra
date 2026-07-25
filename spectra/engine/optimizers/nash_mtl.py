@@ -164,9 +164,9 @@ class NashMTLEngine(OptimizationEngine):
 
         # 6. Head gradients: each head receives its own task loss gradient.
         for i, task_name in enumerate(module.task_names):
-            head = module.heads.get(task_name) if hasattr(module, "heads") else None
-            if head is None:
+            if not hasattr(module, "heads") or task_name not in module.heads:
                 continue
+            head = module.heads[task_name]
             head_params = list(head.parameters())
             if not head_params:
                 continue
