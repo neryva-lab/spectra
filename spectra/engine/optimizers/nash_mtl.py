@@ -64,10 +64,16 @@ class NashMTLEngine(OptimizationEngine):
             alpha_new = 1.0 / v
             alpha_new = alpha_new / alpha_new.sum()
 
+            if not np.isfinite(alpha_new).all():
+                alpha_new = np.ones(K, dtype=np.float64) / K
+
             if np.linalg.norm(alpha_new - alpha) < self.tol:
                 alpha = alpha_new
                 break
             alpha = alpha_new
+
+        if not np.isfinite(alpha).all():
+            alpha = np.ones(K, dtype=np.float64) / K
 
         self._prvs_alpha = alpha.astype(np.float64).copy()
         return alpha.astype(np.float32)
@@ -133,32 +139,65 @@ class NashMTLEngine(OptimizationEngine):
         self._step += 1
         alpha_tensor = torch.from_numpy(alpha).to(G.device, dtype=G.dtype)
 
+        if not torch.isfinite(alpha_tensor).all():
+            alpha_tensor = torch.full_like(alpha_tensor, 1.0 / K)
+            alpha = alpha_tensor.detach().cpu().numpy()
+
         if self.max_norm > 0:
             combined_grad = torch.mv(G.T, alpha_tensor)
             combined_norm = torch.linalg.norm(combined_grad)
-            if combined_norm > self.max_norm:
+            if torch.isfinite(combined_norm) and combined_norm > self.max_norm:
                 alpha_tensor = alpha_tensor * (self.max_norm / (combined_norm + 1e-12))
                 alpha = alpha_tensor.detach().cpu().numpy()
 
-        # 5. Weighted sum backward — handles shared + head params
-        weighted_loss = sum(alpha_tensor[i] * weighted_task_loss_list[i] for i in range(K))
-        if scaler is not None:
-            scaler.scale(weighted_loss).backward()
-        else:
-            weighted_loss.backward()
+        # 5. Backbone gradients: combine task gradients with Nash weights.
+        combined_flat_grad = torch.mv(G.T, alpha_tensor)
+        offset = 0
+        for param in shared_params:
+            numel = param.numel()
+            grad_slice = combined_flat_grad[offset: offset + numel].reshape(param.shape)
+            if param.grad is None:
+                param.grad = grad_slice.clone()
+            else:
+                param.grad.copy_(grad_slice)
+            offset += numel
 
-        # 6. Unscale if AMP
+        # 6. Head gradients: each head receives its own task loss gradient.
+        for i, task_name in enumerate(module.task_names):
+            head = module.heads.get(task_name) if hasattr(module, "heads") else None
+            if head is None:
+                continue
+            head_params = list(head.parameters())
+            if not head_params:
+                continue
+            loss_scaled = scaler.scale(weighted_task_loss_list[i]) if scaler is not None else weighted_task_loss_list[i]
+            is_last_head = (i == len(module.task_names) - 1)
+            head_grads = torch.autograd.grad(
+                loss_scaled,
+                head_params,
+                retain_graph=not is_last_head,
+                allow_unused=True,
+            )
+            for param, grad in zip(head_params, head_grads):
+                if grad is not None:
+                    if param.grad is None:
+                        param.grad = grad.clone()
+                    else:
+                        param.grad.copy_(grad)
+
+        # 7. Unscale if AMP
         if scaler is not None:
             scaler.unscale_(raw_opt)
 
-        # 7. DDP sync: the Nash weights are synchronized above through GTG.
-        #    weighted_loss.backward() then triggers the usual DDP gradient hooks.
+        # 8. DDP sync: the Nash weights are synchronized above through GTG.
+        #    Shared/head grads are assigned manually, so all-reduce must happen
+        #    through the wrapped optimizer/strategy in the caller if needed.
 
-        # 8. Gradient clipping
+        # 9. Gradient clipping
         if module.cfg.train.get("grad_clip", 0) > 0:
             module.clip_gradients(opt, gradient_clip_val=module.cfg.train.grad_clip)
 
-        # 9. Optimizer + scheduler step
+        # 10. Optimizer + scheduler step
         if scaler is not None:
             old_scale = scaler.get_scale()
             scaler.step(raw_opt)
@@ -170,10 +209,10 @@ class NashMTLEngine(OptimizationEngine):
             if sch is not None:
                 sch.step()
 
-        # 10. Logging
+        # 11. Logging
         for i, a in enumerate(alpha):
             module.log(f"nash_mtl/alpha_{i}", a, on_step=True, on_epoch=False, prog_bar=False)
         if sch is not None:
             module.log("lr", sch.get_last_lr()[0], on_step=True, on_epoch=False, prog_bar=False)
 
-        return None
+        return sum(weighted_task_loss_list).detach()
