@@ -98,6 +98,8 @@ class NashMTLEngine(OptimizationEngine):
         gtg: torch.Tensor,
         alpha: torch.Tensor,
         task_grads: list[list[torch.Tensor]],
+        flat_grads: list[torch.Tensor],
+        g_tensor: torch.Tensor,
         combined_grad: torch.Tensor,
         clip_factor: float,
     ) -> None:
@@ -118,8 +120,18 @@ class NashMTLEngine(OptimizationEngine):
                 [torch.cat([g.reshape(-1) for g in grads]).norm().item() for grads in task_grads],
                 dtype=torch.float32,
             )
+            task_finite = torch.tensor(
+                [float(all(torch.isfinite(g).all().item() for g in grads)) for grads in task_grads],
+                dtype=torch.float32,
+            )
+            flat_finite = torch.tensor(
+                [float(torch.isfinite(g).all().item()) for g in flat_grads],
+                dtype=torch.float32,
+            )
+            g_finite = float(torch.isfinite(g_tensor).all().item())
+            gtg_finite = float(torch.isfinite(gtg).all().item())
             logger.info(
-                "[NashMTL debug] step=%s alpha=%s clip_factor=%.6f row_sums=%s diag=%s grad_norms=%s combined_norm=%.6f",
+                "[NashMTL debug] step=%s alpha=%s clip_factor=%.6f row_sums=%s diag=%s grad_norms=%s combined_norm=%.6f g_finite=%s gtg_finite=%s task_finite=%s flat_finite=%s",
                 self._step,
                 [float(x) for x in alpha_cpu.tolist()],
                 clip_factor,
@@ -127,6 +139,10 @@ class NashMTLEngine(OptimizationEngine):
                 [float(x) for x in diag.tolist()],
                 [float(x) for x in grad_norms.tolist()],
                 float(torch.linalg.norm(combined_grad).item()),
+                g_finite,
+                gtg_finite,
+                [float(x) for x in task_finite.tolist()],
+                [float(x) for x in flat_finite.tolist()],
             )
 
             module.log("nash_mtl/debug/row_sum_mean", row_sums.mean().item(), on_step=True, on_epoch=False, prog_bar=False)
@@ -135,7 +151,13 @@ class NashMTLEngine(OptimizationEngine):
             module.log("nash_mtl/debug/diag_std", diag.std(unbiased=False).item(), on_step=True, on_epoch=False, prog_bar=False)
             module.log("nash_mtl/debug/grad_norm_mean", grad_norms.mean().item(), on_step=True, on_epoch=False, prog_bar=False)
             module.log("nash_mtl/debug/grad_norm_std", grad_norms.std(unbiased=False).item(), on_step=True, on_epoch=False, prog_bar=False)
+            module.log("nash_mtl/debug/g_finite", g_finite, on_step=True, on_epoch=False, prog_bar=False)
+            module.log("nash_mtl/debug/gtg_finite", gtg_finite, on_step=True, on_epoch=False, prog_bar=False)
             module.log("nash_mtl/debug/clip_factor", clip_factor, on_step=True, on_epoch=False, prog_bar=False)
+            for i, value in enumerate(task_finite.tolist()):
+                module.log(f"nash_mtl/debug/task_{i}_finite", value, on_step=True, on_epoch=False, prog_bar=False)
+            for i, value in enumerate(flat_finite.tolist()):
+                module.log(f"nash_mtl/debug/flat_{i}_finite", value, on_step=True, on_epoch=False, prog_bar=False)
 
             if self.debug_full_matrix:
                 for i in range(gtg_cpu.shape[0]):
@@ -203,8 +225,11 @@ class NashMTLEngine(OptimizationEngine):
 
         # 2. Flatten and stack into G, compute GTG
         flat_grads = [torch.cat([g.reshape(-1) for g in tg]).to(torch.float32) for tg in task_grads]
+        flat_grads = [torch.nan_to_num(g, nan=0.0, posinf=0.0, neginf=0.0) for g in flat_grads]
         G = torch.stack(flat_grads)
+        G = torch.nan_to_num(G, nan=0.0, posinf=0.0, neginf=0.0)
         GTG = G @ G.T
+        GTG = torch.nan_to_num(GTG, nan=0.0, posinf=0.0, neginf=0.0)
 
         if module.trainer.world_size > 1 and dist.is_initialized():
             dist.all_reduce(GTG, op=dist.ReduceOp.SUM)
@@ -274,6 +299,8 @@ class NashMTLEngine(OptimizationEngine):
             gtg=GTG_normalized,
             alpha=alpha_tensor,
             task_grads=task_grads,
+            flat_grads=flat_grads,
+            g_tensor=G,
             combined_grad=combined_flat_grad,
             clip_factor=clip_factor,
         )
