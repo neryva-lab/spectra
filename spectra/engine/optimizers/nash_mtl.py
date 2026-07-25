@@ -202,7 +202,7 @@ class NashMTLEngine(OptimizationEngine):
             task_grads.append(grads)
 
         # 2. Flatten and stack into G, compute GTG
-        flat_grads = [torch.cat([g.reshape(-1) for g in tg]) for tg in task_grads]
+        flat_grads = [torch.cat([g.reshape(-1) for g in tg]).to(torch.float32) for tg in task_grads]
         G = torch.stack(flat_grads)
         GTG = G @ G.T
 
