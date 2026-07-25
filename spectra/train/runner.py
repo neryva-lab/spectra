@@ -151,11 +151,29 @@ def execute_training_mission(cfg: DictConfig, output_dir: Path):
         isinstance(cb, TQDMProgressBar) for cb in callbacks
     )
 
+    trainer_devices = cfg.train.get("devices", "auto")
+    trainer_accelerator = cfg.train.get("accelerator", "auto")
+    if "strategy" in cfg.train:
+        trainer_strategy = cfg.train.get("strategy")
+    else:
+        explicit_multi_device = (
+            isinstance(trainer_devices, int) and trainer_devices > 1
+        ) or (
+            isinstance(trainer_devices, (list, tuple)) and len(trainer_devices) > 1
+        ) or (
+            isinstance(trainer_devices, str) and trainer_devices != "auto" and trainer_devices != "1"
+        )
+        trainer_strategy = (
+            "ddp_find_unused_parameters_false"
+            if torch.cuda.device_count() > 1 and not explicit_multi_device and trainer_devices == "auto"
+            else "auto"
+        )
+
     trainer = pl.Trainer(
         max_epochs=cfg.train.epochs,
-        accelerator="auto",
-        devices="auto",
-        strategy="ddp_find_unused_parameters_false" if torch.cuda.device_count() > 1 else "auto",
+        accelerator=trainer_accelerator,
+        devices=trainer_devices,
+        strategy=trainer_strategy,
         precision=cfg.train.get("precision", "16-mixed"),
         gradient_clip_val=gradient_clip_val,
         callbacks=callbacks,

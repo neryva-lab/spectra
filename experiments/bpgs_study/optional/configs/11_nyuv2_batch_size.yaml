@@ -1,0 +1,64 @@
+name: 11_nyuv2_batch_size
+group: optional
+kind: training
+description: Half-NYUv2 batch-size sensitivity check for canonical BPGS.
+requires_nyuv2_subsets: true
+notes: Keep the dataset, seed, and method fixed while varying only the training batch size around the paper default of 8.
+variants:
+  - label: batch_4
+    dataset: nyuv2
+    method: bpgs
+    epochs: 60
+    seeds: [42, 43, 44]
+    early_stop: false
+    subset_budget: "50"
+    subset_seed: 11
+    use_subset_file: true
+    extra_overrides:
+      - method.s_mode=batch_aware
+      - method.init_mode=auto_calibrate
+      - train.batch_size=4
+      - batch_augmentation=cpu
+      - train.deterministic=true
+      - train.deterministic_warn_only=true
+      - train.save_ckpt=false
+      - train.progress.type=minimal
+      - train.progress.update_interval_seconds=15
+  - label: batch_8
+    dataset: nyuv2
+    method: bpgs
+    epochs: 60
+    seeds: [42, 43, 44]
+    early_stop: false
+    subset_budget: "50"
+    subset_seed: 11
+    use_subset_file: true
+    extra_overrides:
+      - method.s_mode=batch_aware
+      - method.init_mode=auto_calibrate
+      - train.batch_size=8
+      - batch_augmentation=cpu
+      - train.deterministic=true
+      - train.deterministic_warn_only=true
+      - train.save_ckpt=false
+      - train.progress.type=minimal
+      - train.progress.update_interval_seconds=15
+  - label: batch_16
+    dataset: nyuv2
+    method: bpgs
+    epochs: 60
+    seeds: [42, 43, 44]
+    early_stop: false
+    subset_budget: "50"
+    subset_seed: 11
+    use_subset_file: true
+    extra_overrides:
+      - method.s_mode=batch_aware
+      - method.init_mode=auto_calibrate
+      - train.batch_size=16
+      - batch_augmentation=cpu
+      - train.deterministic=true
+      - train.deterministic_warn_only=true
+      - train.save_ckpt=false
+      - train.progress.type=minimal
+      - train.progress.update_interval_seconds=15

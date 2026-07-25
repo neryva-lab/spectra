@@ -245,6 +245,9 @@ def generate_experiment_metadata(cfg: DictConfig, artifact_dir: Path) -> Dict[st
         "training": {
             "epochs": train_cfg.get("epochs", 0),
             "batch_size": train_cfg.get("batch_size", 0),
+            "devices": train_cfg.get("devices", "auto"),
+            "accelerator": train_cfg.get("accelerator", "auto"),
+            "strategy": train_cfg.get("strategy", None),
             "lr": train_cfg.get("lr", 0.0),
             "min_lr": train_cfg.get("min_lr", 0.0),
             "loader_seed": train_cfg.get("loader_seed", None),
