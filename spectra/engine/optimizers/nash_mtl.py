@@ -96,6 +96,7 @@ class NashMTLEngine(OptimizationEngine):
         self,
         module: pl.LightningModule,
         gtg: torch.Tensor,
+        raw_gtg: torch.Tensor,
         alpha: torch.Tensor,
         task_grads: list[list[torch.Tensor]],
         flat_grads: list[torch.Tensor],
@@ -129,9 +130,10 @@ class NashMTLEngine(OptimizationEngine):
                 dtype=torch.float32,
             )
             g_finite = float(torch.isfinite(g_tensor).all().item())
+            raw_gtg_finite = float(torch.isfinite(raw_gtg).all().item())
             gtg_finite = float(torch.isfinite(gtg).all().item())
             logger.info(
-                "[NashMTL debug] step=%s alpha=%s clip_factor=%.6f row_sums=%s diag=%s grad_norms=%s combined_norm=%.6f g_finite=%s gtg_finite=%s task_finite=%s flat_finite=%s",
+                "[NashMTL debug] step=%s alpha=%s clip_factor=%.6f row_sums=%s diag=%s grad_norms=%s combined_norm=%.6f g_finite=%s raw_gtg_finite=%s gtg_finite=%s task_finite=%s flat_finite=%s",
                 self._step,
                 [float(x) for x in alpha_cpu.tolist()],
                 clip_factor,
@@ -140,6 +142,7 @@ class NashMTLEngine(OptimizationEngine):
                 [float(x) for x in grad_norms.tolist()],
                 float(torch.linalg.norm(combined_grad).item()),
                 g_finite,
+                raw_gtg_finite,
                 gtg_finite,
                 [float(x) for x in task_finite.tolist()],
                 [float(x) for x in flat_finite.tolist()],
@@ -152,6 +155,7 @@ class NashMTLEngine(OptimizationEngine):
             module.log("nash_mtl/debug/grad_norm_mean", grad_norms.mean().item(), on_step=True, on_epoch=False, prog_bar=False)
             module.log("nash_mtl/debug/grad_norm_std", grad_norms.std(unbiased=False).item(), on_step=True, on_epoch=False, prog_bar=False)
             module.log("nash_mtl/debug/g_finite", g_finite, on_step=True, on_epoch=False, prog_bar=False)
+            module.log("nash_mtl/debug/raw_gtg_finite", raw_gtg_finite, on_step=True, on_epoch=False, prog_bar=False)
             module.log("nash_mtl/debug/gtg_finite", gtg_finite, on_step=True, on_epoch=False, prog_bar=False)
             module.log("nash_mtl/debug/clip_factor", clip_factor, on_step=True, on_epoch=False, prog_bar=False)
             for i, value in enumerate(task_finite.tolist()):
@@ -228,8 +232,10 @@ class NashMTLEngine(OptimizationEngine):
         flat_grads = [torch.nan_to_num(g, nan=0.0, posinf=0.0, neginf=0.0) for g in flat_grads]
         G = torch.stack(flat_grads)
         G = torch.nan_to_num(G, nan=0.0, posinf=0.0, neginf=0.0)
-        GTG = G @ G.T
-        GTG = torch.nan_to_num(GTG, nan=0.0, posinf=0.0, neginf=0.0)
+        G_cpu = G.detach().to(torch.float64).cpu()
+        raw_GTG = G_cpu @ G_cpu.T
+        raw_GTG = torch.nan_to_num(raw_GTG, nan=0.0, posinf=0.0, neginf=0.0)
+        GTG = raw_GTG
 
         if module.trainer.world_size > 1 and dist.is_initialized():
             dist.all_reduce(GTG, op=dist.ReduceOp.SUM)
@@ -241,7 +247,7 @@ class NashMTLEngine(OptimizationEngine):
 
         # 4. Solve for Nash weights, or reuse the cached ones.
         if update_weights:
-            alpha = self._solve_nash(GTG_normalized.detach())
+            alpha = self._solve_nash(GTG_normalized.detach().to(torch.float32))
         else:
             alpha = self._prvs_alpha.copy()
         self._step += 1
@@ -297,6 +303,7 @@ class NashMTLEngine(OptimizationEngine):
         self._log_debug_stats(
             module=module,
             gtg=GTG_normalized,
+            raw_gtg=raw_GTG,
             alpha=alpha_tensor,
             task_grads=task_grads,
             flat_grads=flat_grads,
