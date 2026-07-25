@@ -7,6 +7,10 @@ method:
 module:
   engine:
     _target_: spectra.engine.optimizers.NashMTLEngine
+    debug: false
+    debug_interval: 10
+    debug_max_steps: 10
+    debug_full_matrix: false
 
 train:
   grad_clip: 1.0

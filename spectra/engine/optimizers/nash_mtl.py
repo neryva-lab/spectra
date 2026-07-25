@@ -1,10 +1,10 @@
 """Nash-MTL gradient aggregation engine.
 
 Computes per-task gradients, solves the Nash bargaining problem
-for task weights a, then backpropagates the weighted sum.
-Mirrors the structure of PCGradEngine.
+for task weights a, then applies the weighted shared-gradient update.
 """
 
+import logging
 from typing import Any
 
 import numpy as np
@@ -13,6 +13,8 @@ import torch.distributed as dist
 import pytorch_lightning as pl
 
 from spectra.engine.optimizers.base import OptimizationEngine
+
+logger = logging.getLogger(__name__)
 
 
 class NashMTLEngine(OptimizationEngine):
@@ -29,6 +31,10 @@ class NashMTLEngine(OptimizationEngine):
         tol: float = 1e-8,
         max_norm: float = 1.0,
         update_weights_every: int = 1,
+        debug: bool = False,
+        debug_interval: int = 50,
+        debug_max_steps: int = 10,
+        debug_full_matrix: bool = False,
     ):
         super().__init__()
         if max_iter <= 0:
@@ -39,10 +45,18 @@ class NashMTLEngine(OptimizationEngine):
             raise ValueError(f"max_norm must be non-negative; got {max_norm}.")
         if update_weights_every <= 0:
             raise ValueError(f"update_weights_every must be positive; got {update_weights_every}.")
+        if debug_interval <= 0:
+            raise ValueError(f"debug_interval must be positive; got {debug_interval}.")
+        if debug_max_steps < 0:
+            raise ValueError(f"debug_max_steps must be non-negative; got {debug_max_steps}.")
         self.max_iter = max_iter
         self.tol = tol
         self.max_norm = max_norm
         self.update_weights_every = update_weights_every
+        self.debug = debug
+        self.debug_interval = debug_interval
+        self.debug_max_steps = debug_max_steps
+        self.debug_full_matrix = debug_full_matrix
         self._prvs_alpha = None
         self._step = 0
 
@@ -77,6 +91,75 @@ class NashMTLEngine(OptimizationEngine):
 
         self._prvs_alpha = alpha.astype(np.float64).copy()
         return alpha.astype(np.float32)
+
+    def _log_debug_stats(
+        self,
+        module: pl.LightningModule,
+        gtg: torch.Tensor,
+        alpha: torch.Tensor,
+        task_grads: list[list[torch.Tensor]],
+        combined_grad: torch.Tensor,
+        clip_factor: float,
+    ) -> None:
+        if not self.debug:
+            return
+        if self._step >= self.debug_max_steps:
+            return
+        if self._step % self.debug_interval != 0:
+            return
+
+        with torch.no_grad():
+            gtg_cpu = gtg.detach().float().cpu()
+            alpha_cpu = alpha.detach().float().cpu()
+            row_sums = gtg_cpu.sum(dim=1)
+            diag = torch.diag(gtg_cpu)
+            off_diag = gtg_cpu - torch.diag_embed(diag)
+            grad_norms = torch.tensor(
+                [torch.cat([g.reshape(-1) for g in grads]).norm().item() for grads in task_grads],
+                dtype=torch.float32,
+            )
+            logger.info(
+                "[NashMTL debug] step=%s alpha=%s clip_factor=%.6f row_sums=%s diag=%s grad_norms=%s combined_norm=%.6f",
+                self._step,
+                [float(x) for x in alpha_cpu.tolist()],
+                clip_factor,
+                [float(x) for x in row_sums.tolist()],
+                [float(x) for x in diag.tolist()],
+                [float(x) for x in grad_norms.tolist()],
+                float(torch.linalg.norm(combined_grad).item()),
+            )
+
+            module.log("nash_mtl/debug/row_sum_mean", row_sums.mean().item(), on_step=True, on_epoch=False, prog_bar=False)
+            module.log("nash_mtl/debug/row_sum_std", row_sums.std(unbiased=False).item(), on_step=True, on_epoch=False, prog_bar=False)
+            module.log("nash_mtl/debug/diag_mean", diag.mean().item(), on_step=True, on_epoch=False, prog_bar=False)
+            module.log("nash_mtl/debug/diag_std", diag.std(unbiased=False).item(), on_step=True, on_epoch=False, prog_bar=False)
+            module.log("nash_mtl/debug/grad_norm_mean", grad_norms.mean().item(), on_step=True, on_epoch=False, prog_bar=False)
+            module.log("nash_mtl/debug/grad_norm_std", grad_norms.std(unbiased=False).item(), on_step=True, on_epoch=False, prog_bar=False)
+            module.log("nash_mtl/debug/clip_factor", clip_factor, on_step=True, on_epoch=False, prog_bar=False)
+
+            if self.debug_full_matrix:
+                for i in range(gtg_cpu.shape[0]):
+                    for j in range(gtg_cpu.shape[1]):
+                        module.log(
+                            f"nash_mtl/debug/gtg_{i}_{j}",
+                            gtg_cpu[i, j].item(),
+                            on_step=True,
+                            on_epoch=False,
+                            prog_bar=False,
+                        )
+                if gtg_cpu.shape[0] > 1:
+                    row0 = gtg_cpu[0]
+                    for i in range(1, gtg_cpu.shape[0]):
+                        cos_like = torch.nn.functional.cosine_similarity(
+                            row0.unsqueeze(0), gtg_cpu[i].unsqueeze(0), dim=1
+                        ).item()
+                        module.log(
+                            f"nash_mtl/debug/gtg_row_cos_{i}",
+                            cos_like,
+                            on_step=True,
+                            on_epoch=False,
+                            prog_bar=False,
+                        )
 
     def reset(self) -> None:
         self._prvs_alpha = None
@@ -143,15 +226,15 @@ class NashMTLEngine(OptimizationEngine):
             alpha_tensor = torch.full_like(alpha_tensor, 1.0 / K)
             alpha = alpha_tensor.detach().cpu().numpy()
 
+        combined_flat_grad = torch.mv(G.T, alpha_tensor)
+        clip_factor = 1.0
         if self.max_norm > 0:
-            combined_grad = torch.mv(G.T, alpha_tensor)
-            combined_norm = torch.linalg.norm(combined_grad)
+            combined_norm = torch.linalg.norm(combined_flat_grad)
             if torch.isfinite(combined_norm) and combined_norm > self.max_norm:
-                alpha_tensor = alpha_tensor * (self.max_norm / (combined_norm + 1e-12))
-                alpha = alpha_tensor.detach().cpu().numpy()
+                clip_factor = float((self.max_norm / (combined_norm + 1e-12)).item())
+                combined_flat_grad = combined_flat_grad * clip_factor
 
         # 5. Backbone gradients: combine task gradients with Nash weights.
-        combined_flat_grad = torch.mv(G.T, alpha_tensor)
         offset = 0
         for param in shared_params:
             numel = param.numel()
@@ -185,6 +268,15 @@ class NashMTLEngine(OptimizationEngine):
                         param.grad = grad.clone()
                     else:
                         param.grad.copy_(grad)
+
+        self._log_debug_stats(
+            module=module,
+            gtg=GTG_normalized,
+            alpha=alpha_tensor,
+            task_grads=task_grads,
+            combined_grad=combined_flat_grad,
+            clip_factor=clip_factor,
+        )
 
         # 7. Unscale if AMP
         if scaler is not None:
