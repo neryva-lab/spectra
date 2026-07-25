@@ -108,7 +108,7 @@ def preflight_check(cfg: DictConfig, output_dir: Path) -> None:
         )
 
 
-    valid_methods = {"bpgs", "kendall", "kendall_norm", "uwso", "pcgrad", "gradnorm_proxy", "static"}
+    valid_methods = {"bpgs", "kendall", "kendall_norm", "uwso", "pcgrad", "gradnorm_proxy", "static", "nash_mtl"}
     method_name = cfg.get("method_name") or cfg.get("method", {}).get("name", "unknown")
     if method_name not in valid_methods:
         errors.append(f"Unknown method: '{method_name}'. Valid: {sorted(valid_methods)}")
