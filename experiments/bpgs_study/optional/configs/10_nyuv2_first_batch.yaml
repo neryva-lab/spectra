@@ -1,0 +1,64 @@
+name: 10_nyuv2_first_batch
+group: optional
+kind: training
+description: Half-NYUv2 first-batch calibration sensitivity check for canonical BPGS.
+requires_nyuv2_subsets: true
+notes: Keep the model seed fixed and vary only the training loader seed so the first observed batch changes while the rest of the setup stays matched to the ablation subset.
+variants:
+  - label: loader_seed_1001
+    dataset: nyuv2
+    method: bpgs
+    epochs: 60
+    seeds: [42]
+    early_stop: false
+    subset_budget: "50"
+    subset_seed: 11
+    use_subset_file: true
+    extra_overrides:
+      - method.s_mode=batch_aware
+      - method.init_mode=auto_calibrate
+      - train.loader_seed=1001
+      - batch_augmentation=cpu
+      - train.deterministic=true
+      - train.deterministic_warn_only=true
+      - train.save_ckpt=false
+      - train.progress.type=minimal
+      - train.progress.update_interval_seconds=15
+  - label: loader_seed_2001
+    dataset: nyuv2
+    method: bpgs
+    epochs: 60
+    seeds: [42]
+    early_stop: false
+    subset_budget: "50"
+    subset_seed: 11
+    use_subset_file: true
+    extra_overrides:
+      - method.s_mode=batch_aware
+      - method.init_mode=auto_calibrate
+      - train.loader_seed=2001
+      - batch_augmentation=cpu
+      - train.deterministic=true
+      - train.deterministic_warn_only=true
+      - train.save_ckpt=false
+      - train.progress.type=minimal
+      - train.progress.update_interval_seconds=15
+  - label: loader_seed_3001
+    dataset: nyuv2
+    method: bpgs
+    epochs: 60
+    seeds: [42]
+    early_stop: false
+    subset_budget: "50"
+    subset_seed: 11
+    use_subset_file: true
+    extra_overrides:
+      - method.s_mode=batch_aware
+      - method.init_mode=auto_calibrate
+      - train.loader_seed=3001
+      - batch_augmentation=cpu
+      - train.deterministic=true
+      - train.deterministic_warn_only=true
+      - train.save_ckpt=false
+      - train.progress.type=minimal
+      - train.progress.update_interval_seconds=15

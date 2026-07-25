@@ -79,6 +79,22 @@ def _make_loader_generator(seed: int) -> torch.Generator:
     return generator
 
 
+def _resolve_loader_seed(cfg: DictConfig, split: str) -> int:
+    """Resolve a deterministic shuffle seed for a given loader split."""
+    train_cfg = cfg.get("train", {})
+    base_seed = int(cfg.get("seed", 42))
+
+    if split == "train":
+        configured = train_cfg.get("loader_seed", None)
+        return int(base_seed if configured is None else configured)
+
+    if split == "val":
+        configured = train_cfg.get("val_loader_seed", None)
+        return int(base_seed + 1 if configured is None else configured)
+
+    raise ValueError(f"Unsupported loader split: {split}")
+
+
 def _use_nyuv2_batch_augmentation(cfg: DictConfig) -> bool:
     mode = _cfg_lookup(cfg, "batch_augmentation", "disabled")
     if mode == "disabled":
@@ -306,7 +322,7 @@ class SPECTRADataModule(pl.LightningDataModule):
         batch_size = self.cfg.train.batch_size
         num_workers = _resolve_num_workers(self.cfg)
         loader_kwargs = _loader_kwargs(self.dataset_name, num_workers, self.cfg)
-        loader_generator = _make_loader_generator(int(self.cfg.get("seed", 42)))
+        loader_generator = _make_loader_generator(_resolve_loader_seed(self.cfg, "train"))
         
         # Clinical requires specialized weighted sampler for sepsis oversampling
         if self.dataset_name == "clinical":
@@ -357,7 +373,7 @@ class SPECTRADataModule(pl.LightningDataModule):
     def val_dataloader(self):
         num_workers = _resolve_num_workers(self.cfg)
         loader_kwargs = _loader_kwargs(self.dataset_name, num_workers, self.cfg)
-        loader_generator = _make_loader_generator(int(self.cfg.get("seed", 42)) + 1)
+        loader_generator = _make_loader_generator(_resolve_loader_seed(self.cfg, "val"))
         collate_fn = COLLATE_REGISTRY.get(self.dataset_name)
 
         return DataLoader(

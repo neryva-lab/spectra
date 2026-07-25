@@ -135,7 +135,7 @@ rebuttal or cover letter).
   Test whether a different first observed batch leads to substantially different learned
   uncertainty trajectories, given the method's first-batch auto-calibration step.
   **Resolves:** Mxe9-Q1, Mxe9-Q2
-  **Status:** Open
+  **Status:** In Progress - half-NYUv2 canonical BPGS study scaffolded with varying training loader seeds
 
 - [ ] **WI-14. Investigate combining BPGS with conflict-aware methods, or explain the noisy/conflict-regime weakness directly.**
   Either test a BPGS+PCGrad or BPGS+CAGrad combination, or add explicit discussion of why BPGS

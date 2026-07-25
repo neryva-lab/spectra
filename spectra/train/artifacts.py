@@ -247,6 +247,8 @@ def generate_experiment_metadata(cfg: DictConfig, artifact_dir: Path) -> Dict[st
             "batch_size": train_cfg.get("batch_size", 0),
             "lr": train_cfg.get("lr", 0.0),
             "min_lr": train_cfg.get("min_lr", 0.0),
+            "loader_seed": train_cfg.get("loader_seed", None),
+            "val_loader_seed": train_cfg.get("val_loader_seed", None),
             "warmup_steps": train_cfg.get("warmup_steps", 0),
             "weight_decay": train_cfg.get("weight_decay", 0.0),
             "grad_clip": train_cfg.get("grad_clip", 0.0),
