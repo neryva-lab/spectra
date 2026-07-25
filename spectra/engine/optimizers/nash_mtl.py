@@ -155,7 +155,7 @@ class NashMTLEngine(OptimizationEngine):
         offset = 0
         for param in shared_params:
             numel = param.numel()
-            grad_slice = combined_flat_grad[offset: offset + numel].reshape(param.shape)
+            grad_slice = combined_flat_grad[offset: offset + numel].reshape(param.shape).to(param.dtype)
             if param.grad is None:
                 param.grad = grad_slice.clone()
             else:
@@ -180,6 +180,7 @@ class NashMTLEngine(OptimizationEngine):
             )
             for param, grad in zip(head_params, head_grads):
                 if grad is not None:
+                    grad = grad.to(param.dtype)
                     if param.grad is None:
                         param.grad = grad.clone()
                     else:
