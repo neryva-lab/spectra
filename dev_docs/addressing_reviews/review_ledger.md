@@ -123,7 +123,7 @@ rebuttal or cover letter).
   Isolate whether the split-optimization stop-gradient is doing independent work, rather than only
   ever reporting it bundled with the rest of the method.
   **Resolves:** MKod-4
-  **Status:** Open
+  **Status:** In Progress - half-NYUv2 canonical BPGS study scaffolded with split-stop-gradient on/off variants
 
 - [ ] **WI-12. Run a batch-size sensitivity analysis.**
   The method depends directly on batch statistics (μ(L), ς̄(L)); test how results change across a

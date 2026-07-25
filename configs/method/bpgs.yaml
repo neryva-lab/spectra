@@ -9,6 +9,7 @@ method:
   s_mode: batch_aware
   init_mode: auto_calibrate
   theta_grad_scale: 100.0
+  split_stop_gradient: true
   temperature: 2.0
   kappa: 0.1
 

@@ -60,6 +60,7 @@ class BPGS(nn.Module):
         s_mode: str = "batch_aware",
         init_mode: str = "auto_calibrate",
         theta_grad_scale: float = 100.0,
+        split_stop_gradient: bool = True,
         **kwargs,
     ) -> None:
         super().__init__()
@@ -80,6 +81,7 @@ class BPGS(nn.Module):
         self.theta_grad_scale = float(theta_grad_scale)
         self.s_mode = str(s_mode)
         self.init_mode = str(init_mode)
+        self.split_stop_gradient = bool(split_stop_gradient)
 
         valid_s_modes = {"stateless", "batch_aware"}
         valid_init_modes = {"fixed", "auto_calibrate"}
@@ -179,7 +181,9 @@ class BPGS(nn.Module):
         self._maybe_auto_calibrate(raw_losses)
         s = self.get_s(raw_losses if self.s_mode == "batch_aware" else None)
         weights = torch.exp(-s)
-        weights = (weights / weights.sum()).detach()
+        weights = weights / weights.sum()
+        if self.split_stop_gradient:
+            weights = weights.detach()
 
         total_loss = 0
         for i, loss in enumerate(raw_losses):
@@ -196,7 +200,8 @@ class BPGS(nn.Module):
 
         total_loss = 0
         for i, loss in enumerate(raw_losses):
-            total_loss = total_loss + 0.5 * precision[i] * loss.detach() + 0.5 * s[i]
+            payload = loss.detach() if self.split_stop_gradient else loss
+            total_loss = total_loss + 0.5 * precision[i] * payload + 0.5 * s[i]
         return total_loss
 
     def forward(self, losses: torch.Tensor, **kwargs) -> Tuple[torch.Tensor, Dict[str, torch.Tensor]]:

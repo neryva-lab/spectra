@@ -47,6 +47,60 @@ class BPGSEngine(OptimizationEngine):
         raw_opt_net = self._unwrap_optimizer(opt_net)
         raw_opt_unc = self._unwrap_optimizer(opt_unc) if opt_unc is not None else None
         old_scale = scaler.get_scale() if scaler is not None else None
+        split_stop_gradient = bool(getattr(module.weighter, "split_stop_gradient", True))
+
+        if not split_stop_gradient:
+            opt_net.zero_grad()
+            if opt_unc is not None:
+                opt_unc.zero_grad()
+
+            loss_net = module.weighter.network_loss(raw_losses)
+            loss_unc = module.weighter.uncertainty_loss(raw_losses)
+            coupled_loss = loss_net + loss_unc
+            module.manual_backward(coupled_loss)
+
+            if scaler is not None:
+                scaler.unscale_(raw_opt_net)
+                if raw_opt_unc is not None:
+                    scaler.unscale_(raw_opt_unc)
+
+            if grad_clip > 0:
+                torch.nn.utils.clip_grad_norm_(
+                    [p for group in raw_opt_net.param_groups for p in group["params"]],
+                    max_norm=grad_clip,
+                )
+                if raw_opt_unc is not None:
+                    torch.nn.utils.clip_grad_norm_(
+                        module.weighter.parameters(),
+                        max_norm=grad_clip,
+                    )
+
+            if scaler is not None:
+                scaler.step(raw_opt_net)
+                if raw_opt_unc is not None:
+                    scaler.step(raw_opt_unc)
+            else:
+                raw_opt_net.step()
+                if raw_opt_unc is not None:
+                    raw_opt_unc.step()
+
+            if scaler is not None:
+                scaler.update()
+            should_step_schedulers = scaler is None or scaler.get_scale() >= old_scale
+
+            if sch_net is not None and should_step_schedulers:
+                sch_net.step()
+                if hasattr(sch_net, "get_last_lr"):
+                    module.log("lr", sch_net.get_last_lr()[0], on_step=True, on_epoch=False, prog_bar=False)
+            if sch_unc is not None and should_step_schedulers:
+                sch_unc.step()
+                if hasattr(sch_unc, "get_last_lr"):
+                    module.log("lr_unc", sch_unc.get_last_lr()[0], on_step=True, on_epoch=False, prog_bar=False)
+
+            for key, val in module.weighter.get_task_stats().items():
+                module.log(f"train/{key}", val, on_step=False, on_epoch=True, sync_dist=True)
+
+            return coupled_loss.detach()
 
         # Step 1: network flow
         opt_net.zero_grad()

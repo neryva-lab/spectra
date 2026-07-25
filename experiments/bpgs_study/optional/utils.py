@@ -9,4 +9,5 @@ CONFIG_FILES = (
     "09_nyuv2_overhead.yaml",
     "10_nyuv2_first_batch.yaml",
     "11_nyuv2_batch_size.yaml",
+    "12_nyuv2_stop_gradient.yaml",
 )

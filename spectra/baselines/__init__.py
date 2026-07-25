@@ -36,6 +36,7 @@ def build_weighter(cfg):
             s_mode=m_cfg.get("s_mode", "batch_aware"),
             init_mode=m_cfg.get("init_mode", "auto_calibrate"),
             theta_grad_scale=m_cfg.get("theta_grad_scale", 100.0),
+            split_stop_gradient=m_cfg.get("split_stop_gradient", True),
         )
 
     cls = WEIGHTER_REGISTRY.get(name)
