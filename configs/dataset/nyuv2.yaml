@@ -98,6 +98,7 @@ train:
   measure_overhead: false
   loader_seed: null
   val_loader_seed: null
+  devices: 1
 
 logging:
   use_wandb: false
