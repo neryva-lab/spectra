@@ -17,8 +17,8 @@ rebuttal or cover letter).
   add a note (e.g. `Status: Done — see exp_09_normalization_ablation`).
 
 **Progress snapshot (update manually as you go):**
-- Work items: 11 / 19 complete
-- Atomic issues addressed: 0 / 68
+- Work items: 15 / 19 complete
+- Atomic issues addressed: 5 / 68
 
 ---
 
@@ -113,29 +113,29 @@ rebuttal or cover letter).
   **Resolves:** Mxe9-5, Mxe9-6, Mxe9-Q3, AqnD-22, MKod-5
   **Status:** In Progress - half-NYUv2 canonical BPGS study scaffolded with batch sizes 4, 8, and 16 on a single device
 
-- [ ] **WI-10. Add runtime / compute / memory overhead analysis relative to Kendall.**
+- [x] **WI-10. Add runtime / compute / memory overhead analysis relative to Kendall.**
   Report wall-clock and memory overhead introduced by the batch-wise log-loss statistics,
   normalization, and the separate uncertainty-objective optimization pass.
   **Resolves:** Mxe9-11, Mxe9-12, Mxe9-Q4, MKod-7
-  **Status:** In Progress - half-NYUv2 overhead study scaffolded; runtime/memory runs still pending
+  **Status:** Done - 6-run overhead study completed; BPGS adds +0.15% time and +0.87% memory vs Kendall
 
-- [ ] **WI-11. Ablate the stop-gradient design choice independently from the bounded/batch-aware chart.**
+- [x] **WI-11. Ablate the stop-gradient design choice independently from the bounded/batch-aware chart.**
   Isolate whether the split-optimization stop-gradient is doing independent work, rather than only
   ever reporting it bundled with the rest of the method.
   **Resolves:** MKod-4
-  **Status:** In Progress - half-NYUv2 canonical BPGS study scaffolded with split-stop-gradient on/off variants
+  **Status:** Done — all 6 runs completed. Results in `wi-11_stop_gradient_ablation_report.md`. Stop-gradient is critical: without it, θ_max grows +28% instead of decaying, with 14× higher seed variance.
 
-- [ ] **WI-12. Run a batch-size sensitivity analysis.**
+- [x] **WI-12. Run a batch-size sensitivity analysis.**
   The method depends directly on batch statistics (μ(L), ς̄(L)); test how results change across a
   meaningful range of batch sizes.
   **Resolves:** Mxe9-Q6, MKod-3
-  **Status:** Open
+  **Status:** Done — all 9 runs completed. Results in `wi-12_batch_size_sensitivity_report.md`. Across-batch-size CV < 3.5% on all metrics. BPGS robust across 4× batch range.
 
-- [ ] **WI-13. Run a first-batch calibration sensitivity analysis.**
+- [x] **WI-13. Run a first-batch calibration sensitivity analysis.**
   Test whether a different first observed batch leads to substantially different learned
   uncertainty trajectories, given the method's first-batch auto-calibration step.
   **Resolves:** Mxe9-Q1, Mxe9-Q2
-  **Status:** In Progress - half-NYUv2 canonical BPGS study scaffolded with varying training loader seeds
+  **Status:** Done — all 3 runs completed. Results in `wi-13_first_batch_calibration_sensitivity_report.md`. All validation metrics < 2% CV across loader seeds. First-batch sensitivity is negligible.
 
 - [ ] **WI-14. Investigate combining BPGS with conflict-aware methods, or explain the noisy/conflict-regime weakness directly.**
   Either test a BPGS+PCGrad or BPGS+CAGrad combination, or add explicit discussion of why BPGS
@@ -216,12 +216,12 @@ rebuttal or cover letter).
 - [ ] Mxe9-10 — Statistical evidence insufficient for fine-grained ranking → WI-7
 - [ ] Mxe9-11 — No runtime/overhead analysis → WI-10
 - [ ] Mxe9-12 — Practical cost of calibration/split-optimization unclear → WI-10
-- [ ] Mxe9-Q1 — Sensitivity to first-batch calibration? → WI-13
-- [ ] Mxe9-Q2 — Would a different first batch change trajectories? → WI-13
+- [x] Mxe9-Q1 — Sensitivity to first-batch calibration? → WI-13
+- [x] Mxe9-Q2 — Would a different first batch change trajectories? → WI-13
 - [ ] Mxe9-Q3 — Evaluated against Nash-MTL/IMTL-G/FAMO? → WI-9
-- [ ] Mxe9-Q4 — Runtime/memory overhead vs. Kendall? → WI-10
+- [x] Mxe9-Q4 — Runtime/memory overhead vs. Kendall? → WI-10
 - [ ] Mxe9-Q5 — Can BPGS combine with PCGrad/CAGrad? → WI-14
-- [ ] Mxe9-Q6 — Sensitivity to batch size? → WI-12
+- [x] Mxe9-Q6 — Sensitivity to batch size? → WI-12
 
 ### Reviewer AqnD
 - [ ] AqnD-1 — Undocumented 100× gradient scale on θ → WI-4
@@ -254,8 +254,8 @@ rebuttal or cover letter).
 ### Reviewer MKod
 - [ ] MKod-1 — Largely a constrained reparameterization of Kendall + normalization → WI-3, WI-16
 - [ ] MKod-2 — Deeper properties (invariance, convergence) not analyzed → WI-2, WI-5
-- [ ] MKod-3 — Batch-size sensitivity not analyzed → WI-12
-- [ ] MKod-4 — Stop-gradient role not ablated independently → WI-11
+- [x] MKod-3 — Batch-size sensitivity not analyzed → WI-12
+- [x] MKod-4 — Stop-gradient role not ablated independently → WI-11
 - [ ] MKod-5 — Missing CAGrad, Nash-MTL, Auto-Lambda comparisons → WI-9
 - [ ] MKod-6 — Only one full-scale dense-prediction benchmark → WI-15
 - [ ] MKod-7 — No computational overhead analysis → WI-10

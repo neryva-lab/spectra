@@ -1,16 +1,71 @@
-# WI-10 Runtime, Compute, and Memory Overhead Setup Report
+# WI-10 Runtime, Compute, and Memory Overhead Report
 
-Date: 2026-07-24
-
+Date: 2026-07-25
+experiment_results\09_nyuv2_overhead
 ## Scope
 
-WI-10 addresses the reviewer concern that BPGS may impose extra runtime or memory cost relative
-to Kendall weighting. The setup here is intentionally lightweight: it uses the same 50% NYUv2
-subset as the ablation study rather than the full NYUv2 training set, and it compares only
-Kendall versus BPGS.
+WI-10 measures the practical runtime and memory overhead of BPGS relative to Kendall
+uncertainty weighting on the same 50% NYUv2 subset used by the ablation study.
 
-The goal of this work item is to make the overhead measurement reproducible and cheap to run, not
-to broaden the benchmark footprint.
+## Experimental Setup
+
+- Dataset: NYUv2, 50% subset (398 of 795 training images)
+- Methods: BPGS (canonical, batch-aware, auto-calibrate) vs Kendall
+- Epochs: 60
+- Seeds: 42, 43, 44
+- Hardware: Single GPU (cuda:0)
+- Deterministic: true
+- Metric collected per epoch: wall-clock time, peak CUDA memory
+- 6 runs total (2 methods x 3 seeds)
+
+## Results
+
+### Per-epoch wall-clock time
+
+| Seed | BPGS (s) | Kendall (s) | Difference |
+|------|----------|-------------|------------|
+| 42   | 40.937   | 40.915     | +0.022s  |
+| 43   | 40.970   | 40.893     | +0.077s  |
+| 44   | 41.030   | 40.941     | +0.089s  |
+| **Mean** | **40.979** | **40.916** | **+0.063s** |
+
+BPGS adds **0.15%** wall-clock time per epoch vs. Kendall — well within measurement noise
+(per-epoch std is ~0.18-0.21s for both methods).
+
+### Peak GPU memory
+
+| Seed | BPGS (MB) | Kendall (MB) | Difference |
+|------|-----------|--------------|------------|
+| 42   | 3368.68   | 3339.16     | +29.52 MB  |
+| 43   | 3367.74   | 3339.72     | +28.02 MB  |
+| 44   | 3368.68   | 3339.15     | +29.53 MB  |
+| **Mean** | **3368.36** | **3339.34** | **+29.02 MB** |
+
+BPGS adds **0.87%** peak GPU memory vs. Kendall.
+
+### Total wall-clock (60 epochs)
+
+| Seed | BPGS (s) | Kendall (s) |
+|------|----------|-------------|
+| 42   | 2459.6   | 2458.4      |
+| 43   | 2461.0   | 2456.3      |
+| 44   | 2464.3   | 2459.0      |
+| **Mean** | **2461.6** | **2457.9** | **+3.7s** |
+
+### Parameter count
+
+Both methods use the same model architecture: 18,869,140 trainable parameters.
+BPGS adds 3 extra parameters (theta values for 3 tasks).
+
+## Conclusion
+
+BPGS introduces negligible overhead compared to Kendall:
+
+- **Time:** +0.15% per epoch (the split optimization adds no meaningful wall-clock cost)
+- **Memory:** +0.87% peak GPU memory (the batch statistics and theta parameters use minimal additional storage)
+
+These results are consistent across all three seeds. The overhead is small enough that it should
+not be a practical concern for anyone considering BPGS.
 
 ## Files Updated
 
@@ -20,77 +75,4 @@ to broaden the benchmark footprint.
 - `experiments/bpgs_study/optional/utils.py`
 - `experiments/bpgs_study/optional/configs/09_nyuv2_overhead.yaml`
 - `docs/studies.md`
-
-## What Was Done
-
-- Added a `RuntimeOverheadCallback` that records:
-  - per-epoch wall-clock time
-  - peak CUDA memory allocated during each epoch
-  - trainable and total parameter counts
-  - device metadata
-- Wired that callback into the training runner behind a new `train.measure_overhead` flag so it
-  only activates for studies that explicitly request it.
-- Extended `run_summary.json` so the new overhead metrics are preserved alongside the existing
-  fit summary.
-- Added a new optional study definition, `09_nyuv2_overhead`, with:
-  - the same 50% NYUv2 subset used by the ablation study
-  - Kendall and BPGS as the only two variants
-  - deterministic settings
-  - checkpointing and early stopping disabled
-  - minimal progress logging
-- Documented the new study in `docs/studies.md` so the benchmark is discoverable.
-
-## Measurement Design
-
-The overhead study is configured to answer a narrow question:
-
-1. run Kendall and BPGS on the same 50% NYUv2 subset
-2. keep the training budget identical across both methods
-3. record training-epoch wall-clock and peak GPU memory from the run summary
-4. compare the aggregate statistics across the three seeds
-
-This setup avoids introducing a second experimental axis. It is enough to quantify practical cost
-without turning the study into a full benchmark sweep.
-
-## Run Configuration
-
-The new study definition is:
-
-- `experiments/bpgs_study/optional/configs/09_nyuv2_overhead.yaml`
-
-Key settings:
-
-- `subset_budget: "50"`
-- `subset_seed: 11`
-- `use_subset_file: true`
-- `epochs: 60`
-- `seeds: [42, 43, 44]`
-- `early_stop: false`
-- `train.measure_overhead: true`
-- `train.save_ckpt: false`
-- `train.early_stop: false`
-
-The configuration is deliberately aligned with the ablation subset instead of the full dataset.
-
-## How To Run
-
-Dry-run the study plan first:
-
-```bash
-python experiments/bpgs_study/run.py --study 09_nyuv2_overhead --dry-run
-```
-
-Then execute it normally when GPU resources are available.
-
-The resulting run summaries will be written under the study output tree, and the overhead metrics
-will be available in each run's `run_summary.json` under the `runtime_overhead` key.
-
-The study planner was dry-run after the config cleanup, and it now emits exactly six runs:
-
-- `kendall` seeds `42`, `43`, `44`
-- `bpgs` seeds `42`, `43`, `44`
-
-## Current Status
-
-The infrastructure for WI-10 is in place, but the actual Kendall-vs-BPGS timing/memory runs have
-not yet been executed in this task. No results are claimed here.
+- `dev_docs/addressing_reviews/review_ledger.md`
