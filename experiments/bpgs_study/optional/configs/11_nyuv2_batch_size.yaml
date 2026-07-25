@@ -18,6 +18,7 @@ variants:
       - method.s_mode=batch_aware
       - method.init_mode=auto_calibrate
       - train.batch_size=4
+      - train.devices=1
       - batch_augmentation=cpu
       - train.deterministic=true
       - train.deterministic_warn_only=true
@@ -37,6 +38,7 @@ variants:
       - method.s_mode=batch_aware
       - method.init_mode=auto_calibrate
       - train.batch_size=8
+      - train.devices=1
       - batch_augmentation=cpu
       - train.deterministic=true
       - train.deterministic_warn_only=true
@@ -56,6 +58,7 @@ variants:
       - method.s_mode=batch_aware
       - method.init_mode=auto_calibrate
       - train.batch_size=16
+      - train.devices=1
       - batch_augmentation=cpu
       - train.deterministic=true
       - train.deterministic_warn_only=true

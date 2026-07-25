@@ -111,7 +111,7 @@ rebuttal or cover letter).
   At minimum Nash-MTL and FAMO — the most-repeated ask, raised independently by all three
   reviewers. Add IMTL-G, CAGrad, and Auto-Lambda if time allows.
   **Resolves:** Mxe9-5, Mxe9-6, Mxe9-Q3, AqnD-22, MKod-5
-  **Status:** Open
+  **Status:** In Progress - half-NYUv2 canonical BPGS study scaffolded with batch sizes 4, 8, and 16 on a single device
 
 - [ ] **WI-10. Add runtime / compute / memory overhead analysis relative to Kendall.**
   Report wall-clock and memory overhead introduced by the batch-wise log-loss statistics,
