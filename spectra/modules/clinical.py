@@ -32,7 +32,7 @@ class ClinicalSPECTRAModule(OrthogonalSPECTRAModule):
         method_name = cfg.get("method_name") or cfg.get("method", {}).get("name")
         self.is_pcgrad = (method_name == "pcgrad")
         self.is_bpgs = (method_name == "bpgs")
-        
+        self.is_nash_mtl = (method_name == "nash_mtl")
 
         self.task_names = [task.name for task in cfg.tasks]
         self.task_weights = nn.ParameterDict()
@@ -108,7 +108,7 @@ class ClinicalSPECTRAModule(OrthogonalSPECTRAModule):
         raw_losses_tensor = torch.stack([loss_dict[n] for n in self.task_names])
         
 
-        if self.is_pcgrad or self.is_bpgs:
+        if self.is_pcgrad or self.is_bpgs or self.is_nash_mtl:
             total_loss = losses_tensor.sum()
         else:
             total_loss, w_metrics = self.weighter(

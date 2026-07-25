@@ -1,0 +1,13 @@
+# @package _global_
+method_name: nash_mtl
+
+method:
+  name: nash_mtl
+  params: {}
+
+module:
+  engine:
+    _target_: spectra.engine.optimizers.NashMTLEngine
+
+train:
+  grad_clip: 1.0

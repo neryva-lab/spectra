@@ -10,12 +10,13 @@ from spectra.baselines import (
     UWSOWeighter,
     PCGradWeighter,
     GradNormProxyWeighter,
+    NashMTLWeighter,
     build_weighter,
     WEIGHTER_REGISTRY
 )
 
 __all__ = [
     "BaseWeighter", "StaticWeighter", "KendallWeighter",
-    "UWSOWeighter", "PCGradWeighter", "GradNormProxyWeighter",
+    "UWSOWeighter", "PCGradWeighter", "GradNormProxyWeighter", "NashMTLWeighter",
     "WEIGHTER_REGISTRY", "build_weighter",
 ]

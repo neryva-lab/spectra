@@ -38,6 +38,7 @@ class VisionSPECTRAModule(OrthogonalSPECTRAModule):
         method_name = cfg.get("method_name") or cfg.get("method", {}).get("name")
         self.is_pcgrad = (method_name == "pcgrad")
         self.is_bpgs = (method_name == "bpgs")
+        self.is_nash_mtl = (method_name == "nash_mtl")
         batch_aug_mode = cfg.get("batch_augmentation", cfg.get("dataset", {}).get("batch_augmentation", "disabled"))
         if (cfg.get("dataset_name") or cfg.get("dataset", {}).get("name")) == "nyuv2" and batch_aug_mode != "disabled":
             self.batch_train_transform = NYUv2BatchTrainTransform(
@@ -127,7 +128,7 @@ class VisionSPECTRAModule(OrthogonalSPECTRAModule):
         losses_tensor = torch.stack(weighted_task_loss_list)
         raw_losses_tensor = torch.stack([loss_dict[n] for n in self.task_names])
         
-        if self.is_pcgrad or self.is_bpgs:
+        if self.is_pcgrad or self.is_bpgs or self.is_nash_mtl:
             total_loss = losses_tensor.sum()
         else:
             total_loss, w_metrics = self.weighter(

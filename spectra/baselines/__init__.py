@@ -7,6 +7,7 @@ from spectra.baselines.kendall_norm import KendallNormWeighter
 from spectra.baselines.uwso import UWSOWeighter
 from spectra.baselines.pcgrad import PCGradWeighter
 from spectra.baselines.gradnorm_proxy import GradNormProxyWeighter
+from spectra.baselines.nash_mtl import NashMTLWeighter
 
 
 WEIGHTER_REGISTRY = {
@@ -16,6 +17,7 @@ WEIGHTER_REGISTRY = {
     "uwso": UWSOWeighter,
     "pcgrad": PCGradWeighter,
     "gradnorm_proxy": GradNormProxyWeighter,
+    "nash_mtl": NashMTLWeighter,
     "bpgs": None,
 }
 
@@ -55,6 +57,7 @@ __all__ = [
     "UWSOWeighter",
     "PCGradWeighter",
     "GradNormProxyWeighter",
+    "NashMTLWeighter",
     "WEIGHTER_REGISTRY",
     "build_weighter",
 ]
