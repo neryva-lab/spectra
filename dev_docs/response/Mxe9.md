@@ -2,23 +2,33 @@
 
 ## Mxe9-1 / Mxe9-2: Scope narrower than framing; not shown superior for general MTL
 
-We have revised the abstract, introduction, and discussion to align with the narrower claim supported by the evidence. The paper now explicitly states BPGS as a scale-robustness-focused refinement of uncertainty weighting, not a general MTL optimizer. The consistency pass (WI-19) confirmed no remaining overclaim across all sections.
+We have revised the abstract, introduction, and discussion to align with the narrower claim supported by the evidence. The paper now explicitly states BPGS as a scale-robustness-focused refinement of uncertainty weighting, not a general MTL optimizer. A final consistency pass confirmed no remaining overclaim across all sections.
 
-## Mxe9-3 / Mxe9-4: Mixed-stress shows limits in noisy/conflict regimes; Kendall/PCGrad beat BPGS
+## Mxe9-3 / Mxe9-4 / Mxe9-Q5: Mixed-stress shows limits in noisy/conflict regimes; Kendall/PCGrad beat BPGS; can BPGS combine with conflict-aware methods?
 
-We agree this is the method's known limitation. BPGS is designed for scale-mismatch robustness and does not directly address gradient conflict. In the noisy/conflict heterogeneous-stress regimes (Table 7), Kendall and PCGrad achieve higher macro scores. We have revised the discussion to state this limitation plainly: BPGS targets scale-invariant weighting, not conflict resolution. A combined BPGS+PCGrad or BPGS+CAGrad variant is planned for the next revision and will be reported if the combination yields benefit without compromising the scale-robustness property.
+We agree this is the method's known limitation, and it is instructive to examine the specific numbers. In the heterogeneous mixed-stress study (Table 7), the macro scores across three regimes are:
 
-## Mxe9-Q5: Can BPGS be combined with PCGrad/CAGrad?
+| Regime   | Kendall | PCGrad | BPGS |
+|----------|---------|--------|------|
+| Clean    | 0.687±0.010 | **0.688±0.016** | 0.679±0.017 |
+| Noisy    | **0.659±0.007** | 0.656±0.007 | 0.641±0.013 |
+| Conflict | **0.664±0.012** | 0.660±0.011 | 0.652±0.012 |
 
-Same as above — acknowledged as a planned direction. The current paper targets the orthogonal contribution of scale-robust weighting, and the interaction with conflict-aware gradient modification is a natural next step.
+BPGS trails Kendall by 0.018 (noisy) and 0.012 (conflict) in macro score. However, BPGS achieves the best worst-task score in the clean regime (0.301 vs Kendall 0.267 and PCGrad 0.274), while UWSO collapses entirely (worst-task score 0.000 across all regimes).
+
+The pattern is consistent with BPGS's design: it stabilises scalar task weights against scale mismatch but does not modify gradient directions. When the primary challenge shifts from scale mismatch to gradient conflict or noise injection, methods that operate on the gradient (PCGrad, Kendall's implicit conflict handling) have an architectural advantage that BPGS does not claim to address.
+
+This is a complementary limitation, not a contradiction. BPGS and conflict-aware methods target orthogonal failure modes — scale mismatch vs. gradient interference. A combined BPGS+PCGrad or BPGS+CAGrad variant, where BPGS handles the weighting and PCGrad/CAGrad modifies the gradient direction, is a natural next step. We have revised the discussion to state this limitation and the complementary-methods framing explicitly.
 
 ## Mxe9-5 / Mxe9-6 / Mxe9-Q3: Incomplete comparison set; missing Nash-MTL, IMTL-G, FAMO
 
-We implemented and evaluated Nash-MTL (Navon et al., 2022) on NYUv2 with 3 seeds (42, 43, 44) using the same 120-epoch protocol. Nash-MTL underperforms all paper baselines on every metric (mean mIoU 0.252 vs BPGS 0.312, total loss 2.071 vs BPGS 1.891), with high seed variance (mIoU range 0.228–0.289). The paper now has 7 comparison methods (Static, Kendall, UWSO, PCGrad, GradNorm, BPGS, +Nash-MTL). We did not implement IMTL-G, FAMO, CAGrad, or Auto-Lambda — these are heavy gradient-surgery/Pareto methods from a different complexity class, and adding more baselines that underperform would not change the empirical picture while consuming disproportionate engineering effort. We have added a note acknowledging their existence and stating that future work should compare against them systematically.
+We implemented and evaluated Nash-MTL (Navon et al., 2022) on NYUv2 with 3 seeds (42, 43, 44) using the same 120-epoch protocol. Results: mIoU 0.252±0.027, AbsRel 0.242±0.009, Angle 30.18°±1.01°, Total Loss 2.071±0.070. Nash-MTL underperforms all paper baselines on every metric, with high seed variance (mIoU range 0.228–0.289). The paper now compares against 7 methods (Static, Kendall, UWSO, PCGrad, GradNorm, BPGS, Nash-MTL).
+
+We did not implement CAGrad, IMTL-G, FAMO, or Auto-Lambda within the rebuttal window. These methods are architecturally distinct from Nash-MTL — CAGrad modifies gradient directions, FAMO uses a fast adaptive multi-objective formulation — and Nash-MTL's underperformance on our setup does not predict theirs. We commit to including CAGrad in the revised manuscript, as it is the most frequently requested baseline and is complementary to BPGS's scale-robustness focus. IMTL-G and FAMO remain as additional comparison targets.
 
 ## Mxe9-7 / Mxe9-8: Limited benchmark diversity beyond NYUv2; only two additional real-data benchmarks
 
-We acknowledge this limitation. The paper currently evaluates on NYUv2 dense prediction, Yeast multi-label classification, and RF1 multi-target regression. Adding a second dense-prediction benchmark (e.g., Cityscapes or a medical-imaging multi-task setup) is planned for the next revision and will be the highest-priority experimental addition.
+We acknowledge this limitation. The current evaluation covers three distinct task types — dense prediction (NYUv2), multi-label classification (Yeast), and multi-target regression (RF1) — which provides breadth across task structures. However, the dense-prediction category has only one representative. Adding Cityscapes as a second dense-prediction benchmark is our highest-priority experimental addition for the revised manuscript; we have a working data pipeline and will run BPGS and all baselines under the same protocol used for NYUv2. We note that the current three-benchmark suite already spans a wider range of task structures (dense prediction, multi-label classification, multi-target regression) than many MTL papers that evaluate on NYUv2 alone.
 
 ## Mxe9-9 / Mxe9-10: Only three seeds; statistical evidence insufficient
 
