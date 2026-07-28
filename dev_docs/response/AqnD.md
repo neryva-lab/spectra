@@ -14,7 +14,7 @@ All mismatches have been reconciled:
 
 **NYUv2 hyperparams (120/8 vs 80/4):** The preset file `configs/preset/nyuv2_bpgs.yaml` had stale values (80/4) that did not match the actual experiments (120/8). The study runner bypassed the preset, so published results were unaffected, but anyone using `preset=nyuv2_bpgs` would get wrong settings. Updated to match ground truth.
 
-**Selection metric (val/total_loss vs val/miou):** The shared NYUv2 dataset default remains `val/total_loss (min)`. The final benchmark uses an explicit override `val/miou (max)`. This choice follows standard practice: mIoU is the primary evaluation metric for NYUv2 in prior work (Kendall et al., GradNorm, PCGrad), so using it as the selection metric aligns checkpoint selection with the primary evaluation criterion. As a secondary benefit, mIoU provides better method separation across baselines (CV 8.9% vs 3.3%) and does not favor BPGS — Static has the highest mIoU (0.345 vs BPGS 0.311). Per-method checkpoint quality differs by at most 0.0025 mIoU regardless of selection metric. The appendix now documents both settings explicitly.
+**Selection metric (val/total_loss vs val/miou):** The shared NYUv2 dataset default remains `val/total_loss (min)`. The final benchmark uses an explicit override `val/miou (max)`. This choice follows standard practice: mIoU is the standard segmentation metric on NYUv2 and is prominently reported in recent MTL work (GradNorm, PCGrad), so using it as the selection metric aligns checkpoint selection with the primary segmentation evaluation criterion. As a secondary benefit, mIoU provides better method separation across baselines (CV 8.9% vs 3.3%) and does not favor BPGS — Static has the highest mIoU (0.345 vs BPGS 0.311). Per-method checkpoint quality differs by at most 0.0025 mIoU regardless of selection metric. The appendix now documents both settings explicitly.
 
 **Gradient clipping:** The ablation appendix line 8 incorrectly stated "gradient clipping 1.0" for BPGS ablation variants. BPGS variants use `grad_clip=10.0` (from method config), matching the canonical BPGS setting. Only the Kendall ablation variant uses 1.0. This has been corrected. No code change needed.
 
@@ -53,11 +53,11 @@ L1-normalization alone is not enough to recover BPGS-scale invariance. Kendall+L
 
 ## AqnD-14: Narrow experimental scope
 
-We acknowledge the concern. The current evaluation covers three distinct task types — dense prediction (NYUv2), multi-label classification (Yeast), and multi-target regression (RF1) — plus synthetic stress tests. This provides breadth across task types, but the dense-prediction category has only one representative. Adding a second dense-prediction benchmark (Cityscapes) is our highest-priority experimental addition for the revised manuscript; we have a working data pipeline and will run BPGS and all baselines under the same protocol. We note that the current three-benchmark suite already spans a wider range of task structures than many MTL papers that report only NYUv2.
+We acknowledge the concern. The current evaluation covers three distinct task types — dense prediction (NYUv2), multi-label classification (Yeast), and multi-target regression (RF1) — plus synthetic stress tests. This provides breadth across task types, but the dense-prediction category has only one representative. Adding a second dense-prediction benchmark (Cityscapes) is our highest-priority experimental addition for the revised manuscript; we will run BPGS and all baselines under the same protocol. We note that the current three-benchmark suite already spans a wider range of task structures than many MTL papers that report only NYUv2.
 
 ## AqnD-15: Only three seeds
 
-See response to Mxe9-9/Mxe9-10. The synthetic scale-stress experiment has been expanded to 10 seeds (120 runs). BPGS first at every scale. Gap at ×1000: +1.07 SD. Relative degradation: BPGS 27.0%, Kendall 32.3%, UWSO 28.5%. Ranking unchanged from 3-seed estimate.
+We reran the synthetic scale-stress experiment with 10 seeds (42–51) across the full 4×3 grid (4 scale factors × 3 methods = 120 runs). The ranking is unchanged — BPGS first at every scale factor. The BPGS–Kendall gap at ×1000 is +1.07 combined SD. Relative degradation ×1→×1000: BPGS 27.0%, Kendall 32.3%, UWSO 28.5%. BPGS has the smallest relative drop at both 3 and 10 seeds. Means are stable between 3 and 10 seeds (e.g., BPGS ×1: 0.752→0.743, Kendall ×1000: 0.495→0.499). The 10-seed table is included in the revised results. We acknowledge that the other headline results remain at 3 seeds and have updated the reporting protocol and limitations section to state this explicitly.
 
 ## AqnD-16: Robustness claim rests mainly on synthetic diagnostics; Table 4 admits not best on RF1
 
@@ -65,7 +65,7 @@ We have corrected the RF1 framing. The abstract now states BPGS is "competitive"
 
 ## AqnD-20: BPGS is another option, not a paradigm shift
 
-We agree with this characterisation. BPGS is not a paradigm shift in multi-task learning — it is a targeted improvement to a specific and well-understood failure mode of uncertainty weighting. We have revised the paper's positioning accordingly.
+We agree with this characterisation. BPGS is not a paradigm shift — it is a targeted solution to a specific, well-documented failure mode. We believe this is a contribution of practical value because loss-scale mismatch is a recurring issue that existing methods do not explicitly address: Kendall's unbounded parameterization degrades under rescaling (macro score drops −0.130 at ×1000), while gradient-surgery methods like PCGrad address task conflict but not scale. BPGS fills that gap with negligible overhead (+0.15% time, +0.87% memory). The paper's positioning has been revised accordingly.
 
 ## AqnD-21 / AqnD-23: No single benchmark shows dominance; engineering refinement
 
@@ -79,4 +79,4 @@ We did not implement CAGrad, IMTL-G, or FAMO within the rebuttal window. These a
 
 ## AqnD-19: Supplementary material poorly laid out
 
-We have prepared a layout cleanup plan: separate the NeurIPS checklist from the substantive appendices with a clear page break and repurpose any remaining space for a compact supplemental item. This will be applied in the revised manuscript.
+We have restructured the appendix LaTeX source to separate the NeurIPS checklist from the substantive appendices with a clear page break. The freed page-9 space will carry the computational overhead analysis (BPGS vs Kendall runtime and memory). This will be reflected in the revised manuscript.

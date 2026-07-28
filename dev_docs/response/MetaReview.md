@@ -34,9 +34,8 @@ We have taken several concrete steps to strengthen the empirical and analytical 
 - **New ablations:** Batch-size sensitivity (9 runs, CV < 3.5%), first-batch calibration sensitivity (3 runs, CV < 2%), stop-gradient isolation (6 runs, 14× variance difference), and Kendall+L1-normalization (36 runs, showing L1-norm alone does not recover BPGS invariance).
 - **Runtime analysis:** BPGS adds +0.15% time and +0.87% memory vs Kendall — negligible overhead.
 - **Invariance proof:** A formal proposition now proves that the normalized BPGS weights are exactly invariant under uniform loss rescaling, grounding the synthetic result in an algebraic property rather than an empirical observation alone.
-- **Cityscapes benchmark:** Planned as the highest-priority addition for the revised manuscript.
 
-We have also revised the framing to match the evidence: the abstract, introduction, and discussion now consistently present BPGS as a targeted scale-robustness refinement, not a general MTL advance. The RF1 framing has been corrected to state "competitive" rather than implying near-parity with the leading baseline.
+We have also revised the framing to match the evidence: the abstract, introduction, and discussion now consistently present BPGS as a targeted scale-robustness refinement, not a general MTL advance. The RF1 framing has been corrected to state "competitive" rather than implying near-parity with the leading baseline. Additionally, adding Cityscapes as a second dense-prediction benchmark is our highest-priority experimental addition for the revised manuscript.
 
 ## MR-9: Novelty not established strongly enough
 
@@ -49,4 +48,4 @@ We do not claim that BPGS represents a paradigm shift. Its novelty is targeted: 
 
 ---
 
-We are grateful to the AC and all three reviewers for the thorough and constructive feedback. We believe the revisions — new experiments, a formal invariance proof, honest reframing of scope, and full paper-code reconciliation — substantially address the concerns raised.
+We are grateful to the AC and all three reviewers for the thorough and constructive feedback. The revisions — new experiments, a formal invariance proof, honest reframing of scope, and full paper-code reconciliation — directly address the concerns raised.

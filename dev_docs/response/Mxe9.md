@@ -2,7 +2,7 @@
 
 ## Mxe9-1 / Mxe9-2: Scope narrower than framing; not shown superior for general MTL
 
-We have revised the abstract, introduction, and discussion to align with the narrower claim supported by the evidence. The paper now explicitly states BPGS as a scale-robustness-focused refinement of uncertainty weighting, not a general MTL optimizer. A final consistency pass confirmed no remaining overclaim across all sections.
+We have revised the abstract, introduction, and discussion to align with the narrower claim supported by the evidence. The paper now explicitly states BPGS as a scale-robustness-focused refinement of uncertainty weighting, not a general MTL optimizer. For example, the abstract now states BPGS is "competitive" on RF1 rather than the original phrasing that implied near-parity with the leading baseline on RMSE and MAE. A final consistency pass confirmed no remaining overclaim across all sections.
 
 ## Mxe9-3 / Mxe9-4 / Mxe9-Q5: Mixed-stress shows limits in noisy/conflict regimes; Kendall/PCGrad beat BPGS; can BPGS combine with conflict-aware methods?
 
@@ -28,7 +28,7 @@ We did not implement CAGrad, IMTL-G, FAMO, or Auto-Lambda within the rebuttal wi
 
 ## Mxe9-7 / Mxe9-8: Limited benchmark diversity beyond NYUv2; only two additional real-data benchmarks
 
-We acknowledge this limitation. The current evaluation covers three distinct task types — dense prediction (NYUv2), multi-label classification (Yeast), and multi-target regression (RF1) — which provides breadth across task structures. However, the dense-prediction category has only one representative. Adding Cityscapes as a second dense-prediction benchmark is our highest-priority experimental addition for the revised manuscript; we have a working data pipeline and will run BPGS and all baselines under the same protocol used for NYUv2. We note that the current three-benchmark suite already spans a wider range of task structures (dense prediction, multi-label classification, multi-target regression) than many MTL papers that evaluate on NYUv2 alone.
+We acknowledge this limitation. The current evaluation covers three distinct task types — dense prediction (NYUv2), multi-label classification (Yeast), and multi-target regression (RF1) — which provides breadth across task structures. However, the dense-prediction category has only one representative. Adding Cityscapes as a second dense-prediction benchmark is our highest-priority experimental addition for the revised manuscript; we will run BPGS and all baselines under the same protocol used for NYUv2. We note that the current three-benchmark suite already spans a wider range of task structures (dense prediction, multi-label classification, multi-target regression) than many MTL papers that evaluate on NYUv2 alone.
 
 ## Mxe9-9 / Mxe9-10: Only three seeds; statistical evidence insufficient
 

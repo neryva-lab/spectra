@@ -13,7 +13,7 @@ We ran a controlled Kendall + L1-normalization ablation (36 runs: 4 loss scales 
 
 Scale sensitivity ×1→×1000: BPGS −0.004, Kendall −0.130, Kendall+L1 −0.105.
 
-L1-normalization alone does not recover BPGS-scale invariance. At ×1000, Kendall+L1 (−0.105) improves over vanilla Kendall (−0.130) but still trails BPGS (−0.004) by an order of magnitude. A separate stop-gradient ablation (6 runs, 2 variants × 3 seeds, bounded chart held fixed) further isolates the split-optimization contribution: without the stop-gradient, θ_max grows +28% instead of decaying, with 14× higher seed variance (SD 0.192 vs 0.014) and a 4.3% mIoU drop. Together, these two ablations show that (1) L1-normalization alone ≠ BPGS, and (2) the split optimization independently stabilises calibration dynamics. The bounded chart and split optimization each do independent work beyond normalization. We have revised the related work to position BPGS as a bounded, batch-aware refinement with a different fixed-point structure from Kendall, while acknowledging the algebraic similarity of the uncertainty objectives.
+L1-normalization alone does not recover BPGS-scale invariance. At ×1000, Kendall+L1 (−0.105) improves over vanilla Kendall (−0.130) but still trails BPGS (−0.004) by an order of magnitude. A separate stop-gradient ablation (6 runs, 2 variants × 3 seeds, bounded chart held fixed) further isolates the split-optimization contribution: without the stop-gradient, θ_max grows +28% instead of decaying, with 14× higher seed variance (SD 0.192 vs 0.014) and a 4.3% mIoU drop. Together, these two ablations show that (1) L1-normalization alone ≠ BPGS, and (2) the split optimization independently stabilises calibration dynamics. We have revised the related work to position BPGS as a bounded, batch-aware refinement with a different fixed-point structure from Kendall, while acknowledging the algebraic similarity of the uncertainty objectives.
 
 ## MKod-2: Deeper properties (invariance, convergence) not analyzed
 
@@ -42,7 +42,7 @@ We did not implement CAGrad, Auto-Lambda, IMTL-G, or FAMO within the rebuttal wi
 
 ## MKod-6: Only one dense-prediction benchmark (NYUv2)
 
-Acknowledged. The current evaluation covers three distinct task types — dense prediction (NYUv2), multi-label classification (Yeast), and multi-target regression (RF1) — which provides breadth across task structures. However, the dense-prediction category has only one representative. Adding Cityscapes as a second dense-prediction benchmark is our highest-priority experimental addition for the revised manuscript; we have a working data pipeline and will run BPGS and all baselines under the same protocol used for NYUv2.
+Acknowledged. The current evaluation covers three distinct task types — dense prediction (NYUv2), multi-label classification (Yeast), and multi-target regression (RF1) — which provides breadth across task structures. However, the dense-prediction category has only one representative. Adding Cityscapes as a second dense-prediction benchmark is our highest-priority experimental addition for the revised manuscript; we will run BPGS and all baselines under the same protocol used for NYUv2.
 
 ## MKod-7: No computational overhead analysis
 
