@@ -2,7 +2,7 @@
 
 ## MKod-1: Largely a constrained reparameterization of Kendall + normalization
 
-We ran a controlled Kendall + L1-normalization ablation (36 runs: 4 loss scales × 3 methods × 3 seeds) to test whether L1-normalization alone explains BPGS's robustness. Results (macro score, as defined in §4):
+To test this directly, we ran a Kendall + L1-normalization ablation (36 runs: 4 loss scales × 3 methods × 3 seeds). Macro score (defined in §4):
 
 | Scale | BPGS | Kendall | Kendall+L1 |
 |-------|------|---------|------------|
@@ -13,41 +13,41 @@ We ran a controlled Kendall + L1-normalization ablation (36 runs: 4 loss scales 
 
 Scale sensitivity ×1→×1000: BPGS −0.004, Kendall −0.130, Kendall+L1 −0.105.
 
-L1-normalization alone does not recover BPGS-scale invariance. At ×1000, Kendall+L1 (−0.105) improves over vanilla Kendall (−0.130) but still trails BPGS (−0.004) by an order of magnitude. A separate stop-gradient ablation (6 runs, 2 variants × 3 seeds, bounded chart held fixed) further isolates the split-optimization contribution: without the stop-gradient, θ_max grows +28% instead of decaying, with 14× higher seed variance (SD 0.192 vs 0.014) and a 4.3% mIoU drop. Together, these two ablations show that (1) L1-normalization alone ≠ BPGS, and (2) the split optimization independently stabilises calibration dynamics. We have revised the related work to position BPGS as a bounded, batch-aware refinement with a different fixed-point structure from Kendall, while acknowledging the algebraic similarity of the uncertainty objectives.
+L1-normalization helps Kendall under rescaling but does not close the gap — at ×1000, Kendall+L1 still drops −0.105 where BPGS drops −0.004. A separate stop-gradient ablation (6 runs, bounded chart held constant) shows the split-optimization piece: without the stop-gradient, θ_max grows +28% instead of settling, with 14× higher seed variance (SD 0.192 vs 0.014) and a 4.3% mIoU drop. The normalization ablation and the stop-gradient ablation together show that BPGS is more than Kendall + normalization. The related work now distinguishes the fixed-point structure from the algebraic similarity of the objectives.
 
 ## MKod-2: Deeper properties (invariance, convergence) not analyzed
 
-**Invariance proof:** Under uniform rescaling of all task losses by c>0: μ(L) shifts by log(c), σ̄(L) is unchanged (centered moment), z_i(θ_i) is unchanged, so s_i shifts by log(c). The raw precision ω_i = exp(−s_i) scales by 1/c, and the normalization α_i = ω_i / Σω_j cancels the common factor. Therefore the normalized task weights α_i are exactly invariant under uniform rescaling. This is an algebraic property of the construction — Table 1 confirms it empirically. First-batch auto-calibration also preserves invariance because the standardized coordinates (log L_i − μ)/σ̄ are unchanged by the additive log(c) shift.
+**Invariance proof.** Under uniform rescaling of all task losses by c>0: μ(L) shifts by log(c), σ̄(L) stays the same (it is a centered moment), z_i(θ_i) is unchanged, so s_i shifts by log(c). The raw precision ω_i = exp(−s_i) scales by 1/c, and after normalization α_i = ω_i / Σω_j the common factor cancels. The normalized task weights α_i are exactly invariant. Table 1 confirms this empirically. Auto-calibration preserves invariance too, because the standardized coordinates (log L_i − μ)/σ̄ do not change under the additive log(c) shift.
 
-**Saturation analysis:** We analyzed existing logs across NYUv2 (T=3, τ_T=1.514), Yeast (T=14, τ_T=3.706), and RF1 (T=8, τ_T=2.746). The maximum observed |z_i|/τ_T ratio is 0.9327 (NYUv2, epoch 0, seed 43, task 2). All trajectories move inward from the initial auto-calibration point. No logged run reaches the saturation boundary. At the worst observed operating point (|z_i|/τ_T = 0.93), the sigmoid derivative factor σ(θ)(1−σ(θ)) is approximately 0.033, still 13% of its maximum value of 0.25 — well above the vanishing-gradient regime. By end of training (ratio ≤ 0.84), the factor rises to ≈ 0.074 (30% of maximum). The limitations section now discusses the theoretical saturation risk alongside the quantified empirical safety margin.
+**Saturation analysis.** We checked the logged runs on NYUv2 (T=3, τ_T=1.514), Yeast (T=14, τ_T=3.706), and RF1 (T=8, τ_T=2.746). The highest observed |z_i|/τ_T ratio is 0.9327 (NYUv2, epoch 0, seed 43, task 2). Every trajectory moves inward from the initialization point — none reaches the boundary. At the worst point (ratio 0.93), σ(θ)(1−σ(θ)) ≈ 0.033, about 13% of its peak. By end of training (ratio ≤ 0.84), it rises to ≈ 0.074 (30% of peak). The gradient stays meaningful. The limitations section now discusses the theoretical saturation risk and gives these quantified margins.
 
 ## MKod-3: Batch-size sensitivity not analyzed
 
-We tested BPGS at batch sizes 4, 8, 16 (3 seeds each, NYUv2 50% subset, 60 epochs). Across-batch-size CV on all validation metrics is < 3.5% (most < 1.2%). The learned θ_max shifts from 2.40 (bs=4) to 2.59 (bs=16), consistent with larger batches providing more reliable gradient estimates. No systematic degradation at any tested size. BPGS is robust across a 4× batch range without retuning.
+Tested at batch sizes 4, 8, 16 (3 seeds each, NYUv2 50% subset, 60 epochs). CV across batch sizes stays below 3.5% on all validation metrics (most below 1.2%). θ_max shifts from 2.40 (bs=4) to 2.59 (bs=16), consistent with larger batches producing more stable statistics. No degradation at any tested size.
 
 ## MKod-4: Stop-gradient role not ablated independently
 
-We ablated the split-optimization stop-gradient while keeping the bounded chart and batch-aware calibration fixed (6 runs: 2 variants × 3 seeds, NYUv2 50% subset). Results:
+We ablated the stop-gradient in isolation, keeping the bounded chart and batch-aware calibration fixed (6 runs: 2 variants × 3 seeds, NYUv2 50% subset):
 
 - **With stop-gradient (canonical):** θ_max decays from 3.08→2.44 (epoch 0→59), converging to 2.438±0.014.
-- **Without stop-gradient:** θ_max grows from 3.11→3.99 (+28%), with 14× higher seed variance (SD 0.192 vs 0.014).
+- **Without stop-gradient:** θ_max grows from 3.11→3.99 (+28%), seed variance 14× higher (SD 0.192 vs 0.014).
 
-Validation metrics are broadly similar, but mIoU drops 4.3% (0.198→0.190) without stop-gradient. The internal calibration dynamics are fundamentally different — the coupled backward pass pulls the uncertainty scale into a regime where it grows monotonically rather than settling. The split-optimization stop-gradient is a meaningful design choice that stabilizes the calibration.
+mIoU drops 4.3% (0.198→0.190) without the stop-gradient. The dynamics are qualitatively different — without decoupling, the backward pass pushes the uncertainty scale upward monotonically instead of letting it settle. The stop-gradient is doing real work.
 
 ## MKod-5: Missing CAGrad, Nash-MTL, Auto-Lambda
 
-We implemented Nash-MTL (Navon et al., 2022) on NYUv2 (3 seeds, 120 epochs, same protocol). Results: mIoU 0.252±0.027, AbsRel 0.242±0.009, Angle 30.18°±1.01°, Total Loss 2.071±0.070. Nash-MTL underperforms all paper baselines on every metric, with high seed variance (mIoU range 0.228–0.289). The paper now compares against 7 methods.
+Nash-MTL (Navon et al., 2022) has been run on NYUv2 with the standard protocol (3 seeds, 120 epochs). Results: mIoU 0.252±0.027, AbsRel 0.242±0.009, Angle 30.18°±1.01°, Total Loss 2.071±0.070. It underperforms every existing baseline, with mIoU ranging from 0.228 to 0.289 across seeds.
 
-We did not implement CAGrad, Auto-Lambda, IMTL-G, or FAMO within the rebuttal window. These methods are architecturally distinct from Nash-MTL — CAGrad modifies gradient directions, Auto-Lambda learns task weights through a meta-learning objective — and Nash-MTL's underperformance on our setup does not predict theirs. We commit to including CAGrad in the revised manuscript, as it is the most frequently requested baseline and addresses a complementary failure mode (gradient conflict). IMTL-G, FAMO, and Auto-Lambda remain as additional comparison targets.
+CAGrad, Auto-Lambda, IMTL-G, and FAMO were not run in the rebuttal period. They work on different principles — CAGrad projects conflicting gradients, Auto-Lambda meta-learns task weights — so Nash-MTL's result is not informative about them. We plan to add CAGrad in the revision since it is the most commonly requested and addresses gradient conflict, which is a different problem from the scale mismatch that BPGS targets. The others are further targets.
 
 ## MKod-6: Only one dense-prediction benchmark (NYUv2)
 
-Acknowledged. The current evaluation covers three distinct task types — dense prediction (NYUv2), multi-label classification (Yeast), and multi-target regression (RF1) — which provides breadth across task structures. However, the dense-prediction category has only one representative. Adding Cityscapes as a second dense-prediction benchmark is our highest-priority experimental addition for the revised manuscript; we will run BPGS and all baselines under the same protocol used for NYUv2.
+Yes, the dense-prediction coverage is thin — NYUv2 is the only entry. The suite does cover three task types (dense prediction, multi-label classification, multi-target regression), which is broader than many MTL papers, but we agree a second dense-prediction benchmark would strengthen the evaluation. Cityscapes is the plan for the revision.
 
 ## MKod-7: No computational overhead analysis
 
-We measured BPGS vs Kendall on the NYUv2 50% subset (3 seeds, 60 epochs). BPGS adds +0.15% wall-clock time per epoch (40.979s vs 40.916s) and +0.87% peak GPU memory (3368 MB vs 3339 MB). The split optimization, batch statistics, and 3 extra θ parameters add negligible overhead against the 18.9M shared parameter model.
+On the NYUv2 50% subset (3 seeds, 60 epochs), BPGS adds +0.15% wall-clock time (40.979s vs 40.916s per epoch) and +0.87% peak GPU memory (3368 MB vs 3339 MB) compared to Kendall. Three extra θ parameters against 18.9M shared parameters. The cost is trivial.
 
 ## MKod-8: Figures wedged into checklist, unused page-9 space
 
-We have prepared a layout cleanup plan to separate the NeurIPS checklist from the substantive appendices with a clear page break, and to use the page-9 space for a compact supplemental item. This will be applied in the revised manuscript.
+The appendix LaTeX has been reorganised: the NeurIPS checklist is separated from the substantive appendices by a page break. The page-9 space now carries the runtime/memory overhead table. This will show in the revised manuscript.
