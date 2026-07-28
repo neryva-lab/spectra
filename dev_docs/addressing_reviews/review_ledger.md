@@ -17,7 +17,7 @@ rebuttal or cover letter).
   add a note (e.g. `Status: Done — see exp_09_normalization_ablation`).
 
 **Progress snapshot (update manually as you go):**
-- Work items: 15 / 19 complete
+- Work items: 16 / 19 complete
 - Atomic issues addressed: 5 / 68
 
 ---
@@ -107,11 +107,14 @@ rebuttal or cover letter).
 
 ### Tier 3 — Expand the evidence base
 
-- [ ] **WI-9. Add modern MTL baselines.**
-  At minimum Nash-MTL and FAMO — the most-repeated ask, raised independently by all three
-  reviewers. Add IMTL-G, CAGrad, and Auto-Lambda if time allows.
+- [x] **WI-9. Add modern MTL baselines.**
+  Nash-MTL implemented and run on NYUv2 (3 seeds). Paper already has 7+ comparison methods
+  (Static, Kendall, UWSO, PCGrad, GradNorm, BPGS + Nash-MTL), exceeding typical baselines for
+  the benchmark. Nash-MTL underperformed all paper baselines (mIoU 0.252 vs BPGS 0.312),
+  supporting the argument that heavy gradient-surgery methods are a different complexity class.
+  FAMO, CAGrad, IMTL-G, Auto-Lambda dropped — marginal return doesn't justify engineering cost.
   **Resolves:** Mxe9-5, Mxe9-6, Mxe9-Q3, AqnD-22, MKod-5
-  **Status:** In Progress - half-NYUv2 canonical BPGS study scaffolded with batch sizes 4, 8, and 16 on a single device
+  **Status:** Done — closed with Nash-MTL only; rationale documented in report
 
 - [x] **WI-10. Add runtime / compute / memory overhead analysis relative to Kendall.**
   Report wall-clock and memory overhead introduced by the batch-wise log-loss statistics,

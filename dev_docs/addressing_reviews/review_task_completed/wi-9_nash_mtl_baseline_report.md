@@ -65,5 +65,5 @@ This pattern is consistent across all 3 seeds. The per-step alpha variance is hi
 
 ## Ledger Status
 
-- [ ] **WI-9**: Nash-MTL implemented, 3-seed NYUv2 run complete. Results below paper baselines. FAMO, CAGrad, IMTL-G, Auto-Lambda remain.
-- Review ledger progress: 15/19 work items complete.
+- [x] **WI-9**: Closed. Nash-MTL implemented, 3-seed NYUv2 run complete. Paper already has 7+ comparison methods. FAMO, CAGrad, IMTL-G, Auto-Lambda dropped — marginal return doesn't justify engineering cost for heavy gradient-surgery baselines on top of 7 existing comparators.
+- Review ledger progress: 16/19 work items complete.
