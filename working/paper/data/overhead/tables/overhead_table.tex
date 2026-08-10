@@ -1,0 +1,16 @@
+\begin{table}[t]
+\centering
+\caption{Computational overhead on the NYUv2 50\% subset (three seeds, 60 epochs).}
+\label{tab:overhead}
+\small
+\begin{tabular}{lrrr}
+\toprule
+Quantity & BPGS & Kendall & Difference \\
+\midrule
+Per-epoch time (s) & 40.979 & 40.916 & +0.15\% \\
+Peak GPU memory (MB) & 3368.36 & 3339.34 & +0.87\% \\
+Total time, 60 epochs (s) & 2461.6 & 2457.9 & +3.7 \\
+Trainable parameters & 18,869,143 & 18,869,140 & +3 \\
+\bottomrule
+\end{tabular}
+\end{table}

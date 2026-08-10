@@ -6,7 +6,7 @@ Mark the chosen option and update the referencing files (`04_tables_figures_spec
 
 ---
 
-## D1. Normalization-ablation seed set (BLOCKS Phase 1 — highest priority)
+## D1. Normalization-ablation seed set (RESOLVED; blocks Phase 1 until completed)
 
 **Context.** The completed Kendall+L1 ablation (`experiment_results/exp_09_kendall_norm_ablation/`)
 used seeds **{42, 123, 999}**, while the paper's rescaling table uses seeds **{42, 43, 44}**.
@@ -18,9 +18,14 @@ a visible, unexplained inconsistency if both tables appear in the paper.
 | **A (recommended)** | Rerun the normalization ablation with seeds 42/43/44 on the pure-rescaling grid (36 runs; the same synthetic task family that already ran 120 runs during the rebuttal) | ~hours–1 day of compute | **Best quality.** Tables consistent; no explanatory footnote needed; stronger paper |
 | B | Keep the 42/123/999 run; add an explicit seed-set footnote to the table caption and phrase prose in relative terms (scale sensitivity Δ) only | free | Acceptable, but invites reviewer confusion |
 
-**Recommendation: A.** The synthetic experiments are cheap relative to the value of table
+**Decision: adopt Option A.** The synthetic experiments are cheap relative to the value of table
 consistency; AqnD's original complaint was precisely about code/paper mismatches, and a
 seed-set mismatch between two paper tables invites the same class of criticism.
+The manuscript must not quote a newly regenerated normalization-ablation table until the
+42/43/44 rerun has completed and passed the raw-output audit. If the rerun cannot be completed,
+the fallback is not silent substitution: retain the existing {42,123,999} results, label the
+seed set explicitly in every caption and table reference, and do not present the two tables as
+directly seed-matched comparisons.
 
 ## D2. WI-14 — noisy/conflict regime + BPGS×PCGrad/CAGrad (BLOCKS Phase 6)
 
@@ -81,8 +86,13 @@ separate workstream and must not block the manuscript edits.
   At submission time:
   1. **All three** occurrences must be anonymized (per NeurIPS policy, an anonymized code link
      is allowed; a link to the real repo is an anonymity violation).
-  2. The **repo itself** must be re-scrubbed (WI-1) and its **git history** handled
-     (fresh orphan branch or new repo — the ledger notes history was not addressed).
+  2. WI-1 scrubbed the cited identity strings (author names in `spectra/__init__.py`,
+     `setup.py`, `pyproject.toml`, `LICENSE`) but did not address git history. Remaining
+     items: the real URL is still in current content at `docs/getting_started.md` (line 16)
+     in addition to the three paper locations; and the git history is exposed (verified:
+     `docs/getting_started.md` with the real URL is in the initial commit). Submit only an
+     anonymized repository artifact (fresh orphan branch or new repository if necessary). Do
+     not claim that WI-1 alone resolves this risk.
 - **Action item for the user** (not part of the manuscript edits): prepare the anonymized
   repository + link before submission day. Phase 9 audit greps the compiled PDF text for the
   URL string to confirm zero hits.

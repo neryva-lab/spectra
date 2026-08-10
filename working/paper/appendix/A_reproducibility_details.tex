@@ -1,0 +1,35 @@
+\section{Reproducibility Details}
+\label{app:reproducibility}
+All main-paper tables aggregate over seeds 42, 43, and 44. The stress studies use per-seed \texttt{results.csv} summaries. NYUv2, Yeast, and RF1 tables are extracted from epoch-level \texttt{metrics.csv} logs using the final recorded epoch for each run. This final-epoch rule is especially important for NYUv2 because checkpoint metadata is not consistently available across methods.
+
+\paragraph{Optimizer fidelity.}
+The batch log-loss statistics $\mu(L)$ and $\bar\varsigma(L)$ are detached from the network
+computation graph. Network training uses detached normalized weights, while the uncertainty
+update uses $g_\theta=100$ in every reported BPGS configuration. BPGS uses gradient clipping 10.0;
+the Kendall ablation baseline uses 1.0, matching its method configuration.
+
+\paragraph{Main NYUv2 benchmark.}
+The standard NYUv2 benchmark uses 795 training images and 654 validation images with semantic segmentation, depth estimation, and surface-normal prediction. Representative BPGS runs use 120 epochs, batch size 8, learning rate $5\times 10^{-4}$, minimum learning rate $10^{-6}$, 100 warmup steps, weight decay $10^{-4}$, gradient clipping 10.0, deterministic execution with CPU batch augmentation, and mixed-precision training. Checkpoint selection is done with \texttt{val/miou} in max mode for the final benchmark runs, as specified in the study overrides. The configuration files include early-stopping fields, but the paper tables are extracted from the final epoch for every method.
+
+\paragraph{NYUv2 ablation.}
+The ablation uses a fixed 50\% training subset (398 of 795 images, selected via stratified sampling by majority semantic class and depth quartile using seed~11) with the same validation split. Representative runs use 60 epochs, batch size 8, learning rate $5\times 10^{-4}$, minimum learning rate $10^{-6}$, 100 warmup steps, weight decay $10^{-4}$, mixed precision, and the dataset default selection rule (\texttt{val/total\_loss} in min mode). In this ablation, the Kendall baseline uses gradient clipping 1.0, while the BPGS variants use gradient clipping 10.0, matching their respective method configurations.
+
+\paragraph{Yeast and RF1.}
+Yeast uses 1{,}500 training examples and 917 validation examples; RF1 uses 4{,}108 training examples and 5{,}017 validation examples. Representative Yeast BPGS runs use 120 epochs, batch size 128, learning rate $5\times 10^{-4}$, minimum learning rate $10^{-5}$, 200 warmup steps, weight decay $10^{-4}$, gradient clipping 10.0, and selection metric \texttt{val/total\_loss} with patience 15. Representative RF1 BPGS runs use the same optimizer settings, batch size 256, and the same selection rule.
+
+\paragraph{Method naming.}
+The real-data comparison includes \texttt{GradNormProxy}, which is a gradient-norm proxy baseline inspired by GradNorm rather than a claim of faithful reimplementation. The UWSO baseline is an analytical inverse-loss weighting rule with fixed temperature as implemented in this codebase.
+
+\paragraph{Additional NYUv2 studies.}
+The stop-gradient, batch-size, first-batch, and overhead studies all use the 50\% NYUv2 subset
+and 60 epochs. The first three use the settings described in the main text; the overhead study
+compares BPGS and Kendall over seeds 42, 43, and 44. Nash-MTL uses the main NYUv2 120-epoch
+protocol with batch size 8, AdamW learning rate $5\times10^{-4}$, weight decay $10^{-4}$, 100
+warmup steps, cosine decay to $10^{-6}$, mixed precision, and gradient clipping 1.0. The
+normalization ablation uses the pure-rescaling grid and seeds 42, 123, and 999.
+
+\paragraph{Submission-scope disclosures.}
+The experiments use standard public benchmarks cited in the main text. The anonymized submission
+materials include the implementation, configuration files, and reproduction scripts. Uniform
+hardware and wall-clock records for every archived run are not included; the dedicated overhead
+study is therefore limited to the controlled setting reported in the paper.

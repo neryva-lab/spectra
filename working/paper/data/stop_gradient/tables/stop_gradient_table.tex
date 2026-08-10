@@ -1,0 +1,17 @@
+\begin{table}[t]
+\centering
+\caption{Stop-gradient ablation on the NYUv2 50\% subset (three seeds, 60 epochs). Removing the stop-gradient changes the uncertainty dynamics and lowers segmentation mIoU.}
+\label{tab:stop_gradient}
+\small
+\begin{tabular}{lcc}
+\toprule
+Metric & Split on & Split off \\
+\midrule
+$\theta_{\max}$, epoch 0 & $3.082 \pm 0.017$ & $3.109 \pm 0.011$ \\
+$\theta_{\max}$, final & $2.438 \pm 0.014$ & $3.993 \pm 0.192$ \\
+Segmentation mIoU & $0.1983$ & $0.1897$ \\
+Depth RMSE & $0.8433$ & $0.8544$ \\
+Total loss & $2.1278$ & $2.1419$ \\
+\bottomrule
+\end{tabular}
+\end{table}

@@ -122,10 +122,10 @@ idea/
 
 
 # Project Specific
-
+output
 datasets
 legacy
-working
+# working
 # Project Specific
 outputs/
 # dev_docs

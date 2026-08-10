@@ -1,0 +1,34 @@
+\section{Additional Stress Results}
+\label{app:norm_ablation}
+\input{data/stress/scale/tables/scale_stress_scale_table}
+\input{data/stress/combined/tables/degradation_table}
+\input{data/stress/heterogeneous/tables/heterogeneous_table}
+\input{data/norm_ablation/tables/norm_ablation_table}
+
+\begin{figure*}[t]
+\centering
+\includegraphics[width=\textwidth]{data/stress/scale/figures/pdf/scale_stress_curves.pdf}
+\caption{Synthetic scale-stress curves. As the scale factor increases, all methods degrade, but BPGS retains the strongest macro score at every tested factor and tracks the strongest worst-task score at the larger stress levels.}
+\label{fig:appendix_scale_stress}
+\end{figure*}
+
+\begin{figure*}[t]
+\centering
+\includegraphics[width=\textwidth]{data/stress/rescaling/figures/pdf/rescaling_stress_curves.pdf}
+\caption{Pure loss-rescaling curves. BPGS remains nearly invariant across the entire rescaling range, while Kendall degrades sharply at larger factors and UWSO improves only from a substantially weaker starting point.}
+\label{fig:appendix_rescaling}
+\end{figure*}
+
+\begin{figure*}[t]
+\centering
+\includegraphics[width=\textwidth]{data/stress/combined/figures/pdf/degradation_comparison.pdf}
+\caption{Relative degradation comparison between synthetic scale stress and pure loss rescaling. The figure shows that BPGS has the smallest macro-score degradation under scale stress and essentially no macro-score degradation under pure rescaling.}
+\label{fig:appendix_degradation}
+\end{figure*}
+
+\begin{figure*}[t]
+\centering
+\includegraphics[width=\textwidth]{data/stress/heterogeneous/figures/pdf/heterogeneous_panel.pdf}
+\caption{Heterogeneous mixed-stress summary. BPGS is not the best method in every regime, but it achieves the strongest worst-task score in the clean regime and remains well above the degenerate UWSO worst-task score across all regimes.}
+\label{fig:appendix_heterogeneous}
+\end{figure*}

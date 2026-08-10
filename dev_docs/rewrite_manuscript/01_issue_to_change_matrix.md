@@ -79,7 +79,7 @@ Legend for status: `NEW` = change is not yet in the manuscript; `PART` = partial
 | AqnD-23 | Engineering refinement, not conceptual novelty | Non-triviality pillar (invariance + Kendall+L1 + stop-grad ablations) | M3.5, M4.1, M4.3 | NEW |
 | AqnD-C1 | Boundedness of s ≠ learnability of θ | Same as AqnD-5 | M3.4, M6 | NEW |
 | AqnD-C2 | Limitations omit saturation issue | Add to limitations | M6 | NEW |
-| AqnD-F1 | Anonymity violation in repo | Repo scrubbing (WI-1) still pending; URL appears in three paper locations — see 09 D8 | N/A | OPEN |
+| AqnD-F1 | Anonymity violation in repo | WI-1 scrubbed the cited identity strings (author names) from core package metadata; the real repo URL still sits in current content — `docs/getting_started.md` (line 16) plus the three paper locations — and the git history was never addressed. See 09 D8 | N/A | PART |
 
 ## D. Reviewer MKod
 

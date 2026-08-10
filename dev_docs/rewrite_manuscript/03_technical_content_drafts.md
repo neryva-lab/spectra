@@ -52,22 +52,22 @@ per-task scalar terms while the network objective aggregates full-batch gradient
 deep network; without compensation the θ update would be orders of magnitude slower than the
 network update, and the calibration would effectively freeze.
 
-**Restoration note (verified 2026-08-11):** the compiled PDF already carries grad-scale
-sentences in the §3.3 prose ("an explicit scale $g_\theta=100$ on the update") and §4.3
-("the uncertainty objective (Eq.~10) includes a gradient scale $g_\theta = 100$ on the
-uncertainty update, and the network objective does not see it"); the working tex has lost
-both. Restore them merged with this block (one mention per section — no third mention).
+**Grad-scale note (verified 2026-08-11):** neither the compiled PDF nor the working tex
+carries any grad-scale sentence; this block is **new** content. The value is verified in the
+code, not the paper: `theta_grad_scale: 100.0` in `configs/method/bpgs.yaml` (line 11), the
+default `100.0` in `spectra/baselines/__init__.py` (line 40), and the 100× backward-gradient
+multiplier `GradScale` in `spectra/core/bpgs.py` (WI-4). Insert the sentence once in §3.3
+prose and once in §4.3 (one mention per section — no third mention).
 
 ---
 
 ## 3. Reworded Eq. (10) comment — replaces the current sentence in §3.3
 
-**State check (2026-08-11):** the current paper no longer contains the old sentence below —
-the split-interpretation and fixed-point paragraphs are already present (in the compiled PDF
-and the working file). Treat this block as the reference wording to verify against; apply it
-only if an older sentence survives. The remaining mandatory action is retargeting the
-fixed-point paragraph's closing reference from the undefined `sec:ablation_sg` to
-`\ref{sec:norm_ablation}` (see 02 §3.3b).
+**State check (2026-08-11):** the old sentence below is **still present** in the working file
+(02_method.tex §3.3) and there is no fixed-point paragraph anywhere (verified in the file and
+the compiled PDF). Replace the old sentence with the block below — it is new content, not a
+replacement of existing wording. No reference retargeting is needed (no undefined
+`sec:ablation_sg` reference exists in the current source).
 
 Replace:
 > This matches the scalar uncertainty objective used by classical homoscedastic uncertainty

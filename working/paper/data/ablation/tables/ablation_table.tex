@@ -1,0 +1,18 @@
+\begin{table}[t]
+\centering
+\caption{Ablation study: BPGS variants vs.\ Kendall uncertainty weighting on NYUv2. All methods trained for 60 epochs. Mean $\pm$ std over 3 seeds.}
+\label{tab:ablation}
+\resizebox{\columnwidth}{!}{%
+\begin{tabular}{l c c c c c c}
+\toprule
+Method & mIoU $\uparrow$ & Abs Rel $\downarrow$ & RMSE $\downarrow$ & Angle $\downarrow$ & Within 11.25$^\circ$ $\uparrow$ & Total Loss $\downarrow$ \\
+\midrule
+Kendall & $\underline{0.137 \pm 0.006}$ & $0.294 \pm 0.010$ & $\underline{0.990 \pm 0.016}$ & $38.681 \pm 0.936$ & $0.130 \pm 0.005$ & $2.546 \pm 0.035$ \\
+BPGS (canonical) & $0.128 \pm 0.008$ & $\mathbf{0.283 \pm 0.005}$ & $\mathbf{0.988 \pm 0.043}$ & $\mathbf{33.834 \pm 1.068}$ & $\mathbf{0.161 \pm 0.015}$ & $\mathbf{2.488 \pm 0.075}$ \\
+\textbf{BPGS (BA-fixed)} & $\mathbf{0.143 \pm 0.006}$ & $0.291 \pm 0.005$ & $0.994 \pm 0.022$ & $39.097 \pm 0.478$ & $0.130 \pm 0.004$ & $\underline{2.524 \pm 0.047}$ \\
+BPGS (SL-auto) & $0.058 \pm 0.006$ & $0.331 \pm 0.003$ & $1.305 \pm 0.015$ & $\underline{34.661 \pm 1.310}$ & $\underline{0.147 \pm 0.024}$ & $6.142 \pm 1.332$ \\
+BPGS (SL-fixed) & $0.120 \pm 0.007$ & $\underline{0.287 \pm 0.006}$ & $1.013 \pm 0.025$ & $35.183 \pm 0.963$ & $0.142 \pm 0.010$ & $2.566 \pm 0.051$ \\
+\bottomrule
+\end{tabular}
+}
+\end{table}

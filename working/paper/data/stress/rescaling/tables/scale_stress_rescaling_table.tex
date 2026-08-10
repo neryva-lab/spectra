@@ -1,0 +1,16 @@
+\begin{table}[t]
+\centering
+\caption{Pure loss rescaling (06): Macro Score across scale factors. Mean $\pm$ std over 3 seeds.}
+\label{tab:stress_rescaling}
+\resizebox{\columnwidth}{!}{%
+\begin{tabular}{l c c c c}
+\toprule
+Method & $\times{1}$ & $\times{10}$ & $\times{100}$ & $\times{1000}$ \\
+\midrule
+Kendall & $\mathbf{0.780 \pm 0.007}$ & $0.769 \pm 0.013$ & $0.714 \pm 0.017$ & $0.637 \pm 0.015$ \\
+UWSO & $0.622 \pm 0.073$ & $0.674 \pm 0.036$ & $0.688 \pm 0.035$ & $0.681 \pm 0.014$ \\
+BPGS & $0.777 \pm 0.012$ & $\mathbf{0.784 \pm 0.008}$ & $\mathbf{0.781 \pm 0.001}$ & $\mathbf{0.778 \pm 0.006}$ \\
+\bottomrule
+\end{tabular}
+}
+\end{table}

@@ -1,0 +1,169 @@
+\section{Method}
+\subsection{Problem setup}
+Let $T$ denote the number of tasks, let $w$ denote the shared network parameters, and let
+\begin{equation}
+L(w) = \bigl(L_1(w), \dots, L_T(w)\bigr)
+\end{equation}
+collect the raw task losses for the current batch. The goal is to construct adaptive task weights that remain informative when the task losses differ substantially in scale. BPGS does this by learning one latent uncertainty coordinate per task and mapping that coordinate into a bounded log-variance chart.
+
+The design goal is not to replace task weighting altogether, but to make the weighting rule less
+fragile when the same task is measured in different numerical units or when one loss is much larger
+than the others. In that situation, an unconstrained uncertainty parameter can move too far too
+quickly, so the method deliberately constrains the coordinate and ties it to the current batch's
+loss statistics.
+
+\subsection{Canonical BPGS chart}
+For the canonical batch-aware variant, BPGS computes detached log-loss statistics
+\begin{equation}
+\widetilde L_i = \max(L_i, \varepsilon_{\log}), \qquad
+\mu(L) = \frac{1}{T}\sum_{i=1}^{T}\operatorname{sg}[\log \widetilde L_i],
+\end{equation}
+and
+\begin{equation}
+\bar{\varsigma}(L) =
+\max\!\left(
+\sqrt{\frac{1}{T}\sum_{i=1}^{T}\bigl(\operatorname{sg}[\log \widetilde L_i] - \mu(L)\bigr)^2},
+\varepsilon_{\mathrm{std}}
+\right).
+\end{equation}
+Each task has a learnable uncertainty coordinate $\theta_i \in \mathbb{R}$. Using the task-count-dependent latent radius
+\begin{equation}
+\tau_T = \sqrt{T-1}+0.1,
+\label{eq:tau}
+\end{equation}
+we define the bounded latent coordinate
+\begin{equation}
+z_i(\theta_i) = \tau_T \bigl(2\sigma(\theta_i)-1\bigr),
+\end{equation}
+where $\sigma(\cdot)$ is the logistic sigmoid. The canonical BPGS log-variance is then
+\begin{equation}
+s_i(\theta_i;L) = \mu(L) + \bar{\varsigma}(L)\, z_i(\theta_i).
+\end{equation}
+
+The radius in Eq.~\eqref{eq:tau} follows from the geometry of a population-standardized
+$T$-vector. When the safeguards are inactive, its coordinates have zero mean and unit average
+square. If one coordinate has magnitude $M$, the other $T-1$ coordinates must sum to $-M$;
+their squared sum is minimized when they are equal. Hence
+$T \ge M^2+(T-1)(M/(T-1))^2$, giving $M\le\sqrt{T-1}$. The added $0.1$ is a numerical margin
+that keeps first-batch inverse-sigmoid calibration away from the chart boundary.
+The corresponding task precision is
+\begin{equation}
+\omega_i(\theta_i;L) = e^{-s_i(\theta_i;L)},
+\end{equation}
+and the network weight is its L1-normalized version
+\begin{equation}
+\alpha_i(\theta_i;L) =
+\frac{\omega_i(\theta_i;L)}{\sum_{j=1}^{T}\omega_j(\theta_j;L)}.
+\end{equation}
+
+The reason for the bounded chart is simple: the uncertainty variable should still adapt, but it
+should not be free to drift to extreme values just because the raw losses are numerically large or
+small. Centering the coordinate on the current batch mean and scaling it by the current batch
+spread makes the representation relative to the batch rather than tied to an absolute loss level.
+The bounded sigmoid map then keeps the learnable coordinate inside a finite range, which makes the
+resulting precision easier to control and easier to reason about.
+
+In the canonical configuration used for the main experiments, BPGS performs a one-shot auto-calibration step on the first observed batch. This initialization maps the first batch's detached log-loss statistics into the bounded chart before the first network-weight construction. Ablation variants with fixed initialization or a stateless chart are studied separately, but the primary method studied in this paper is the batch-aware auto-calibrated form above.
+
+This first-batch calibration is a practical choice, not a separate claim of optimality. Its role is
+to place the uncertainty coordinates in a sensible range before training begins so that the model
+does not spend the early iterations recovering from an arbitrary starting point. The ablations then
+test whether that initialization rule matters independently from the bounded, batch-aware chart.
+
+\subsection{Split optimization objectives}
+BPGS uses separate objectives for the network parameters and the uncertainty coordinates. The network objective is
+\begin{equation}
+J_{\mathrm{net}}(w \mid \theta, L)
+=
+\sum_{i=1}^{T} \operatorname{sg}\!\left[\alpha_i(\theta_i;L)\right] L_i,
+\end{equation}
+where $\operatorname{sg}[\cdot]$ denotes stop-gradient. The uncertainty objective is
+\begin{equation}
+J_{\mathrm{unc}}(\theta \mid L)
+=
+\sum_{i=1}^{T}
+\left[
+\frac{1}{2}\omega_i(\theta_i;L)\operatorname{sg}[L_i]
++
+\frac{1}{2}s_i(\theta_i;L)
+\right].
+\label{eq:unc}
+\end{equation}
+Equation~\eqref{eq:unc} has the same algebraic form as the scalar uncertainty objective of
+classical homoscedastic uncertainty weighting \cite{kendall2018}, but it is not the same
+optimization problem. Kendall's log-variance is unconstrained, whereas BPGS confines $s_i$ to a
+batch-conditional interval; their fixed-point structures therefore differ even though the
+objective forms coincide.
+
+The implemented uncertainty update uses a fixed gradient scale $g_\theta=100$. This constant is
+used across the reported BPGS configurations to compensate for the smaller uncertainty-gradient
+magnitudes; it changes the update speed, not the weighting rule. Appendix~\ref{app:reproducibility}
+lists this and the remaining optimizer settings.
+
+The split is important because the two parameter groups play different roles. The network should see
+the current task weights as fixed coefficients for the main update, while the uncertainty
+coordinates should react to the current losses without directly reshaping the network gradient in the
+same step. Separating the passes makes that division explicit and avoids conflating "how to update
+the model" with "how to update the weights."
+
+At each iteration, BPGS uses the same current-batch losses for both passes. The network parameters are updated with $J_{\mathrm{net}}$, and the uncertainty coordinates are updated in a separate pass with $J_{\mathrm{unc}}$. In the implemented method, the network pass uses detached normalized weights, while the uncertainty pass treats both raw losses and batch statistics as detached quantities.
+
+In plain language, the network pass answers: given the current task weights, how should the shared
+model move? The uncertainty pass answers: given the current batch losses, how should the weights be
+reshaped for the next step? Keeping those questions separate is the core reason the method uses two
+objectives rather than a single coupled update.
+
+\subsection{Batch-conditional boundedness}
+\label{sec:boundedness}
+The key formal property used in our robustness framing is conditional boundedness with respect to the current batch. For any fixed batch $L$ and any finite $\theta_i$,
+\begin{equation}
+\mu(L)-\bar{\varsigma}(L)\tau_T
+<
+s_i(\theta_i;L)
+<
+\mu(L)+\bar{\varsigma}(L)\tau_T.
+\end{equation}
+This follows immediately from $\sigma(\theta_i)\in(0,1)$, which implies
+\begin{equation}
+z_i(\theta_i)\in(-\tau_T,\tau_T).
+\end{equation}
+Substituting this interval into the affine map defining $s_i$ gives the stated bound. Consequently, for any fixed batch, the induced precision $\omega_i(\theta_i;L)$ is strictly positive and remains inside a finite interval. The claim is therefore batch-conditional rather than globally independent of the observed loss statistics.
+
+The point of stating this property explicitly is not that boundedness alone proves the method is
+best, but that it explains why the learned weights stay numerically well-behaved. If the coordinate
+can only move inside a finite interval for a given batch, then the corresponding precision cannot
+explode or collapse without limit on that batch. That makes the method's robustness claim more
+concrete: BPGS is designed to keep the uncertainty parameter in a controlled range while still
+allowing it to adapt to the batch it sees.
+
+Boundedness alone does not ensure learnability near the boundary: as $z_i$ approaches
+$\pm\tau_T$, the sigmoid derivative vanishes and recovery can become difficult. We therefore
+examined the logged main-paper trajectories (Appendix~\ref{app:chart_behavior}). The largest
+observed ratio was $|z_i|/\tau_T=0.93$ (NYUv2, initialization); the final-epoch caps were at most
+0.84 on NYUv2, 0.69 on Yeast, and 0.89 on RF1. The closest observed point retained a derivative
+factor of about $0.033$ (13\% of its maximum), and the final epochs reached about $0.074$.
+Thus no logged run exhibited boundary locking, although this empirical margin is not a guarantee.
+
+\subsection{Uniform rescaling invariance}
+\label{sec:invariance}
+The batch-aware chart has a narrow but useful algebraic property.
+
+\begin{proposition}[Uniform rescaling invariance]
+\label{prop:invariance}
+Let $L'_i=cL_i$ for every task and some $c>0$. If the numerical safeguards
+$\varepsilon_{\log}$ and $\varepsilon_{\mathrm{std}}$ are inactive on both batches, then
+$\alpha_i(\theta_i;L')=\alpha_i(\theta_i;L)$ for all $i$. First-batch auto-calibration also
+produces the same initial $\theta_i$ values under the same rescaling.
+\end{proposition}
+
+\begin{proof}
+Uniform rescaling adds $\log c$ to every log-loss. Therefore $\mu(L')=\mu(L)+\log c$ while
+$\bar{\varsigma}(L')=\bar{\varsigma}(L)$, and $z_i(\theta_i)$ is unchanged. Hence
+$s_i(\theta_i;L')=s_i(\theta_i;L)+\log c$, so each raw precision is multiplied by the same
+factor $1/c$, which cancels in the L1 normalization. The standardized coordinates used for
+first-batch calibration are unchanged by the same additive shift.
+\end{proof}
+
+The proposition concerns normalized weights on a fixed batch; it does not claim that an entire
+optimizer trajectory or final predictive metrics are invariant. The pure-rescaling experiment
+provides the corresponding empirical diagnostic.

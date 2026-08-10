@@ -1,0 +1,18 @@
+\begin{table}[t]
+\centering
+\caption{NYUv2 dense prediction benchmark. All methods trained for 120 epochs. Final-epoch metrics reported as mean $\pm$ std over 3 seeds. $\Delta_M$ is computed against the Static baseline; the Nash-MTL value is derived from the reported mean metrics and is shown approximately.}
+\label{tab:nyuv2_main}
+\resizebox{\columnwidth}{!}{%
+\begin{tabular}{l c c c c c c c}
+\toprule
+Method & mIoU $\uparrow$ & Abs Rel $\downarrow$ & RMSE $\downarrow$ & Angle $\downarrow$ & Within 11.25$^\circ$ $\uparrow$ & Total Loss $\downarrow$ & $\Delta_M$ $\uparrow$ \\
+\midrule
+Static & $\mathbf{0.341 \pm 0.006}$ & $0.239 \pm 0.000$ & $0.829 \pm 0.011$ & $35.934 \pm 2.055$ & $0.169 \pm 0.009$ & $1.992 \pm 0.033$ & $0.000 \pm 0.000$ \\
+Kendall & $0.281 \pm 0.013$ & $0.229 \pm 0.001$ & $\underline{0.808 \pm 0.003}$ & $28.629 \pm 0.431$ & $0.231 \pm 0.007$ & $1.977 \pm 0.029$ & $0.022 \pm 0.000$ \\
+UWSO & $0.294 \pm 0.007$ & $\underline{0.228 \pm 0.003}$ & $0.815 \pm 0.012$ & $\mathbf{26.110 \pm 0.383}$ & $\mathbf{0.271 \pm 0.007}$ & $\underline{1.936 \pm 0.023}$ & $\underline{0.059 \pm 0.000}$ \\
+\textbf{BPGS} & $\underline{0.312 \pm 0.001}$ & $\mathbf{0.223 \pm 0.002}$ & $\mathbf{0.790 \pm 0.010}$ & $\underline{26.851 \pm 0.334}$ & $\underline{0.257 \pm 0.005}$ & $\mathbf{1.891 \pm 0.014}$ & $\mathbf{0.078 \pm 0.000}$ \\
+Nash-MTL & $0.252 \pm 0.027$ & $0.242 \pm 0.009$ & $0.856 \pm 0.029$ & $30.180 \pm 1.010$ & $0.211 \pm 0.011$ & $2.071 \pm 0.070$ & $\approx -0.038$ \\
+\bottomrule
+\end{tabular}
+}
+\end{table}

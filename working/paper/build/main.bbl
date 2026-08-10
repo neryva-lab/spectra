@@ -1,0 +1,79 @@
+\begin{thebibliography}{11}
+\providecommand{\natexlab}[1]{#1}
+\providecommand{\url}[1]{\texttt{#1}}
+\expandafter\ifx\csname urlstyle\endcsname\relax
+  \providecommand{\doi}[1]{doi: #1}\else
+  \providecommand{\doi}{doi: \begingroup \urlstyle{rm}\Url}\fi
+
+\bibitem[Caruana(1997)]{caruana1997multitask}
+Rich Caruana.
+\newblock Multitask learning.
+\newblock \emph{Machine Learning}, 28\penalty0 (1):\penalty0 41--75, 1997.
+\newblock \doi{10.1023/A:1007379606734}.
+
+\bibitem[Kendall et~al.(2018)Kendall, Gal, and Cipolla]{kendall2018}
+Alex Kendall, Yarin Gal, and Roberto Cipolla.
+\newblock Multi-task learning using uncertainty to weigh losses for scene
+  geometry and semantics.
+\newblock In \emph{Proceedings of the IEEE Conference on Computer Vision and
+  Pattern Recognition}, pages 7482--7491, 2018.
+
+\bibitem[Yu et~al.(2020)Yu, Kumar, Gupta, Levine, Hausman, and
+  Finn]{yu2020pcgrad}
+Tianhe Yu, Saurabh Kumar, Abhishek Gupta, Sergey Levine, Karol Hausman, and
+  Chelsea Finn.
+\newblock Gradient surgery for multi-task learning.
+\newblock In \emph{Advances in Neural Information Processing Systems}, 2020.
+
+\bibitem[Chen et~al.(2018)Chen, Badrinarayanan, Lee, and
+  Rabinovich]{chen2018gradnorm}
+Zhao Chen, Vijay Badrinarayanan, Chen-Yu Lee, and Andrew Rabinovich.
+\newblock Gradnorm: Gradient normalization for adaptive loss balancing in deep
+  multitask networks.
+\newblock In \emph{Proceedings of the 35th International Conference on Machine
+  Learning}, volume~80 of \emph{Proceedings of Machine Learning Research},
+  pages 794--803, 2018.
+
+\bibitem[Guo et~al.(2018)Guo, Haque, Huang, Yeung, and Fei-Fei]{guo2018dtp}
+Michelle Guo, Albert Haque, De-An Huang, Serena Yeung, and Li~Fei-Fei.
+\newblock Dynamic task prioritization for multitask learning.
+\newblock In \emph{Proceedings of the European Conference on Computer Vision
+  (ECCV)}, pages 282--299, 2018.
+
+\bibitem[Sener and Koltun(2018)]{sener2018multiobjective}
+Ozan Sener and Vladlen Koltun.
+\newblock Multi-task learning as multi-objective optimization.
+\newblock In \emph{Advances in Neural Information Processing Systems}, 2018.
+
+\bibitem[Liu et~al.(2021)Liu, Liu, Jin, Stone, and Liu]{liu2021cagrad}
+Bo~Liu, Xingchao Liu, Xiaojie Jin, Peter Stone, and Qiang Liu.
+\newblock Conflict-averse gradient descent for multi-task learning.
+\newblock In \emph{Advances in Neural Information Processing Systems}, 2021.
+
+\bibitem[Silberman et~al.(2012)Silberman, Hoiem, Kohli, and
+  Fergus]{silberman2012nyuv2}
+Nathan Silberman, Derek Hoiem, Pushmeet Kohli, and Rob Fergus.
+\newblock Indoor segmentation and support inference from {RGBD} images.
+\newblock In \emph{European Conference on Computer Vision}, 2012.
+
+\bibitem[Elisseeff and Weston(2001)]{elisseeff2001yeast}
+Andr{\'e} Elisseeff and Jason Weston.
+\newblock A kernel method for multi-labelled classification.
+\newblock In \emph{Advances in Neural Information Processing Systems}, 2001.
+
+\bibitem[Spyromitros-Xioufis et~al.(2016)Spyromitros-Xioufis, Tsoumakas,
+  Groves, and Vlahavas]{spyromitros2016mtr}
+Eleftherios Spyromitros-Xioufis, Grigorios Tsoumakas, William Groves, and
+  Ioannis Vlahavas.
+\newblock Multi-target regression via input space expansion: treating targets
+  as inputs.
+\newblock \emph{Machine Learning}, 104\penalty0 (1):\penalty0 55--98, 2016.
+\newblock \doi{10.1007/s10994-016-5546-z}.
+
+\bibitem[Liu et~al.(2019)Liu, Johns, and Davison]{liu2019mtan}
+Shikun Liu, Edward Johns, and Andrew~J. Davison.
+\newblock End-to-end multi-task learning with attention.
+\newblock In \emph{Proceedings of the IEEE/CVF Conference on Computer Vision
+  and Pattern Recognition}, 2019.
+
+\end{thebibliography}

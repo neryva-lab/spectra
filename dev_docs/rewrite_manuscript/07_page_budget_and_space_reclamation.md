@@ -3,7 +3,12 @@
 NeurIPS 2026 limit: **9 pages of main content** (figures included). References, acknowledgments,
 appendices, checklist are unlimited.
 
-## 1. Measured current usage (compiled `build/main.pdf`, 21 pages total)
+## 1. Provisional baseline usage (compiled `build/main.pdf`, 21 pages total)
+
+The compiled PDF/build auxiliary files predate the final source reconciliation in places (notably
+the auxiliary table entry still says the scale-stress table has 3 seeds although the source table
+has 10). Therefore these measurements are planning estimates only; Phase 0 must rebuild and
+remeasure before any prose is cut to the page budget.
 
 - Pages 1–7: main text.
 - Page 8: tail of Discussion + **References start** → main body is ≈ **7.4 pages**.

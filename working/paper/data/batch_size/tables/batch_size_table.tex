@@ -1,0 +1,18 @@
+\begin{table}[t]
+\centering
+\caption{Batch-size sensitivity of canonical BPGS on the NYUv2 50\% subset (three seeds per batch size, 60 epochs). Values are seed-averaged final metrics.}
+\label{tab:batch_size}
+\small
+\begin{tabular}{lrrrr}
+\toprule
+Metric & bs=4 & bs=8 & bs=16 & CV \\
+\midrule
+Total loss & 2.1468 & 2.1226 & 2.1507 & 0.58\% \\
+Depth Abs Rel & 0.2411 & 0.2421 & 0.2451 & 0.70\% \\
+Depth RMSE & 0.8643 & 0.8403 & 0.8490 & 1.17\% \\
+Normal angle & 29.400 & 29.223 & 29.754 & 0.75\% \\
+Segmentation mIoU & 0.1955 & 0.1932 & 0.1810 & 3.35\% \\
+$\theta_{\max}$, final & 2.396 & 2.441 & 2.589 & -- \\
+\bottomrule
+\end{tabular}
+\end{table}

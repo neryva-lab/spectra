@@ -1,0 +1,398 @@
+{
+  "study": "nyuv2",
+  "primary_method": "bpgs",
+  "baseline_methods": [
+    "kendall",
+    "static",
+    "uwso"
+  ],
+  "metrics": [
+    "val/segmentation_miou",
+    "val/depth_abs_rel",
+    "val/depth_rmse",
+    "val/normals_mean_angle",
+    "val/normals_within_11_25",
+    "val/total_loss"
+  ],
+  "n_seeds": 3,
+  "comparisons": [
+    {
+      "method_a": "bpgs",
+      "method_b": "kendall",
+      "metric": "val/segmentation_miou",
+      "mean_a": 0.3120181361834207,
+      "mean_b": 0.28079935908317566,
+      "mean_diff": 0.031218777100245065,
+      "cohens_d": 3.515825908443912,
+      "effect_size": "large",
+      "ci_a": {
+        "low": 0.3109504878520965,
+        "high": 0.31257796287536616
+      },
+      "ci_b": {
+        "low": 0.27267545461654663,
+        "high": 0.2946520447731018
+      },
+      "wilcoxon_p": 0.25,
+      "wilcoxon_significant": false,
+      "wilcoxon_warning": "Only 3 paired observations \u2014 Wilcoxon test has insufficient power. Use effect sizes and bootstrap CIs instead."
+    },
+    {
+      "method_a": "bpgs",
+      "method_b": "kendall",
+      "metric": "val/depth_abs_rel",
+      "mean_a": 0.22276237110296881,
+      "mean_b": 0.22922288378079728,
+      "mean_diff": -0.006460512677828462,
+      "cohens_d": -3.900596434372796,
+      "effect_size": "large",
+      "ci_a": {
+        "low": 0.2206778973340988,
+        "high": 0.22386089464028672
+      },
+      "ci_b": {
+        "low": 0.227665513753891,
+        "high": 0.2302071154117584
+      },
+      "wilcoxon_p": 0.25,
+      "wilcoxon_significant": false,
+      "wilcoxon_warning": "Only 3 paired observations \u2014 Wilcoxon test has insufficient power. Use effect sizes and bootstrap CIs instead."
+    },
+    {
+      "method_a": "bpgs",
+      "method_b": "kendall",
+      "metric": "val/depth_rmse",
+      "mean_a": 0.7898781895637512,
+      "mean_b": 0.8079922993977865,
+      "mean_diff": -0.018114109834035275,
+      "cohens_d": -2.5256310536358195,
+      "effect_size": "large",
+      "ci_a": {
+        "low": 0.7799319624900818,
+        "high": 0.7990335822105408
+      },
+      "ci_b": {
+        "low": 0.8058021863301595,
+        "high": 0.8116421699523926
+      },
+      "wilcoxon_p": 0.25,
+      "wilcoxon_significant": false,
+      "wilcoxon_warning": "Only 3 paired observations \u2014 Wilcoxon test has insufficient power. Use effect sizes and bootstrap CIs instead."
+    },
+    {
+      "method_a": "bpgs",
+      "method_b": "kendall",
+      "metric": "val/normals_mean_angle",
+      "mean_a": 26.850857416788738,
+      "mean_b": 28.62947718302409,
+      "mean_diff": -1.7786197662353516,
+      "cohens_d": -4.612182908622393,
+      "effect_size": "large",
+      "ci_a": {
+        "low": 26.634829839070637,
+        "high": 27.22261619567871
+      },
+      "ci_b": {
+        "low": 28.34708086649577,
+        "high": 29.09839630126953
+      },
+      "wilcoxon_p": 0.25,
+      "wilcoxon_significant": false,
+      "wilcoxon_warning": "Only 3 paired observations \u2014 Wilcoxon test has insufficient power. Use effect sizes and bootstrap CIs instead."
+    },
+    {
+      "method_a": "bpgs",
+      "method_b": "kendall",
+      "metric": "val/normals_within_11_25",
+      "mean_a": 0.25739458203315735,
+      "mean_b": 0.23110321660836533,
+      "mean_diff": 0.026291365424792018,
+      "cohens_d": 4.411685101412717,
+      "effect_size": "large",
+      "ci_a": {
+        "low": 0.2517021894454956,
+        "high": 0.2607493003209432
+      },
+      "ci_b": {
+        "low": 0.2239589691162109,
+        "high": 0.23550001780192054
+      },
+      "wilcoxon_p": 0.25,
+      "wilcoxon_significant": false,
+      "wilcoxon_warning": "Only 3 paired observations \u2014 Wilcoxon test has insufficient power. Use effect sizes and bootstrap CIs instead."
+    },
+    {
+      "method_a": "bpgs",
+      "method_b": "kendall",
+      "metric": "val/total_loss",
+      "mean_a": 1.8913313150405884,
+      "mean_b": 1.9772284428278606,
+      "mean_diff": -0.08589712778727221,
+      "cohens_d": -3.820230197836668,
+      "effect_size": "large",
+      "ci_a": {
+        "low": 1.878164529800415,
+        "high": 1.9054865837097168
+      },
+      "ci_b": {
+        "low": 1.9465595483779907,
+        "high": 1.996189037958781
+      },
+      "wilcoxon_p": 0.25,
+      "wilcoxon_significant": false,
+      "wilcoxon_warning": "Only 3 paired observations \u2014 Wilcoxon test has insufficient power. Use effect sizes and bootstrap CIs instead."
+    },
+    {
+      "method_a": "bpgs",
+      "method_b": "static",
+      "metric": "val/segmentation_miou",
+      "mean_a": 0.3120181361834207,
+      "mean_b": 0.34123551845550537,
+      "mean_diff": -0.029217382272084647,
+      "cohens_d": -7.15485369223081,
+      "effect_size": "large",
+      "ci_a": {
+        "low": 0.3109504878520965,
+        "high": 0.31257796287536616
+      },
+      "ci_b": {
+        "low": 0.3347139656543731,
+        "high": 0.3447528084119161
+      },
+      "wilcoxon_p": 0.25,
+      "wilcoxon_significant": false,
+      "wilcoxon_warning": "Only 3 paired observations \u2014 Wilcoxon test has insufficient power. Use effect sizes and bootstrap CIs instead."
+    },
+    {
+      "method_a": "bpgs",
+      "method_b": "static",
+      "metric": "val/depth_abs_rel",
+      "mean_a": 0.22276237110296881,
+      "mean_b": 0.23850502073764798,
+      "mean_diff": -0.015742649634679168,
+      "cohens_d": -11.93475314703351,
+      "effect_size": "large",
+      "ci_a": {
+        "low": 0.2206778973340988,
+        "high": 0.22386089464028672
+      },
+      "ci_b": {
+        "low": 0.2380654066801071,
+        "high": 0.2389430105686187
+      },
+      "wilcoxon_p": 0.25,
+      "wilcoxon_significant": false,
+      "wilcoxon_warning": "Only 3 paired observations \u2014 Wilcoxon test has insufficient power. Use effect sizes and bootstrap CIs instead."
+    },
+    {
+      "method_a": "bpgs",
+      "method_b": "static",
+      "metric": "val/depth_rmse",
+      "mean_a": 0.7898781895637512,
+      "mean_b": 0.8294856150945028,
+      "mean_diff": -0.03960742553075158,
+      "cohens_d": -3.8309915987801544,
+      "effect_size": "large",
+      "ci_a": {
+        "low": 0.7799319624900818,
+        "high": 0.7990335822105408
+      },
+      "ci_b": {
+        "low": 0.8179601430892944,
+        "high": 0.8399878144264221
+      },
+      "wilcoxon_p": 0.25,
+      "wilcoxon_significant": false,
+      "wilcoxon_warning": "Only 3 paired observations \u2014 Wilcoxon test has insufficient power. Use effect sizes and bootstrap CIs instead."
+    },
+    {
+      "method_a": "bpgs",
+      "method_b": "static",
+      "metric": "val/normals_mean_angle",
+      "mean_a": 26.850857416788738,
+      "mean_b": 35.933650970458984,
+      "mean_diff": -9.082793553670246,
+      "cohens_d": -6.168917854504987,
+      "effect_size": "large",
+      "ci_a": {
+        "low": 26.634829839070637,
+        "high": 27.22261619567871
+      },
+      "ci_b": {
+        "low": 33.56451797485352,
+        "high": 37.15792465209961
+      },
+      "wilcoxon_p": 0.25,
+      "wilcoxon_significant": false,
+      "wilcoxon_warning": "Only 3 paired observations \u2014 Wilcoxon test has insufficient power. Use effect sizes and bootstrap CIs instead."
+    },
+    {
+      "method_a": "bpgs",
+      "method_b": "static",
+      "metric": "val/normals_within_11_25",
+      "mean_a": 0.25739458203315735,
+      "mean_b": 0.16948297123114262,
+      "mean_diff": 0.08791161080201473,
+      "cohens_d": 11.79309862512526,
+      "effect_size": "large",
+      "ci_a": {
+        "low": 0.2517021894454956,
+        "high": 0.2607493003209432
+      },
+      "ci_b": {
+        "low": 0.1629870980978012,
+        "high": 0.18000152707099906
+      },
+      "wilcoxon_p": 0.25,
+      "wilcoxon_significant": false,
+      "wilcoxon_warning": "Only 3 paired observations \u2014 Wilcoxon test has insufficient power. Use effect sizes and bootstrap CIs instead."
+    },
+    {
+      "method_a": "bpgs",
+      "method_b": "static",
+      "metric": "val/total_loss",
+      "mean_a": 1.8913313150405884,
+      "mean_b": 1.991888165473938,
+      "mean_diff": -0.10055685043334961,
+      "cohens_d": -3.984037546663441,
+      "effect_size": "large",
+      "ci_a": {
+        "low": 1.878164529800415,
+        "high": 1.9054865837097168
+      },
+      "ci_b": {
+        "low": 1.956401824951172,
+        "high": 2.0136075417200723
+      },
+      "wilcoxon_p": 0.25,
+      "wilcoxon_significant": false,
+      "wilcoxon_warning": "Only 3 paired observations \u2014 Wilcoxon test has insufficient power. Use effect sizes and bootstrap CIs instead."
+    },
+    {
+      "method_a": "bpgs",
+      "method_b": "uwso",
+      "metric": "val/segmentation_miou",
+      "mean_a": 0.3120181361834207,
+      "mean_b": 0.29353352387746173,
+      "mean_diff": 0.018484612305958992,
+      "cohens_d": 3.8471705881885283,
+      "effect_size": "large",
+      "ci_a": {
+        "low": 0.3109504878520965,
+        "high": 0.31257796287536616
+      },
+      "ci_b": {
+        "low": 0.2862316370010376,
+        "high": 0.29795342683792114
+      },
+      "wilcoxon_p": 0.25,
+      "wilcoxon_significant": false,
+      "wilcoxon_warning": "Only 3 paired observations \u2014 Wilcoxon test has insufficient power. Use effect sizes and bootstrap CIs instead."
+    },
+    {
+      "method_a": "bpgs",
+      "method_b": "uwso",
+      "metric": "val/depth_abs_rel",
+      "mean_a": 0.22276237110296881,
+      "mean_b": 0.22835414111614225,
+      "mean_diff": -0.0055917700131734305,
+      "cohens_d": -2.3343130962666563,
+      "effect_size": "large",
+      "ci_a": {
+        "low": 0.2206778973340988,
+        "high": 0.22386089464028672
+      },
+      "ci_b": {
+        "low": 0.2251715809106826,
+        "high": 0.23020204901695251
+      },
+      "wilcoxon_p": 0.25,
+      "wilcoxon_significant": false,
+      "wilcoxon_warning": "Only 3 paired observations \u2014 Wilcoxon test has insufficient power. Use effect sizes and bootstrap CIs instead."
+    },
+    {
+      "method_a": "bpgs",
+      "method_b": "uwso",
+      "metric": "val/depth_rmse",
+      "mean_a": 0.7898781895637512,
+      "mean_b": 0.8149971961975098,
+      "mean_diff": -0.025119006633758545,
+      "cohens_d": -2.304105075817359,
+      "effect_size": "large",
+      "ci_a": {
+        "low": 0.7799319624900818,
+        "high": 0.7990335822105408
+      },
+      "ci_b": {
+        "low": 0.8020676374435425,
+        "high": 0.8229761123657227
+      },
+      "wilcoxon_p": 0.25,
+      "wilcoxon_significant": false,
+      "wilcoxon_warning": "Only 3 paired observations \u2014 Wilcoxon test has insufficient power. Use effect sizes and bootstrap CIs instead."
+    },
+    {
+      "method_a": "bpgs",
+      "method_b": "uwso",
+      "metric": "val/normals_mean_angle",
+      "mean_a": 26.850857416788738,
+      "mean_b": 26.110374450683594,
+      "mean_diff": 0.7404829661051444,
+      "cohens_d": 2.0607036413401105,
+      "effect_size": "large",
+      "ci_a": {
+        "low": 26.634829839070637,
+        "high": 27.22261619567871
+      },
+      "ci_b": {
+        "low": 25.857807159423828,
+        "high": 26.52021789550781
+      },
+      "wilcoxon_p": 0.25,
+      "wilcoxon_significant": false,
+      "wilcoxon_warning": "Only 3 paired observations \u2014 Wilcoxon test has insufficient power. Use effect sizes and bootstrap CIs instead."
+    },
+    {
+      "method_a": "bpgs",
+      "method_b": "uwso",
+      "metric": "val/normals_within_11_25",
+      "mean_a": 0.25739458203315735,
+      "mean_b": 0.27096375823020935,
+      "mean_diff": -0.013569176197052002,
+      "cohens_d": -2.2057592098386265,
+      "effect_size": "large",
+      "ci_a": {
+        "low": 0.2517021894454956,
+        "high": 0.2607493003209432
+      },
+      "ci_b": {
+        "low": 0.2633640766143799,
+        "high": 0.27556225657463074
+      },
+      "wilcoxon_p": 0.25,
+      "wilcoxon_significant": false,
+      "wilcoxon_warning": "Only 3 paired observations \u2014 Wilcoxon test has insufficient power. Use effect sizes and bootstrap CIs instead."
+    },
+    {
+      "method_a": "bpgs",
+      "method_b": "uwso",
+      "metric": "val/total_loss",
+      "mean_a": 1.8913313150405884,
+      "mean_b": 1.9357009331385295,
+      "mean_diff": -0.044369618097941155,
+      "cohens_d": -2.373958097045108,
+      "effect_size": "large",
+      "ci_a": {
+        "low": 1.878164529800415,
+        "high": 1.9054865837097168
+      },
+      "ci_b": {
+        "low": 1.9139626026153564,
+        "high": 1.9590948820114136
+      },
+      "wilcoxon_p": 0.25,
+      "wilcoxon_significant": false,
+      "wilcoxon_warning": "Only 3 paired observations \u2014 Wilcoxon test has insufficient power. Use effect sizes and bootstrap CIs instead."
+    }
+  ]
+}

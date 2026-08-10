@@ -92,8 +92,9 @@ Order: stop-gradient (design ablation), batch size, first-batch calibration. Fig
 \section{Computational Overhead}
 \input{data/overhead/tables/overhead_table}
 ```
-Plus one paragraph: hardware (single GPU, type), what was measured, and the interpretation
-(+0.15% time / +0.87% memory; 3 extra parameters vs 18.9M shared).
+Plus one paragraph: hardware (single GPU; report the exact model only if it is recorded in the
+run metadata), what was measured, and the interpretation (+0.15% time / +0.87% memory; 3 extra
+parameters vs 18.9M shared). Never infer or invent a hardware model from the aggregate timings.
 
 ### G — Bounded-chart behavior (NEW: saturation analysis)
 ```

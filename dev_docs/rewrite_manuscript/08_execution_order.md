@@ -4,8 +4,9 @@ Implementation is staged so that **data and scripts come first** (every table/fi
 from sources), **then prose**, then **appendices**, with a **build + audit** at each gate.
 Each phase is independently verifiable; do not skip gates.
 
-> Pre-requisite: user decision on the open items (`09_open_decisions.md`), especially D1
-> (normalization-ablation seeds) which changes where Phase 1 reads data.
+> Pre-requisite: the resolved D1 normalization-ablation rerun (or its explicitly documented
+> fallback) and the remaining implementation choices in `09_open_decisions.md`. Phase 1 must
+> use the actual artifact paths recorded in `04_tables_figures_specs.md`.
 
 ---
 
@@ -39,7 +40,7 @@ Each phase is independently verifiable; do not skip gates.
    - Reuse the existing figure style helpers (`analysis/common/latex.py`, figure style module).
 3. **Acceptance check:** every generated table cell matches the numbers in `04_tables_figures_specs.md`
    (rounded to the same precision). Any mismatch = investigate before proceeding.
-   **Gate 1:** all 6 new/updated tables + 3 figures exist at their target paths and pass the
+   **Gate 1:** all 7 new/updated tables + 3 figures exist at their target paths and pass the
    acceptance check.
 
 ## Phase 2 — References (0.3 h)
@@ -50,17 +51,22 @@ Each phase is independently verifiable; do not skip gates.
 
 ## Phase 3 — Method section (`sections/02_method.tex`)
 
-**Step 0 — restore the reviewer state of the file (before any additions; see 02 §3 Step 0):**
-the working file diverged from the compiled PDF. Purge the draft notes (02_method.tex lines
-~37, 56, 65–110: τ_1 edge-case note, J_net/J_all note, boundedness scratchpad), restore the
-PDF's §3.3/§3.4 order (Split optimization objectives before Batch-conditional boundedness),
-restore the lost `g_θ = 100` sentences (§3.3 prose and §4.3) and `\operatorname{sg}[\alpha_i]`
-in the J_net equation, and retarget the fixed-point paragraph's undefined `sec:ablation_sg`
-reference to `\ref{sec:norm_ablation}` (label added in §5.1(b)).
+**Current-state audit note:** the working file already has the correct subsection order,
+split-objective lead-in, and `\operatorname{sg}[\alpha_i]`. Verify the file before acting on the
+historical Step 0 description below; do not purge or replace correct content.
+
+**Step 0 — verify the file, do not restore (see 02 §3 Step 0):** verified 2026-08-11 — the
+working file is clean and structurally correct (right §3.3/§3.4 order, split-objective
+lead-in, `\operatorname{sg}[\alpha_i]` in Eq. 9, no scratch, no undefined references). No
+purge and no restore-from-PDF is needed; the compiled PDF matches the Method section and is
+stale only on the empirical sections (3-seed Table 5/§5.1 vs 10-seed source). All Method work
+below is **new** content: grad-scale sentences (§3.3 prose + §4.3; value verified
+`theta_grad_scale=100.0` in code/config), fixed-point paragraph (§3.3, draft in 03 §3), the
+sg[·] action on μ(L)/σ̄(L) in Eq. 10, τ_T derivation, saturation paragraph, Proposition 1.
 
 Apply in file order (drafts in `03_technical_content_drafts.md`):
 1. τ_T derivation after Eq. (4); add `\operatorname{sg}` to μ/σ̄ where they enter Eq. (10).
-2. Grad-scale note in §3.3 (restore the lost sentence first — see note in 03 §2).
+2. Grad-scale note in §3.3 (new sentence — see note in 03 §2).
 3. Saturation paragraph at end of §3.4.
 4. New §3.5 with Proposition 1 (add `\newtheorem{proposition}` to preamble; standalone
    counter per 09 D4).

@@ -1,0 +1,18 @@
+\begin{table}[t]
+\centering
+\caption{First-batch calibration sensitivity on the NYUv2 50\% subset. Only the loader seed changes; the model seed is fixed.}
+\label{tab:first_batch}
+\small
+\begin{tabular}{lrrrr}
+\toprule
+Metric & 1001 & 2001 & 3001 & CV \\
+\midrule
+Total loss & 2.1145 & 2.1040 & 2.1090 & 0.20\% \\
+Depth Abs Rel & 0.2385 & 0.2392 & 0.2411 & 0.46\% \\
+Depth RMSE & 0.8348 & 0.8302 & 0.8325 & 0.23\% \\
+Normal angle & 28.9205 & 28.8975 & 29.1069 & 0.32\% \\
+Segmentation mIoU & 0.1912 & 0.1866 & 0.1952 & 1.84\% \\
+$\theta_{\max}$, final & 2.4451 & 2.4382 & 2.4380 & 0.3\% spread \\
+\bottomrule
+\end{tabular}
+\end{table}

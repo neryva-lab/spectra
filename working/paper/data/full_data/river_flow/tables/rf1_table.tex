@@ -1,0 +1,19 @@
+\begin{table}[t]
+\centering
+\caption{RF1 multi-target regression (8 flow sites). Final-epoch task metrics reported as mean $\pm$ std over 3 seeds.}
+\label{tab:rf1}
+\resizebox{\columnwidth}{!}{%
+\begin{tabular}{l c c c}
+\toprule
+Method & $R^2$ $\uparrow$ & RMSE $\downarrow$ & MAE $\downarrow$ \\
+\midrule
+Static & $-0.453 \pm 0.127$ & $29.875 \pm 0.485$ & $23.376 \pm 0.451$ \\
+Kendall & $-0.439 \pm 0.164$ & $\underline{29.801 \pm 0.821}$ & $\underline{23.219 \pm 0.790}$ \\
+UWSO & $\mathbf{-0.408 \pm 0.193}$ & $30.144 \pm 1.137$ & $23.449 \pm 1.230$ \\
+PCGrad & $-0.432 \pm 0.107$ & $\mathbf{29.596 \pm 0.385}$ & $\mathbf{23.098 \pm 0.368}$ \\
+GradNorm & $-0.508 \pm 0.248$ & $30.033 \pm 0.482$ & $23.380 \pm 0.582$ \\
+\textbf{BPGS} & $\underline{-0.429 \pm 0.213}$ & $30.158 \pm 0.952$ & $23.548 \pm 0.908$ \\
+\bottomrule
+\end{tabular}
+}
+\end{table}

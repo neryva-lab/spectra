@@ -1,0 +1,18 @@
+\begin{table}[t]
+\centering
+\caption{Normalization ablation on pure loss rescaling. Macro score (mean $\pm$ std over seeds 42, 123, and 999). L1-normalizing Kendall improves the largest-scale result but does not reproduce the BPGS scale sensitivity.}
+\label{tab:norm_ablation}
+\small
+\begin{tabular}{lccc}
+\toprule
+Scale & BPGS & Kendall & Kendall+L1 \\
+\midrule
+$\times1$    & $0.789 \pm 0.018$ & $0.788 \pm 0.014$ & $0.794 \pm 0.017$ \\
+$\times10$   & $0.791 \pm 0.015$ & $0.781 \pm 0.023$ & $0.780 \pm 0.022$ \\
+$\times100$  & $0.788 \pm 0.016$ & $0.734 \pm 0.037$ & $0.742 \pm 0.029$ \\
+$\times1000$ & $0.785 \pm 0.017$ & $0.658 \pm 0.042$ & $0.689 \pm 0.034$ \\
+\midrule
+$\Delta(\times1\!\to\!\times1000)$ & $-0.004$ & $-0.130$ & $-0.105$ \\
+\bottomrule
+\end{tabular}
+\end{table}

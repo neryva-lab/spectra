@@ -118,30 +118,41 @@ related to PCGrad but is not evaluated here."*
 
 ## 3. Method (`sections/02_method.tex`)
 
-### Step 0 — restore the reviewer state of the file (before any additions)
+### Step 0 — verify the current reviewer state of the file before additions
 
-The working file diverged from the compiled `build/main.pdf` (the reviewer-visible state) and
-now contains drafting debris. Verified 2026-08-11 by direct read + pdftotext:
+**Current-state correction (2026-08-11 audit):** the working file already has the correct §3.3 →
+§3.4 order, the split-objective lead-in, and `\operatorname{sg}[\alpha_i]` in $J_{\mathrm{net}}$.
+Do not overwrite those sections with stale PDF text. Check for drafting debris, retain the
+existing correct structure, and apply only the missing gradient-scale documentation,
+detached-statistics notation, fixed-point-reference correction, saturation analysis, and new
+invariance proposition described below.
 
-1. **Scratch notes in the file that must be purged:** line 37 (τ_1 edge-case note "τ_1
-   undefined? No —"), line 56 (informal "(Note: contrary to Kendall's formulation…)" block),
-   lines 65–110 (the entire boundedness subsection is a scratchpad: "The state of the paper
-   before the next build is unclear…", "wait, I should double check", "Hmm, no:", "Let me
-   redo:", "Yes that's the intended formula", "Conclusion for the paper: …", "(editing note)").
-2. **Content the PDF has that the file lost:** the `g_θ = 100` sentence in §3.3 prose ("an
-   explicit scale $g_\theta=100$ on the update") and in §4.3 ("the uncertainty objective
-   (Eq. 10) includes a gradient scale g_θ = 100…"), the `\operatorname{sg}[\alpha_i]` inside
-   the J_net equation, and the split-optimization subsection's lead-in prose ("BPGS uses
-   separate objectives for the network parameters and the uncertainty coordinates…").
-3. **Section order is swapped:** the PDF has §3.3 *Split optimization objectives* → §3.4
-   *Batch-conditional boundedness*; the working file has them reversed. Restore the PDF order
-   (matches the target structure above).
-4. **Undefined reference is reviewer-visible:** the fixed-point paragraph ends with
-   `Section~\ref{sec:ablation_sg}`, a label that exists nowhere; the PDF renders
-   "(see Section ??)". The paragraph refers to the normalization ablation, which lands in
-   §5.1 — retarget to `\ref{sec:norm_ablation}` (label added in §5.1(b)).
+Verified state 2026-08-11 (direct read of the working file + pdftotext of the compiled PDF):
 
-The correct boundedness claim to keep (from the scratch, mathematically verified): with
+1. **The working file is clean.** `sections/02_method.tex` (118 lines) has no drafting debris:
+   the τ_1 note, the J_net/J_all note, and the boundedness scratchpad that existed earlier are
+   gone. Nothing to purge.
+2. **Structure is correct in both file and PDF.** §3.3 *Split optimization objectives* →
+   §3.4 *Batch-conditional boundedness* (PDF order preserved); the split-objective lead-in
+   ("BPGS uses separate objectives for the network parameters and the uncertainty
+   coordinates…") is present; `\operatorname{sg}[\alpha_i]` is inside the J_net equation
+   (Eq. 9); the "This matches the scalar uncertainty objective…" sentence is present. Do not
+   re-edit these.
+3. **No undefined reference exists.** Neither the PDF nor the working file contains
+   `\ref{sec:ablation_sg}` or a "(see Section ??)" rendering. The earlier retarget
+   instruction is obsolete.
+4. **The compiled PDF is stale only in the empirical sections** (built 2026-05-07, before the
+   WI-7 10-seed update): Table 5 and the §5.1 prose still carry the 3-seed caption/values
+   ("Mean ± std over 3 seeds"; 0.529/0.495/0.486 at ×1000), while the current source has the
+   10-seed values. The Method section in the PDF matches the working file; there is no hidden
+   reviewer-visible text to restore.
+5. **The g_θ = 100 documentation is NEW content** (present in neither the PDF nor the working
+   file), sourced from the code, not the PDF: `theta_grad_scale: 100.0` in
+   `configs/method/bpgs.yaml` (line 11), default `100.0` in `spectra/baselines/__init__.py`
+   (line 40), applied as a 100× backward-gradient multiplier via `GradScale`
+   (`spectra/core/bpgs.py`, per WI-4). Value verified; the wording below is a draft.
+
+The correct boundedness claim (mathematically verified): with
 $s_i \le s^{\max}_i$ and $s_j \ge s^{\min}_j$ for $j \neq i$, the normalized weight is at most
 $\exp(-s^{\min}_i)/\left(\exp(-s^{\min}_i) + \sum_{j \neq i}\exp(-s^{\max}_j)\right)$.
 
@@ -166,9 +177,9 @@ Insert (draft in 03):
 Also: add the sg[·] notation to μ(L) and σ̄(L) where they enter the uncertainty objective
 (Eq. 10) — **action, not verify-condition**: the AqnD response committed to "sg[] has been
 added to the μ(L) and σ̄(L) definitions," but the current paper does not carry it (only the
-prose "detached log-loss statistics" and `\operatorname{sg}[L_i]` in Eq. 10 exist). Also
-restore `\operatorname{sg}[\alpha_i]` inside the J_net equation (the compiled PDF's Eq. 9
-carries it; the working file moved J_net into §3.2 and dropped the notation).
+prose "detached log-loss statistics" and `\operatorname{sg}[L_i]` in Eq. 10 exist).
+`\operatorname{sg}[\alpha_i]` is already inside the J_net equation (Eq. 9) in both the
+working file and the compiled PDF — no change needed there.
 
 ### 3.3 Split optimization objectives — **add two things**
 
@@ -181,22 +192,19 @@ sentence, which must be **reworded** — see (b)):
 > and does not affect the weighting rule itself (the invariance property of §3.5 holds for any
 > positive g_θ). Full hyperparameter details are given in Appendix A.
 
-**(b) Fixed-point note** — the current paper already contains the split-interpretation
-paragraph and the fixed-point paragraph (they are in the compiled PDF and in the working
-file; the old "This matches the scalar uncertainty objective… but changes the chart" sentence
-no longer exists). **Remaining actions:**
-- Retarget the fixed-point paragraph's closing reference from the undefined
-  `sec:ablation_sg` to `Section~\ref{sec:norm_ablation}` (the normalization ablation lands in
-  §5.1(b)); the PDF currently renders "(see Section ??)".
-- Verify the paragraphs match this wording (keep them if they do):
+**(b) Fixed-point paragraph — NEW content** (verified 2026-08-11: the paragraph exists in
+neither the working file nor the compiled PDF; the old "This matches the scalar uncertainty
+objective… but changes the chart" sentence is still present in the working file and should be
+replaced). Add the paragraph below (draft in 03 §3), which supersedes that sentence; it
+references `sec:norm_ablation` directly (no retarget needed — no undefined reference exists):
 
 > Equation (10) has the same algebraic form as the scalar uncertainty objective of classical
 > homoscedastic uncertainty weighting \cite{kendall2018}, but it is not the same optimization
 > problem: Kendall's log-variance is unconstrained, so its optimum is reachable for any loss
 > scale, whereas BPGS's log-variance s_i is confined to a batch-conditional interval, so its
 > fixed point — when it exists — lies inside that interval by construction. The fixed-point
-> structures therefore differ even though the objective forms coincide; §5.1 shows empirically
-> that this distinction matters.
+> structures therefore differ even though the objective forms coincide;
+> Section~\ref{sec:norm_ablation} shows empirically that this distinction matters.
 
 ### 3.4 Batch-conditional boundedness — **add saturation paragraph** at the end
 
@@ -216,7 +224,7 @@ Table 1 as empirical confirmation (reframes TA-1: the table becomes confirmation
 
 **(a) Controlled NYUv2 diagnostics** (after the existing ablation paragraph):
 
-> Three further controlled studies use the same 50% training subset. (i) A stop-gradient
+> Four further controlled studies use the same 50% training subset. (i) A stop-gradient
 > ablation compares canonical BPGS against a variant with a coupled (non-detached) uncertainty
 > gradient, 3 seeds × 60 epochs. (ii) A batch-size study trains canonical BPGS at batch sizes
 > 4, 8, and 16 (3 seeds each, 60 epochs). (iii) A first-batch study varies only the loader seed
@@ -228,9 +236,9 @@ Table 1 as empirical confirmation (reframes TA-1: the table becomes confirmation
 
 > To test whether the robustness of BPGS reduces to L1-normalization of Kendall's weights, we run
 > a normalization ablation on the pure loss-rescaling grid (×1/×10/×100/×1000) comparing BPGS,
-> Kendall, and Kendall with L1-normalized weights, 3 seeds per setting. [Seed set: see
-> 09_open_decisions.md — preferred: rerun with seeds 42/43/44; fallback: report seeds 42/123/999
-> explicitly in the caption.]
+> Kendall, and Kendall with L1-normalized weights, 3 seeds per setting. The final target seed set
+> is 42/43/44; if the adopted rerun is unavailable, the existing 42/123/999 artifact must be
+> labeled explicitly rather than silently presented as seed-matched to the main rescaling table.
 
 ### 4.2 Compared methods and metrics — **add Nash-MTL**
 
@@ -242,10 +250,11 @@ Table 1 as empirical confirmation (reframes TA-1: the table becomes confirmation
 ### 4.3 Reporting protocol — **update seed reporting**
 
 - Keep the 10-seed scale-stress sentence.
-- **Restore the lost §4.3 sentence** (present in the compiled PDF, missing from the working
-  file): *"Furthermore, the uncertainty weights are explicit functions of θ, so the uncertainty
-  objective (Eq. 10) includes a gradient scale g_θ = 100 on the uncertainty update, and the
-  network objective does not see it."*
+- **Add the gradient-scale sentence** (new; present in neither the PDF nor the working file;
+  value verified in code/config: `theta_grad_scale=100.0`, see Step 0 item 5): *"Furthermore,
+  the uncertainty weights are explicit functions of θ, so the uncertainty objective (Eq. 10)
+  includes a gradient scale g_θ = 100 on the uncertainty update, and the network objective does
+  not see it."*
 - Add: *For the new controlled studies (stop-gradient, batch size, first-batch, overhead,
   normalization ablation), mean ± std over three seeds is reported as in the main tables; the
   synthetic normalization ablation uses the seed set noted in its table caption.*

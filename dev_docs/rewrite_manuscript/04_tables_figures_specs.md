@@ -40,8 +40,9 @@ table with the existing `table.py` pipeline.
 ## 2. Normalization ablation table — NEW `data/norm_ablation/tables/norm_ablation_table.tex`
 
 **Source:** `experiment_results/exp_09_kendall_norm_ablation/20260724_113615/` (latest run dir).
-**Seeds used in that run: 42, 123, 999 — see decision in `09_open_decisions.md` (preferred:
-rerun with 42/43/44; if rerun, source paths change accordingly).**
+**Final target seeds: 42, 43, 44.** The currently completed artifact uses {42, 123, 999};
+the adopted plan requires a 42/43/44 rerun before this table is treated as the final artifact.
+If the fallback is used, preserve the existing source and label its seed set explicitly.
 
 Macro score by loss-scale factor (mean ± std, 3 seeds):
 
@@ -239,9 +240,20 @@ analysis scripts (new or updated):
    42/123/999) → BPGS ×1 reads 0.777 vs 0.789. Do not let the two tables sit side by side with
    unexplained differences (see `09_open_decisions.md`).
 2. **Scale-stress table is 10-seed; rescaling table is 3-seed.** Captions must keep saying so.
+   The completed 10-seed artifacts (seeds 42–51, 120 runs) are under
+   `experiment_results/02_synthetic_scale_stress/` — NOT under
+   `outputs/data/stress/final_outputs/02_synthetic_scale_stress/`, which still holds only the
+   old 3-seed runs (42/43/44), and NOT `outputs/02_synthetic_scale_stress/` (the path named in
+   the WI-7 report), which does not exist.
 3. **Ablation table uses 60 epochs on the 50% subset; main NYUv2 table uses 120 epochs on the
    full set.** New controlled studies also use the 50% subset — state it in every caption.
 4. **Nash-MTL uses grad_clip=1.0** (its own config) — state in Appendix A so nobody assumes a
    uniform clip across methods.
 5. **Δ_M for Nash-MTL is negative** (≈ −0.038) — bold/underline only positive best values.
 6. All "≈" values (0.033, 0.074, −0.038) must be recomputed by scripts from raw data, not typed.
+7. Two stale ×10 items in the current source (both from the pre-WI-7 3-seed era; the table
+   values are already 10-seed): (a) the Appendix B figure caption `fig:appendix_scale_stress`
+   says BPGS is strongest "at ×1, ×100, and ×1000" — it omits ×10, where the 10-seed table
+   also ranks BPGS first (0.616 vs 0.607); (b) Table 5 (`tab:stress_scale`) still bolds
+   **Kendall** at ×10, but with the 10-seed values BPGS is highest there (0.616 ± 0.039 vs
+   0.607 ± 0.038) — the bold must move to BPGS. Fix both in the final consistency pass.

@@ -1,0 +1,22 @@
+\section{Discussion and Limitations}
+The empirical case for BPGS is strongest on the scale-mismatch questions the method was designed to address. The rescaling study isolates numerical-scale invariance directly, the scale-stress study tests degradation under worsening imbalance, and the NYUv2 results show that the same parameterization remains competitive on a standard dense-prediction benchmark. The paper therefore supports a targeted claim about robustness-oriented uncertainty weighting rather than a general claim of dominance over all multi-task optimizers.
+
+The study also has clear limits. First, the benchmark set is small: one dense-prediction
+benchmark, two tabular real-data problems, and controlled stress tests. A second dense-prediction
+benchmark remains future work. Second, most headline results use three seeds; the 10-seed
+scale-stress study strengthens one comparison but does not justify fine-grained ranking claims.
+Third, BPGS trails Kendall and PCGrad in the noisy and conflict mixed-stress regimes. It
+stabilizes scalar weights but does not alter gradient directions, so conflict-aware methods can
+have a structural advantage when gradient interference is the dominant difficulty. Combining BPGS
+with such methods is untested future work.
+
+Fourth, boundedness does not guarantee learnability at the chart boundary. The logged runs remain
+inside the boundary (the largest observed $|z_i|/\tau_T$ is 0.93), but this is an empirical margin,
+not a guarantee for new tasks or training regimes. Fifth, the batch-size and first-batch studies
+cover only batch sizes 4--16 and the tested NYUv2 subset. Sixth, the formal results establish
+batch-conditional boundedness and normalized-weight invariance, not convergence or
+scale-independent optimality. Finally, Nash-MTL is the only added recent baseline; CAGrad,
+IMTL-G, FAMO, and Auto-Lambda \cite{liu2022autolambda} remain outside the evaluated comparison
+set. The runtime study quantifies cost only on the controlled NYUv2 subset and one GPU setting.
+
+Potential societal impact is indirect. A more stable task-weighting rule can improve the reliability of multi-output models used in scientific or engineering pipelines, but any downstream deployment still inherits the data, labeling, and evaluation failures of the underlying tasks. In safety-sensitive settings, a method that improves one task while weakening another can be misused if only aggregate performance is reported, which is why this paper reports per-task metrics and states where BPGS is not the best method.

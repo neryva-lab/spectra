@@ -119,8 +119,12 @@ stand alone without the appendix.
 
 ## 6. Where the paper stands on page budget (measured, not guessed)
 
-Current compiled PDF: main text ends on page 8 (References start there). So the main body is
-**~7.5 pages**, leaving **~1.5 pages** of headroom against the 9-page limit.
+The compiled PDF (`build/main.pdf`, last built 2026-05-07, before the WI-7 10-seed update) is
+only a provisional layout baseline: its build auxiliary data still records the scale-stress
+table as 3-seed, while the current source records the completed 10-seed table. Rebuild before
+treating page counts or float positions as authoritative. The provisional baseline shows
+References beginning on page 8, suggesting roughly **~1.5 pages** of headroom, but this must
+be remeasured after the source/data reconciliation.
 
 Estimated additions: **~1.3 pages** (see `07_page_budget_and_space_reclamation.md`). This is
 feasible *if* we reclaim ~0.2–0.3 pages by tightening existing prose (the method motivation
@@ -139,7 +143,7 @@ text. A prioritized fallback-cut list is in file 07 in case the build overflows.
 | `06_references_update.md` | New bibliography entries (Nash-MTL, IMTL-G, FAMO, Auto-Lambda) |
 | `07_page_budget_and_space_reclamation.md` | Page accounting + fallback cuts |
 | `08_execution_order.md` | Ordered implementation steps with build/verification gates |
-| `09_open_decisions.md` | Decisions needing user input (seed consistency, WI-14, WI-15) |
+| `09_open_decisions.md` | D1 is resolved as a required 42/43/44 rerun (with an explicit fallback); WI-14/WI-15 remain parked as discussion/future-work decisions |
 
 ## 8. Golden rules for the implementation phase
 
