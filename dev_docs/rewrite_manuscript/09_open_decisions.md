@@ -27,6 +27,15 @@ the fallback is not silent substitution: retain the existing {42,123,999} result
 seed set explicitly in every caption and table reference, and do not present the two tables as
 directly seed-matched comparisons.
 
+**STATUS 2026-08-11: fallback (Option B) implemented, in full transparency.**
+- The rerun was not completed; the paper keeps the {42,123,999} results and labels them
+  everywhere: `norm_ablation_table.tex` caption ("seeds 42, 123, and 999"), Appendix A
+  ("The normalization ablation uses the pure-rescaling grid and seeds 42, 123, and 999"),
+  and §5.1 ("This comparison is interpreted as evidence that normalization alone is
+  insufficient, not as a seed-matched estimate of the main-table gap").
+- All prose quotes only relative quantities (Δ scale sensitivity) plus the ×1000 absolute
+  values, both labeled with the seed set. No table is presented as seed-matched to Table 1.
+
 ## D2. WI-14 — noisy/conflict regime + BPGS×PCGrad/CAGrad (BLOCKS Phase 6)
 
 | Option | Description | Cost | Verdict |
@@ -96,3 +105,15 @@ separate workstream and must not block the manuscript edits.
 - **Action item for the user** (not part of the manuscript edits): prepare the anonymized
   repository + link before submission day. Phase 9 audit greps the compiled PDF text for the
   URL string to confirm zero hits.
+
+**STATUS 2026-08-11: paper side complete.**
+- All three paper locations have been rewritten to "The anonymized supplementary materials
+  contain the implementation, configuration files, and reproduction instructions." — no
+  `\url{}` remains anywhere under `working/paper/` (verified by grep over the whole tree and
+  by searching the compiled PDF text for `http`/`www`/`github`/`Neryva`; only the official
+  template's own checklist guideline URLs remain, which are template boilerplate, not author
+  content).
+- **Still open (user action):** the anonymized repository artifact for submission. `docs/
+  getting_started.md` (line 16) still contains the real URL and the git history exposes it;
+  WI-19 must use a fresh orphan branch/new repo. Do not upload anything derived from the
+  current working tree without this step.

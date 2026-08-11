@@ -138,3 +138,69 @@ Apply in file order (drafts in `03_technical_content_drafts.md`):
 
 Produce a one-page change summary for the user: files changed, new data files, verification
 results, remaining decisions. (Also serves as the future cover-letter skeleton.)
+
+---
+
+## Phase 11 — Post-rewrite review (2026-08-11, DONE)
+
+Full review of the completed manuscript against the raw runs. Everything below was verified
+against the compiled PDF (`build/main.pdf`, 26 pages: 9 main + 1 references + 10 appendix +
+6 checklist) and the raw artifacts; the build was then re-run clean.
+
+### Blocking issues found and fixed (build was silently truncated before the fix)
+
+1. **`main.tex`: `\usepackage{amsthm}` missing.** `\begin{proof}` in §2.4 raised
+   "Environment proof undefined"; `\end{proof}` consumed `\end{document}`, so everything after
+   the proof (results, discussion, all appendices, checklist) was silently missing from the
+   PDF while `build.ps1` still reported success (it only checks PDF existence). Fix applied;
+   rebuild clean.
+2. **Table 5 (`scale_stress_scale_table.tex`): ×10 bold on Kendall** (0.607) while BPGS
+   (0.616) is highest — bold moved to BPGS; also verified the raw 10-seed means
+   (BPGS 0.6159 > Kendall 0.6071) and that the printed stds equal numpy ddof=0 aggregation
+   (e.g. ×1000 BPGS 0.0340 → 0.032).
+3. **Caption debris `(02)/(06)/(07)`** (internal spec markers) removed from the three stress
+   table captions; captions normalized. The generator
+   `analysis/studies/stress/table.py` still emits these markers and hardcodes
+   "over 3 seeds" — must be fixed so regeneration does not reintroduce them (scale table is
+   now "over 10 seeds").
+
+### Verified correct (no action needed)
+
+- All §5.1–§5.6 prose numbers match the tables and the raw runs (rescaling 3-seed table;
+  scale-stress 10-seed table; degradation 27.0/32.3/28.5%; gap 0.043 / 1.07 combined SD;
+  NYUv2 0.223/0.790/1.891/0.078/Δ_M ≈ −0.038; ablation; sensitivity; Yeast 0.436/0.616/0.773;
+  RF1 −0.429/30.158/23.548; overhead 40.979/40.916, 3368/3339 MB, +0.15%/+0.87%;
+  saturation 0.93/0.84/0.69/0.89/0.033/0.074; heterogeneous worst-task clean 0.301, UWSO 0).
+- Every `\ref`/`\eqref` resolves (no undefined refs in the log); bibtex clean; all 15 cited
+  keys present in `references.bib`; no URLs in the paper; anonymization clean
+  (no `Neryva`, no `github`, no personal strings in the PDF text layer).
+- Submission-mode formatting is active and correct: anonymous title block, line numbers in
+  the margin, "Submitted to NeurIPS 2026. Do not distribute." — these come from the official
+  `neurips_2026.sty` and are expected.
+- Checklist: all 16 items answered honestly; no `\answerTODO` left; section references correct.
+- Layout: main text exactly 9 pages; references page 10; appendices 11–19; checklist 20–26.
+- Data provenance: 10-seed scale-stress runs exist (seeds 42–51 under
+  `experiment_results/02_synthetic_scale_stress/{x1,x10,x100,x1000}/`); norm-ablation runs
+  exist (`experiment_results/exp_09_kendall_norm_ablation/20260724_*`); D1 fallback fully
+  labeled (see 09); D8 paper-side complete (see 09).
+- `02_method.tex` (169 lines): τ_T derivation, sg[·] in μ/σ̄, split objectives with
+  `\operatorname{sg}[\alpha_i]`, fixed-point paragraph, saturation paragraph, Proposition 1
+  + proof — all present and clean (the mid-edit debris the review caught earlier is gone).
+
+### Remaining items (all optional except #1/#2)
+
+1. **Harden `build.ps1`**: fail when `main.log` contains a LaTeX error (`^!` or
+   "LaTeX Error"). Today the build "succeeded" on a truncated PDF.
+2. **Fix the table generator** (`analysis/studies/stress/table.py`): drop the `(02)/(06)/(07)`
+   markers and make the seed-count string a parameter ("over 10 seeds" for scale).
+3. **Create the missing study packages** (Phase 1 item 2, not yet done): `studies/
+   norm_ablation/`, `studies/sensitivity/`, `studies/saturation/` generator code so every
+   paper table is regenerable from raw runs.
+4. **θ_max figures** (04 §8): not referenced by the paper — either generate and add to
+   Appendix E, or declare dropped. Paper is self-consistent as-is.
+5. **`.gitignore`**: add `working/paper/build/` (build artifacts are currently tracked).
+6. **Anonymized archive** for submission (09 D8): fresh orphan branch/new repo; excludes the
+   real URL in `docs/getting_started.md`.
+7. Cosmetic (optional): the anonymous title block shows the template's placeholder lines
+   ("Affiliation / Address / email") — standard template behavior; leave as-is unless the
+   venue guidance says otherwise.

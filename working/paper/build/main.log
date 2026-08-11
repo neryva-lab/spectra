@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.141592653-2.6-1.40.28 (MiKTeX 25.12) (preloaded format=pdflatex 2026.5.6)  7 MAY 2026 16:58
+This is pdfTeX, Version 3.141592653-2.6-1.40.28 (MiKTeX 25.12) (preloaded format=pdflatex 2026.5.28)  11 AUG 2026 06:27
 entering extended mode
  restricted \write18 enabled.
  %&-line parsing enabled.
@@ -71,40 +71,12 @@ Package: iftex 2024/12/12 v1.0g TeX engine tests
 (C:\Users\Hellx\AppData\Local\Programs\MiKTeX\tex/latex/geometry\geometry.cfg))
 \@neuripsabovecaptionskip=\skip53
 \@neuripsbelowcaptionskip=\skip54
-(C:\Users\Hellx\AppData\Local\Programs\MiKTeX\tex/latex/lineno\lineno.sty
-Package: lineno 2026/03/08 line numbers on paragraphs v5.9
-
-(C:\Users\Hellx\AppData\Local\Programs\MiKTeX\tex/latex/etoolbox\etoolbox.sty
-Package: etoolbox 2025/10/02 v2.5m e-TeX tools for LaTeX (JAW)
-\etb@tempcnta=\count287
-)
-(C:\Users\Hellx\AppData\Local\Programs\MiKTeX\tex/latex/kvoptions\kvoptions.sty
-Package: kvoptions 2022-06-15 v3.15 Key value format for package options (HO)
-(C:\Users\Hellx\AppData\Local\Programs\MiKTeX\tex/generic/ltxcmds\ltxcmds.sty
-Package: ltxcmds 2023-12-04 v1.26 LaTeX kernel commands for general use (HO)
-)
-(C:\Users\Hellx\AppData\Local\Programs\MiKTeX\tex/latex/kvsetkeys\kvsetkeys.sty
-Package: kvsetkeys 2022-10-05 v1.19 Key value parser (HO)
-))
-\linenopenalty=\count288
-\output=\toks20
-\linenoprevgraf=\count289
-\linenumbersep=\dimen157
-\linenumberwidth=\dimen158
-\c@linenumber=\count290
-\c@pagewiselinenumber=\count291
-\c@LN@truepage=\count292
-\c@internallinenumber=\count293
-\c@internallinenumbers=\count294
-\quotelinenumbersep=\dimen159
-\bframerule=\dimen160
-\bframesep=\dimen161
-\bframebox=\box53
-)) (C:\Users\Hellx\AppData\Local\Programs\MiKTeX\tex/latex/base\inputenc.sty
+) (C:\Users\Hellx\AppData\Local\Programs\MiKTeX\tex/latex/base\inputenc.sty
 Package: inputenc 2024/02/08 v1.3d Input encoding file
-\inpenc@prehook=\toks21
-\inpenc@posthook=\toks22
-) (C:\Users\Hellx\AppData\Local\Programs\MiKTeX\tex/latex/base\fontenc.sty
+\inpenc@prehook=\toks20
+\inpenc@posthook=\toks21
+)
+(C:\Users\Hellx\AppData\Local\Programs\MiKTeX\tex/latex/base\fontenc.sty
 Package: fontenc 2025/07/18 v2.1d Standard LaTeX package
 LaTeX Font Info:    Trying to load font information for T1+ptm on input line 11
 6.
@@ -115,6 +87,9 @@ File: t1ptm.fd 2001/06/04 font definitions for T1/ptm.
 (C:\Users\Hellx\AppData\Local\Programs\MiKTeX\tex/latex/hyperref\hyperref.sty
 Package: hyperref 2025-07-12 v7.01o Hypertext links for LaTeX
 
+(C:\Users\Hellx\AppData\Local\Programs\MiKTeX\tex/latex/kvsetkeys\kvsetkeys.sty
+Package: kvsetkeys 2022-10-05 v1.19 Key value parser (HO)
+)
 (C:\Users\Hellx\AppData\Local\Programs\MiKTeX\tex/generic/kvdefinekeys\kvdefine
 keys.sty
 Package: kvdefinekeys 2019-12-19 v1.6 Define keys (HO)
@@ -123,6 +98,9 @@ Package: kvdefinekeys 2019-12-19 v1.6 Define keys (HO)
 ty
 Package: pdfescape 2019/12/09 v1.15 Implements pdfTeX's escape features (HO)
 
+(C:\Users\Hellx\AppData\Local\Programs\MiKTeX\tex/generic/ltxcmds\ltxcmds.sty
+Package: ltxcmds 2023-12-04 v1.26 LaTeX kernel commands for general use (HO)
+)
 (C:\Users\Hellx\AppData\Local\Programs\MiKTeX\tex/generic/pdftexcmds\pdftexcmds
 .sty
 Package: pdftexcmds 2020-06-27 v0.33 Utility functions of pdfTeX for LuaTeX (HO
@@ -148,17 +126,24 @@ Package: refcount 2019/12/15 v3.6 Data extraction from label references (HO)
 (C:\Users\Hellx\AppData\Local\Programs\MiKTeX\tex/generic/gettitlestring\gettit
 lestring.sty
 Package: gettitlestring 2019/12/15 v1.6 Cleanup title references (HO)
+
+(C:\Users\Hellx\AppData\Local\Programs\MiKTeX\tex/latex/kvoptions\kvoptions.sty
+Package: kvoptions 2022-06-15 v3.15 Key value format for package options (HO)
+))
+\c@section@level=\count287
 )
-\c@section@level=\count295
+(C:\Users\Hellx\AppData\Local\Programs\MiKTeX\tex/latex/etoolbox\etoolbox.sty
+Package: etoolbox 2025/10/02 v2.5m e-TeX tools for LaTeX (JAW)
+\etb@tempcnta=\count288
 )
 (C:\Users\Hellx\AppData\Local\Programs\MiKTeX\tex/generic/stringenc\stringenc.s
 ty
 Package: stringenc 2019/11/29 v1.12 Convert strings between diff. encodings (HO
 )
 )
-\@linkdim=\dimen162
-\Hy@linkcounter=\count296
-\Hy@pagecounter=\count297
+\@linkdim=\dimen157
+\Hy@linkcounter=\count289
+\Hy@pagecounter=\count290
  (C:\Users\Hellx\AppData\Local\Programs\MiKTeX\tex/latex/hyperref\pd1enc.def
 File: pd1enc.def 2025-07-12 v7.01o Hyperref: PDFDocEncoding definition (HO)
 Now handling font encoding PD1 ...
@@ -166,7 +151,7 @@ Now handling font encoding PD1 ...
 ) (C:\Users\Hellx\AppData\Local\Programs\MiKTeX\tex/generic/intcalc\intcalc.sty
 Package: intcalc 2019/12/15 v1.3 Expandable calculations with integers (HO)
 )
-\Hy@SavedSpaceFactor=\count298
+\Hy@SavedSpaceFactor=\count291
  (C:\Users\Hellx\AppData\Local\Programs\MiKTeX\tex/latex/hyperref\puenc.def
 File: puenc.def 2025-07-12 v7.01o Hyperref: PDF Unicode definition (HO)
 Now handling font encoding PU ...
@@ -179,14 +164,14 @@ Package hyperref Info: Plain pages OFF on input line 4210.
 Package hyperref Info: Backreferencing OFF on input line 4215.
 Package hyperref Info: Implicit mode ON; LaTeX internals redefined.
 Package hyperref Info: Bookmarks ON on input line 4462.
-\c@Hy@tempcnt=\count299
+\c@Hy@tempcnt=\count292
 
 (C:\Users\Hellx\AppData\Local\Programs\MiKTeX\tex/latex/url\url.sty
 \Urlmuskip=\muskip17
 Package: url 2013/09/16  ver 3.4  Verb mode for urls, etc.
 )
 LaTeX Info: Redefining \url on input line 4801.
-\XeTeXLinkMargin=\dimen163
+\XeTeXLinkMargin=\dimen158
 
 (C:\Users\Hellx\AppData\Local\Programs\MiKTeX\tex/generic/bitset\bitset.sty
 Package: bitset 2019/12/09 v1.3 Handle bit-vector datatype (HO)
@@ -196,9 +181,9 @@ Package: bitset 2019/12/09 v1.3 Handle bit-vector datatype (HO)
 Package: bigintcalc 2019/12/15 v1.5 Expandable calculations on big integers (HO
 )
 ))
-\Fld@menulength=\count300
-\Field@Width=\dimen164
-\Fld@charsize=\dimen165
+\Fld@menulength=\count293
+\Field@Width=\dimen159
+\Fld@charsize=\dimen160
 Package hyperref Info: Hyper figures OFF on input line 6078.
 Package hyperref Info: Link nesting OFF on input line 6083.
 Package hyperref Info: Hyper index ON on input line 6086.
@@ -206,16 +191,16 @@ Package hyperref Info: backreferencing OFF on input line 6093.
 Package hyperref Info: Link coloring OFF on input line 6098.
 Package hyperref Info: Link coloring with OCG OFF on input line 6103.
 Package hyperref Info: PDF/A mode OFF on input line 6108.
-\Hy@abspage=\count301
-\c@Item=\count302
-\c@Hfootnote=\count303
+\Hy@abspage=\count294
+\c@Item=\count295
+\c@Hfootnote=\count296
 )
 Package hyperref Info: Driver (autodetected): hpdftex.
 
 (C:\Users\Hellx\AppData\Local\Programs\MiKTeX\tex/latex/hyperref\hpdftex.def
 File: hpdftex.def 2025-07-12 v7.01o Hyperref driver for pdfTeX
-\Fld@listcount=\count304
-\c@bookmark@seq@number=\count305
+\Fld@listcount=\count297
+\c@bookmark@seq@number=\count298
 
 (C:\Users\Hellx\AppData\Local\Programs\MiKTeX\tex/latex/rerunfilecheck\rerunfil
 echeck.sty
@@ -232,18 +217,18 @@ Package uniquecounter Info: New unique counter `rerunfilecheck' on input line 2
 )
 (C:\Users\Hellx\AppData\Local\Programs\MiKTeX\tex/latex/microtype\microtype.sty
 Package: microtype 2026/03/01 v3.2d Micro-typographical refinements (RS)
-\MT@toks=\toks23
-\MT@tempbox=\box54
-\MT@count=\count306
+\MT@toks=\toks22
+\MT@tempbox=\box53
+\MT@count=\count299
 LaTeX Info: Redefining \noprotrusionifhmode on input line 1084.
 LaTeX Info: Redefining \leftprotrusion on input line 1085.
-\MT@prot@toks=\toks24
+\MT@prot@toks=\toks23
 LaTeX Info: Redefining \rightprotrusion on input line 1104.
 LaTeX Info: Redefining \textls on input line 1449.
-\MT@outer@kern=\dimen166
+\MT@outer@kern=\dimen161
 LaTeX Info: Redefining \microtypecontext on input line 2053.
 LaTeX Info: Redefining \textmicrotypecontext on input line 2070.
-\MT@listname@count=\count307
+\MT@listname@count=\count300
 
 (C:\Users\Hellx\AppData\Local\Programs\MiKTeX\tex/latex/microtype\microtype-pdf
 tex.def
@@ -290,66 +275,64 @@ Package: amstext 2024/11/17 v2.01 AMS text
 
 (C:\Users\Hellx\AppData\Local\Programs\MiKTeX\tex/latex/amsmath\amsgen.sty
 File: amsgen.sty 1999/11/30 v2.0 generic functions
-\@emptytoks=\toks25
-\ex@=\dimen167
+\@emptytoks=\toks24
+\ex@=\dimen162
 ))
 (C:\Users\Hellx\AppData\Local\Programs\MiKTeX\tex/latex/amsmath\amsbsy.sty
 Package: amsbsy 1999/11/29 v1.2d Bold Symbols
-\pmbraise@=\dimen168
+\pmbraise@=\dimen163
 )
 (C:\Users\Hellx\AppData\Local\Programs\MiKTeX\tex/latex/amsmath\amsopn.sty
 Package: amsopn 2022/04/08 v2.04 operator names
 )
-\inf@bad=\count308
+\inf@bad=\count301
 LaTeX Info: Redefining \frac on input line 233.
-\uproot@=\count309
-\leftroot@=\count310
+\uproot@=\count302
+\leftroot@=\count303
 LaTeX Info: Redefining \overline on input line 398.
 LaTeX Info: Redefining \colon on input line 409.
-\classnum@=\count311
-\DOTSCASE@=\count312
+\classnum@=\count304
+\DOTSCASE@=\count305
 LaTeX Info: Redefining \ldots on input line 495.
 LaTeX Info: Redefining \dots on input line 498.
 LaTeX Info: Redefining \cdots on input line 619.
-\Mathstrutbox@=\box55
-\strutbox@=\box56
+\Mathstrutbox@=\box54
+\strutbox@=\box55
 LaTeX Info: Redefining \big on input line 721.
 LaTeX Info: Redefining \Big on input line 722.
 LaTeX Info: Redefining \bigg on input line 723.
 LaTeX Info: Redefining \Bigg on input line 724.
-\big@size=\dimen169
+\big@size=\dimen164
 LaTeX Font Info:    Redeclaring font encoding OML on input line 742.
 LaTeX Font Info:    Redeclaring font encoding OMS on input line 743.
-\macc@depth=\count313
+\macc@depth=\count306
 LaTeX Info: Redefining \bmod on input line 904.
 LaTeX Info: Redefining \pmod on input line 909.
 LaTeX Info: Redefining \smash on input line 939.
 LaTeX Info: Redefining \relbar on input line 969.
 LaTeX Info: Redefining \Relbar on input line 970.
-\c@MaxMatrixCols=\count314
+\c@MaxMatrixCols=\count307
 \dotsspace@=\muskip18
-\c@parentequation=\count315
-\dspbrk@lvl=\count316
-\tag@help=\toks26
-\row@=\count317
-\column@=\count318
-\maxfields@=\count319
-\andhelp@=\toks27
-\eqnshift@=\dimen170
-\alignsep@=\dimen171
-\tagshift@=\dimen172
-\tagwidth@=\dimen173
-\totwidth@=\dimen174
-\lineht@=\dimen175
-\@envbody=\toks28
+\c@parentequation=\count308
+\dspbrk@lvl=\count309
+\tag@help=\toks25
+\row@=\count310
+\column@=\count311
+\maxfields@=\count312
+\andhelp@=\toks26
+\eqnshift@=\dimen165
+\alignsep@=\dimen166
+\tagshift@=\dimen167
+\tagwidth@=\dimen168
+\totwidth@=\dimen169
+\lineht@=\dimen170
+\@envbody=\toks27
 \multlinegap=\skip58
 \multlinetaggap=\skip59
-\mathdisplay@stack=\toks29
+\mathdisplay@stack=\toks28
 LaTeX Info: Redefining \[ on input line 2950.
 LaTeX Info: Redefining \] on input line 2951.
 )
-\@LN@amsmath@ams@eqpen=\count320
-
 (C:\Users\Hellx\AppData\Local\Programs\MiKTeX\tex/latex/amsfonts\amssymb.sty
 Package: amssymb 2013/01/14 v3.01 AMS font symbols
 
@@ -360,35 +343,47 @@ Package: amsfonts 2013/01/14 v3.01 Basic AMSFonts support
 LaTeX Font Info:    Redeclaring math symbol \hbar on input line 98.
 LaTeX Font Info:    Overwriting math alphabet `\mathfrak' in version `bold'
 (Font)                  U/euf/m/n --> U/euf/b/n on input line 106.
-)) (C:\Users\Hellx\AppData\Local\Programs\MiKTeX\tex/latex/booktabs\booktabs.st
-y
+)) (C:\Users\Hellx\AppData\Local\Programs\MiKTeX\tex/latex/amscls\amsthm.sty
+Package: amsthm 2020/05/29 v2.20.6
+\thm@style=\toks29
+\thm@bodyfont=\toks30
+\thm@headfont=\toks31
+\thm@notefont=\toks32
+\thm@headpunct=\toks33
+\thm@preskip=\skip60
+\thm@postskip=\skip61
+\thm@headsep=\skip62
+\dth@everypar=\toks34
+)
+(C:\Users\Hellx\AppData\Local\Programs\MiKTeX\tex/latex/booktabs\booktabs.sty
 Package: booktabs 2020/01/12 v1.61803398 Publication quality tables
-\heavyrulewidth=\dimen176
-\lightrulewidth=\dimen177
-\cmidrulewidth=\dimen178
-\belowrulesep=\dimen179
-\belowbottomsep=\dimen180
-\aboverulesep=\dimen181
-\abovetopsep=\dimen182
-\cmidrulesep=\dimen183
-\cmidrulekern=\dimen184
-\defaultaddspace=\dimen185
-\@cmidla=\count321
-\@cmidlb=\count322
-\@aboverulesep=\dimen186
-\@belowrulesep=\dimen187
-\@thisruleclass=\count323
-\@lastruleclass=\count324
-\@thisrulewidth=\dimen188
-) (C:\Users\Hellx\AppData\Local\Programs\MiKTeX\tex/latex/tools\array.sty
+\heavyrulewidth=\dimen171
+\lightrulewidth=\dimen172
+\cmidrulewidth=\dimen173
+\belowrulesep=\dimen174
+\belowbottomsep=\dimen175
+\aboverulesep=\dimen176
+\abovetopsep=\dimen177
+\cmidrulesep=\dimen178
+\cmidrulekern=\dimen179
+\defaultaddspace=\dimen180
+\@cmidla=\count313
+\@cmidlb=\count314
+\@aboverulesep=\dimen181
+\@belowrulesep=\dimen182
+\@thisruleclass=\count315
+\@lastruleclass=\count316
+\@thisrulewidth=\dimen183
+)
+(C:\Users\Hellx\AppData\Local\Programs\MiKTeX\tex/latex/tools\array.sty
 Package: array 2025/09/25 v2.6n Tabular extension package (FMi)
-\col@sep=\dimen189
-\ar@mcellbox=\box57
-\extrarowheight=\dimen190
-\NC@list=\toks30
-\extratabsurround=\skip60
-\backup@length=\skip61
-\ar@cellbox=\box58
+\col@sep=\dimen184
+\ar@mcellbox=\box56
+\extrarowheight=\dimen185
+\NC@list=\toks35
+\extratabsurround=\skip63
+\backup@length=\skip64
+\ar@cellbox=\box57
 )
 (C:\Users\Hellx\AppData\Local\Programs\MiKTeX\tex/latex/graphics\graphicx.sty
 Package: graphicx 2024/12/31 v1.2e Enhanced LaTeX Graphics (DPC,SPQR)
@@ -405,45 +400,47 @@ File: graphics.cfg 2016/06/04 v1.11 sample graphics configuration
 )
 Package graphics Info: Driver file: pdftex.def on input line 106.
 )
-\Gin@req@height=\dimen191
-\Gin@req@width=\dimen192
+\Gin@req@height=\dimen186
+\Gin@req@width=\dimen187
 )
 (C:\Users\Hellx\AppData\Local\Programs\MiKTeX\tex/latex/enumitem\enumitem.sty
 Package: enumitem 2025/02/06 v3.11 Customized lists
-\labelindent=\skip62
-\enit@outerparindent=\dimen193
-\enit@toks=\toks31
-\enit@inbox=\box59
-\enit@count@id=\count325
-\enitdp@description=\count326
+\labelindent=\skip65
+\enit@outerparindent=\dimen188
+\enit@toks=\toks36
+\enit@inbox=\box58
+\enit@count@id=\count317
+\enitdp@description=\count318
 )
+\c@proposition=\count319
+
 (C:\Users\Hellx\AppData\Local\Programs\MiKTeX\tex/latex/l3backend\l3backend-pdf
 tex.def
 File: l3backend-pdftex.def 2025-10-09 L3 backend support: PDF output (pdfTeX)
-\l__color_backend_stack_int=\count327
+\l__color_backend_stack_int=\count320
 )
 (C:\Users\Hellx\Documents\Programming\python\Project\iron\bc\SPECTRA\working\pa
 per\build\main.aux)
 \openout1 = `main.aux'.
 
-LaTeX Font Info:    Checking defaults for OML/cmm/m/it on input line 23.
-LaTeX Font Info:    ... okay on input line 23.
-LaTeX Font Info:    Checking defaults for OMS/cmsy/m/n on input line 23.
-LaTeX Font Info:    ... okay on input line 23.
-LaTeX Font Info:    Checking defaults for OT1/cmr/m/n on input line 23.
-LaTeX Font Info:    ... okay on input line 23.
-LaTeX Font Info:    Checking defaults for T1/cmr/m/n on input line 23.
-LaTeX Font Info:    ... okay on input line 23.
-LaTeX Font Info:    Checking defaults for TS1/cmr/m/n on input line 23.
-LaTeX Font Info:    ... okay on input line 23.
-LaTeX Font Info:    Checking defaults for OMX/cmex/m/n on input line 23.
-LaTeX Font Info:    ... okay on input line 23.
-LaTeX Font Info:    Checking defaults for U/cmr/m/n on input line 23.
-LaTeX Font Info:    ... okay on input line 23.
-LaTeX Font Info:    Checking defaults for PD1/pdf/m/n on input line 23.
-LaTeX Font Info:    ... okay on input line 23.
-LaTeX Font Info:    Checking defaults for PU/pdf/m/n on input line 23.
-LaTeX Font Info:    ... okay on input line 23.
+LaTeX Font Info:    Checking defaults for OML/cmm/m/it on input line 25.
+LaTeX Font Info:    ... okay on input line 25.
+LaTeX Font Info:    Checking defaults for OMS/cmsy/m/n on input line 25.
+LaTeX Font Info:    ... okay on input line 25.
+LaTeX Font Info:    Checking defaults for OT1/cmr/m/n on input line 25.
+LaTeX Font Info:    ... okay on input line 25.
+LaTeX Font Info:    Checking defaults for T1/cmr/m/n on input line 25.
+LaTeX Font Info:    ... okay on input line 25.
+LaTeX Font Info:    Checking defaults for TS1/cmr/m/n on input line 25.
+LaTeX Font Info:    ... okay on input line 25.
+LaTeX Font Info:    Checking defaults for OMX/cmex/m/n on input line 25.
+LaTeX Font Info:    ... okay on input line 25.
+LaTeX Font Info:    Checking defaults for U/cmr/m/n on input line 25.
+LaTeX Font Info:    ... okay on input line 25.
+LaTeX Font Info:    Checking defaults for PD1/pdf/m/n on input line 25.
+LaTeX Font Info:    ... okay on input line 25.
+LaTeX Font Info:    Checking defaults for PU/pdf/m/n on input line 25.
+LaTeX Font Info:    ... okay on input line 25.
 
 *geometry* driver: auto-detecting
 *geometry* detected driver: pdftex
@@ -511,7 +508,7 @@ LaTeX Font Info:    ... okay on input line 23.
 * \@reversemarginfalse
 * (1in=72.27pt=25.4mm, 1cm=28.453pt)
 
-Package hyperref Info: Link coloring OFF on input line 23.
+Package hyperref Info: Link coloring OFF on input line 25.
 
 (C:\Users\Hellx\Documents\Programming\python\Project\iron\bc\SPECTRA\working\pa
 per\build\main.out)
@@ -520,13 +517,13 @@ per\build\main.out)
 \@outlinefile=\write3
 \openout3 = `main.out'.
 
-LaTeX Info: Redefining \microtypecontext on input line 23.
-Package microtype Info: Applying patch `item' on input line 23.
-Package microtype Info: Applying patch `toc' on input line 23.
-Package microtype Info: Applying patch `eqnum' on input line 23.
-Package microtype Info: Applying patch `footnote' on input line 23.
-Package microtype Info: Applying patch `verbatim' on input line 23.
-LaTeX Info: Redefining \microtypesetup on input line 23.
+LaTeX Info: Redefining \microtypecontext on input line 25.
+Package microtype Info: Applying patch `item' on input line 25.
+Package microtype Info: Applying patch `toc' on input line 25.
+Package microtype Info: Applying patch `eqnum' on input line 25.
+Package microtype Info: Applying patch `footnote' on input line 25.
+Package microtype Info: Applying patch `verbatim' on input line 25.
+LaTeX Info: Redefining \microtypesetup on input line 25.
 Package microtype Info: Generating PDF output.
 Package microtype Info: Character protrusion enabled (level 2).
 Package microtype Info: Using default protrusion set `alltext'.
@@ -544,17 +541,17 @@ File: mt-ptm.cfg 2006/04/20 v1.7 microtype config. file: Times (RS)
 (C:\Users\Hellx\AppData\Local\Programs\MiKTeX\tex/context/base/mkii\supp-pdf.mk
 ii
 [Loading MPS to PDF converter (version 2006.09.02).]
-\scratchcounter=\count328
-\scratchdimen=\dimen194
-\scratchbox=\box60
-\nofMPsegments=\count329
-\nofMParguments=\count330
-\everyMPshowfont=\toks32
-\MPscratchCnt=\count331
-\MPscratchDim=\dimen195
-\MPnumerator=\count332
-\makeMPintoPDFobject=\count333
-\everyMPtoPDFconversion=\toks33
+\scratchcounter=\count321
+\scratchdimen=\dimen189
+\scratchbox=\box59
+\nofMPsegments=\count322
+\nofMParguments=\count323
+\everyMPshowfont=\toks37
+\MPscratchCnt=\count324
+\MPscratchDim=\dimen190
+\MPnumerator=\count325
+\makeMPintoPDFobject=\count326
+\everyMPtoPDFconversion=\toks38
 )
 (C:\Users\Hellx\AppData\Local\Programs\MiKTeX\tex/latex/epstopdf-pkg\epstopdf-b
 ase.sty
@@ -570,7 +567,7 @@ File: epstopdf-sys.cfg 2021/03/18 v2.0 Configuration of epstopdf for MiKTeX
 File: mt-cmr.cfg 2013/05/19 v2.2 microtype config. file: Computer Modern Roman 
 (RS)
 )
-LaTeX Font Info:    Trying to load font information for U+msa on input line 25.
+LaTeX Font Info:    Trying to load font information for U+msa on input line 27.
 
 
 (C:\Users\Hellx\AppData\Local\Programs\MiKTeX\tex/latex/amsfonts\umsa.fd
@@ -579,7 +576,7 @@ File: umsa.fd 2013/01/14 v3.01 AMS symbols A
 (C:\Users\Hellx\AppData\Local\Programs\MiKTeX\tex/latex/microtype\mt-msa.cfg
 File: mt-msa.cfg 2006/02/04 v1.1 microtype config. file: AMS symbols (a) (RS)
 )
-LaTeX Font Info:    Trying to load font information for U+msb on input line 25.
+LaTeX Font Info:    Trying to load font information for U+msb on input line 27.
 
 
 (C:\Users\Hellx\AppData\Local\Programs\MiKTeX\tex/latex/amsfonts\umsb.fd
@@ -588,140 +585,127 @@ File: umsb.fd 2013/01/14 v3.01 AMS symbols B
 (C:\Users\Hellx\AppData\Local\Programs\MiKTeX\tex/latex/microtype\mt-msb.cfg
 File: mt-msb.cfg 2005/06/01 v1.0 microtype config. file: AMS symbols (b) (RS)
 )
-Package microtype Info: Loading generic protrusion settings for font family
-(microtype)             `cmtt' (encoding: T1).
-(microtype)             For optimal results, create family-specific settings.
-(microtype)             See the microtype manual for details.
-
-(sections/00_abstract.tex
-LaTeX Font Info:    Trying to load font information for T1+phv on input line 3.
-
-
-(C:\Users\Hellx\AppData\Local\Programs\MiKTeX\tex/latex/psnfss\t1phv.fd
-File: t1phv.fd 2020/03/25 scalable font definitions for T1/phv.
-)
-Package microtype Info: Loading generic protrusion settings for font family
-(microtype)             `phv' (encoding: T1).
-(microtype)             For optimal results, create family-specific settings.
-(microtype)             See the microtype manual for details.
-)
-(sections/01_introduction.tex [1
+(sections/00_abstract.tex) (sections/01_introduction.tex [1
 
 
 {C:/Users/Hellx/AppData/Local/MiKTeX/fonts/map/pdftex/pdftex.map}{C:/Users/Hell
 x/AppData/Local/Programs/MiKTeX/fonts/enc/dvips/base/8r.enc}]) (sections/03_rel
-ated_work.tex) (sections/02_method.tex [2])
-(sections/03_experimental_setup.tex [3] [4]) (sections/04_results.tex
+ated_work.tex)
+(sections/02_method.tex [2] [3] [4]) (sections/03_experimental_setup.tex
+[5]
+Package microtype Info: Loading generic protrusion settings for font family
+(microtype)             `cmtt' (encoding: T1).
+(microtype)             For optimal results, create family-specific settings.
+(microtype)             See the microtype manual for details.
+) (sections/04_results.tex
 (data/stress/rescaling/tables/scale_stress_rescaling_table.tex)
-<data/stress/combined/figures/pdf/stress_robustness_summary.pdf, id=167, 502.63
+<data/stress/combined/figures/pdf/stress_robustness_summary.pdf, id=207, 502.63
 786pt x 403.64175pt>
 File: data/stress/combined/figures/pdf/stress_robustness_summary.pdf Graphic fi
 le (type pdf)
 <use data/stress/combined/figures/pdf/stress_robustness_summary.pdf>
 Package pdftex.def Info: data/stress/combined/figures/pdf/stress_robustness_sum
-mary.pdf  used on input line 11.
+mary.pdf  used on input line 18.
 (pdftex.def)             Requested size: 397.48499pt x 319.20607pt.
+ [6]
+Underfull \vbox (badness 10000) has occurred while \output is active []
 
-(data/nyuv2/tables/nyuv2_main_table.tex) [5]
-(data/ablation/tables/ablation_table.tex)
-Underfull \vbox (badness 2181) has occurred while \output is active []
-
-
-Underfull \vbox (badness 2181) has occurred while \output is active []
-
- [6 <./data/stress/combined/figures/pdf/stress_robustness_summary.pdf>]
+ [7 <./data/stress/combined/figures/pdf/stress_robustness_summary.pdf>]
+(data/nyuv2/tables/nyuv2_main_table.tex)
+(data/ablation/tables/ablation_table.tex) [8]
 (data/full_data/tables/real_data_table.tex))
-(sections/05_discussion_limitations.tex [7])
+(sections/05_discussion_limitations.tex [9])
 (C:\Users\Hellx\Documents\Programming\python\Project\iron\bc\SPECTRA\working\pa
-per\build\main.bbl) (appendix/A_reproducibility_details.tex [8])
-(appendix/B_additional_stress_results.tex
+per\build\main.bbl [10]) (appendix/A_reproducibility_details.tex)
+(appendix/B_additional_stress_results.tex [11]
 (data/stress/scale/tables/scale_stress_scale_table.tex)
 (data/stress/combined/tables/degradation_table.tex)
 (data/stress/heterogeneous/tables/heterogeneous_table.tex)
-<data/stress/scale/figures/pdf/scale_stress_curves.pdf, id=258, 502.63786pt x 2
+(data/norm_ablation/tables/norm_ablation_table.tex)
+<data/stress/scale/figures/pdf/scale_stress_curves.pdf, id=319, 502.63786pt x 2
 15.04883pt>
 File: data/stress/scale/figures/pdf/scale_stress_curves.pdf Graphic file (type 
 pdf)
 <use data/stress/scale/figures/pdf/scale_stress_curves.pdf>
 Package pdftex.def Info: data/stress/scale/figures/pdf/scale_stress_curves.pdf 
- used on input line 8.
+ used on input line 10.
 (pdftex.def)             Requested size: 397.48499pt x 170.06389pt.
-<data/stress/rescaling/figures/pdf/rescaling_stress_curves.pdf, id=259, 502.637
+<data/stress/rescaling/figures/pdf/rescaling_stress_curves.pdf, id=320, 502.637
 86pt x 215.04883pt>
 File: data/stress/rescaling/figures/pdf/rescaling_stress_curves.pdf Graphic fil
 e (type pdf)
 <use data/stress/rescaling/figures/pdf/rescaling_stress_curves.pdf>
 Package pdftex.def Info: data/stress/rescaling/figures/pdf/rescaling_stress_cur
-ves.pdf  used on input line 15.
+ves.pdf  used on input line 17.
 (pdftex.def)             Requested size: 397.48499pt x 170.06389pt.
-<data/stress/combined/figures/pdf/degradation_comparison.pdf, id=260, 502.63786
+<data/stress/combined/figures/pdf/degradation_comparison.pdf, id=321, 502.63786
 pt x 279.16058pt>
 File: data/stress/combined/figures/pdf/degradation_comparison.pdf Graphic file 
 (type pdf)
 <use data/stress/combined/figures/pdf/degradation_comparison.pdf>
 Package pdftex.def Info: data/stress/combined/figures/pdf/degradation_compariso
-n.pdf  used on input line 22.
+n.pdf  used on input line 24.
 (pdftex.def)             Requested size: 397.48499pt x 220.76445pt.
-<data/stress/heterogeneous/figures/pdf/heterogeneous_panel.pdf, id=261, 502.637
+<data/stress/heterogeneous/figures/pdf/heterogeneous_panel.pdf, id=322, 502.637
 86pt x 215.07034pt>
 File: data/stress/heterogeneous/figures/pdf/heterogeneous_panel.pdf Graphic fil
 e (type pdf)
 <use data/stress/heterogeneous/figures/pdf/heterogeneous_panel.pdf>
 Package pdftex.def Info: data/stress/heterogeneous/figures/pdf/heterogeneous_pa
-nel.pdf  used on input line 29.
+nel.pdf  used on input line 31.
 (pdftex.def)             Requested size: 397.48499pt x 170.0809pt.
 )
 (appendix/C_ablation_and_nyuv2_figures.tex
-<data/ablation/figures/pdf/ablation_per_task_val_curves.pdf, id=262, 502.63786p
+<data/ablation/figures/pdf/ablation_per_task_val_curves.pdf, id=323, 502.63786p
 t x 219.85463pt>
 File: data/ablation/figures/pdf/ablation_per_task_val_curves.pdf Graphic file (
 type pdf)
 <use data/ablation/figures/pdf/ablation_per_task_val_curves.pdf>
 Package pdftex.def Info: data/ablation/figures/pdf/ablation_per_task_val_curves
-.pdf  used on input line 5.
+.pdf  used on input line 8.
 (pdftex.def)             Requested size: 397.48499pt x 173.8644pt.
-<data/ablation/figures/pdf/ablation_weight_dynamics.pdf, id=263, 502.63786pt x 
+<data/ablation/figures/pdf/ablation_weight_dynamics.pdf, id=324, 502.63786pt x 
 244.88991pt>
 File: data/ablation/figures/pdf/ablation_weight_dynamics.pdf Graphic file (type
  pdf)
 <use data/ablation/figures/pdf/ablation_weight_dynamics.pdf>
 Package pdftex.def Info: data/ablation/figures/pdf/ablation_weight_dynamics.pdf
-  used on input line 12.
+  used on input line 15.
 (pdftex.def)             Requested size: 397.48499pt x 193.66267pt.
-<data/nyuv2/figures/pdf/nyuv2_performance_comparison.pdf, id=264, 502.63786pt x
+<data/nyuv2/figures/pdf/nyuv2_performance_comparison.pdf, id=325, 502.63786pt x
  278.93103pt>
 File: data/nyuv2/figures/pdf/nyuv2_performance_comparison.pdf Graphic file (typ
 e pdf)
 <use data/nyuv2/figures/pdf/nyuv2_performance_comparison.pdf>
 Package pdftex.def Info: data/nyuv2/figures/pdf/nyuv2_performance_comparison.pd
-f  used on input line 19.
+f  used on input line 22.
 (pdftex.def)             Requested size: 397.48499pt x 220.58292pt.
-<data/nyuv2/figures/pdf/nyuv2_performance_heatmap.pdf, id=265, 501.90245pt x 22
+<data/nyuv2/figures/pdf/nyuv2_performance_heatmap.pdf, id=326, 501.90245pt x 22
 9.36691pt>
 File: data/nyuv2/figures/pdf/nyuv2_performance_heatmap.pdf Graphic file (type p
 df)
 <use data/nyuv2/figures/pdf/nyuv2_performance_heatmap.pdf>
 Package pdftex.def Info: data/nyuv2/figures/pdf/nyuv2_performance_heatmap.pdf  
-used on input line 26.
+used on input line 29.
 (pdftex.def)             Requested size: 397.48499pt x 181.65634pt.
-<data/nyuv2/figures/pdf/nyuv2_task_training_curves.pdf, id=266, 502.63786pt x 2
+<data/nyuv2/figures/pdf/nyuv2_task_training_curves.pdf, id=327, 502.63786pt x 2
 15.06964pt>
 File: data/nyuv2/figures/pdf/nyuv2_task_training_curves.pdf Graphic file (type 
 pdf)
 <use data/nyuv2/figures/pdf/nyuv2_task_training_curves.pdf>
 Package pdftex.def Info: data/nyuv2/figures/pdf/nyuv2_task_training_curves.pdf 
- used on input line 33.
+ used on input line 36.
 (pdftex.def)             Requested size: 397.48499pt x 170.08034pt.
-<data/nyuv2/figures/pdf/nyuv2_delta_m_comparison.pdf, id=267, 240.65909pt x 111
+<data/nyuv2/figures/pdf/nyuv2_delta_m_comparison.pdf, id=328, 240.65909pt x 111
 .47647pt>
 File: data/nyuv2/figures/pdf/nyuv2_delta_m_comparison.pdf Graphic file (type pd
 f)
 <use data/nyuv2/figures/pdf/nyuv2_delta_m_comparison.pdf>
 Package pdftex.def Info: data/nyuv2/figures/pdf/nyuv2_delta_m_comparison.pdf  u
-sed on input line 40.
+sed on input line 43.
 (pdftex.def)             Requested size: 397.48499pt x 184.12044pt.
 ) (appendix/D_real_data_figures.tex
-<data/full_data/yeast/figures/pdf/yeast_training_curves.pdf, id=268, 502.63786p
+<data/full_data/yeast/figures/pdf/yeast_training_curves.pdf, id=329, 502.63786p
 t x 303.57854pt>
 File: data/full_data/yeast/figures/pdf/yeast_training_curves.pdf Graphic file (
 type pdf)
@@ -729,7 +713,7 @@ type pdf)
 Package pdftex.def Info: data/full_data/yeast/figures/pdf/yeast_training_curves
 .pdf  used on input line 5.
 (pdftex.def)             Requested size: 397.48499pt x 240.07455pt.
-<data/full_data/river_flow/figures/pdf/rf1_training_curves.pdf, id=269, 502.637
+<data/full_data/river_flow/figures/pdf/rf1_training_curves.pdf, id=330, 502.637
 86pt x 303.57854pt>
 File: data/full_data/river_flow/figures/pdf/rf1_training_curves.pdf Graphic fil
 e (type pdf)
@@ -738,30 +722,32 @@ Package pdftex.def Info: data/full_data/river_flow/figures/pdf/rf1_training_cur
 ves.pdf  used on input line 12.
 (pdftex.def)             Requested size: 397.48499pt x 240.07455pt.
 )
-(checklist.tex [9]
+(appendix/E_sensitivity_analyses.tex
+(data/stop_gradient/tables/stop_gradient_table.tex)
+(data/batch_size/tables/batch_size_table.tex)
+(data/first_batch/tables/first_batch_table.tex))
+(appendix/F_computational_overhead.tex (data/overhead/tables/overhead_table.tex
+)) (appendix/G_bounded_chart_behavior.tex
+(data/saturation/tables/saturation_table.tex)) [12] [13 <./data/stress/scale/fi
+gures/pdf/scale_stress_curves.pdf>] [14 <./data/stress/rescaling/figures/pdf/re
+scaling_stress_curves.pdf> <./data/stress/combined/figures/pdf/degradation_comp
+arison.pdf>] [15 <./data/stress/heterogeneous/figures/pdf/heterogeneous_panel.p
+df> <./data/ablation/figures/pdf/ablation_per_task_val_curves.pdf>] [16 <./data
+/ablation/figures/pdf/ablation_weight_dynamics.pdf> <./data/nyuv2/figures/pdf/n
+yuv2_performance_comparison.pdf>] [17 <./data/nyuv2/figures/pdf/nyuv2_performan
+ce_heatmap.pdf> <./data/nyuv2/figures/pdf/nyuv2_task_training_curves.pdf>]
+[18 <./data/nyuv2/figures/pdf/nyuv2_delta_m_comparison.pdf> <./data/full_data/y
+east/figures/pdf/yeast_training_curves.pdf>] [19 <./data/full_data/river_flow/f
+igures/pdf/rf1_training_curves.pdf>] (checklist.tex
 LaTeX Font Info:    Trying to load font information for TS1+ptm on input line 1
 1.
 
 (C:\Users\Hellx\AppData\Local\Programs\MiKTeX\tex/latex/psnfss\ts1ptm.fd
 File: ts1ptm.fd 2001/06/04 font definitions for TS1/ptm.
 )
-[10 <./data/stress/scale/figures/pdf/scale_stress_curves.pdf>]
-Underfull \vbox (badness 3735) has occurred while \output is active []
+[20
 
-
-Underfull \vbox (badness 3735) has occurred while \output is active []
-
- [11 <./data/stress/rescaling/figures/pdf/rescaling_stress_curves.pdf> <./data/
-stress/combined/figures/pdf/degradation_comparison.pdf>] [12 <./data/stress/het
-erogeneous/figures/pdf/heterogeneous_panel.pdf> <./data/ablation/figures/pdf/ab
-lation_per_task_val_curves.pdf>] [13 <./data/ablation/figures/pdf/ablation_weig
-ht_dynamics.pdf> <./data/nyuv2/figures/pdf/nyuv2_performance_comparison.pdf>] [
-14 <./data/nyuv2/figures/pdf/nyuv2_performance_heatmap.pdf> <./data/nyuv2/figur
-es/pdf/nyuv2_task_training_curves.pdf>] [15 <./data/nyuv2/figures/pdf/nyuv2_del
-ta_m_comparison.pdf> <./data/full_data/yeast/figures/pdf/yeast_training_curves.
-pdf>]
-[16 <./data/full_data/river_flow/figures/pdf/rf1_training_curves.pdf>] [17]
-[18] [19] [20]) [21]
+] [21] [22] [23] [24] [25]) [26]
 (C:\Users\Hellx\Documents\Programming\python\Project\iron\bc\SPECTRA\working\pa
 per\build\main.aux)
  ***********
@@ -769,37 +755,41 @@ LaTeX2e <2025-11-01>
 L3 programming layer <2025-12-24>
  ***********
 Package rerunfilecheck Info: File `main.out' has not changed.
-(rerunfilecheck)             Checksum: CC0D8A4CF78883BB5D0E103B0803E021;3383.
+(rerunfilecheck)             Checksum: C9C73002E108A28D093259B41674DDA3;4530.
  ) 
 Here is how much of TeX's memory you used:
- 14852 strings out of 467870
- 242623 string characters out of 5418356
- 702436 words of memory out of 5000000
- 43133 multiletter control sequences out of 15000+600000
- 664676 words of font info for 202 fonts, out of 8000000 for 9000
+ 14789 strings out of 467870
+ 244818 string characters out of 5418355
+ 709695 words of memory out of 5000000
+ 42994 multiletter control sequences out of 15000+600000
+ 667259 words of font info for 220 fonts, out of 8000000 for 9000
  1141 hyphenation exceptions out of 8191
- 72i,12n,79p,1505b,886s stack positions out of 10000i,1000n,20000p,200000b,200000s
+ 75i,12n,79p,1667b,836s stack positions out of 10000i,1000n,20000p,200000b,200000s
  <C:\Users\Hellx\AppData\Local\MiKTeX\fonts/pk/ljfour/jknappen/ec/dpi600\ectt
 1000.pk><C:/Users/Hellx/AppData/Local/Programs/MiKTeX/fonts/type1/public/amsfon
 ts/cm/cmbx10.pfb><C:/Users/Hellx/AppData/Local/Programs/MiKTeX/fonts/type1/publ
 ic/amsfonts/cm/cmex10.pfb><C:/Users/Hellx/AppData/Local/Programs/MiKTeX/fonts/t
 ype1/public/amsfonts/cm/cmmi10.pfb><C:/Users/Hellx/AppData/Local/Programs/MiKTe
 X/fonts/type1/public/amsfonts/cm/cmmi5.pfb><C:/Users/Hellx/AppData/Local/Progra
-ms/MiKTeX/fonts/type1/public/amsfonts/cm/cmmi7.pfb><C:/Users/Hellx/AppData/Loca
-l/Programs/MiKTeX/fonts/type1/public/amsfonts/cm/cmr10.pfb><C:/Users/Hellx/AppD
-ata/Local/Programs/MiKTeX/fonts/type1/public/amsfonts/cm/cmr7.pfb><C:/Users/Hel
-lx/AppData/Local/Programs/MiKTeX/fonts/type1/public/amsfonts/cm/cmsy10.pfb><C:/
-Users/Hellx/AppData/Local/Programs/MiKTeX/fonts/type1/public/amsfonts/cm/cmsy7.
-pfb><C:/Users/Hellx/AppData/Local/Programs/MiKTeX/fonts/type1/public/amsfonts/s
-ymbols/msbm10.pfb><C:/Users/Hellx/AppData/Local/Programs/MiKTeX/fonts/type1/urw
-/helvetic/uhvr8a.pfb><C:/Users/Hellx/AppData/Local/Programs/MiKTeX/fonts/type1/
-urw/times/utmb8a.pfb><C:/Users/Hellx/AppData/Local/Programs/MiKTeX/fonts/type1/
-urw/times/utmr8a.pfb><C:/Users/Hellx/AppData/Local/Programs/MiKTeX/fonts/type1/
-urw/times/utmri8a.pfb>
+ms/MiKTeX/fonts/type1/public/amsfonts/cm/cmmi6.pfb><C:/Users/Hellx/AppData/Loca
+l/Programs/MiKTeX/fonts/type1/public/amsfonts/cm/cmmi7.pfb><C:/Users/Hellx/AppD
+ata/Local/Programs/MiKTeX/fonts/type1/public/amsfonts/cm/cmmi9.pfb><C:/Users/He
+llx/AppData/Local/Programs/MiKTeX/fonts/type1/public/amsfonts/cm/cmr10.pfb><C:/
+Users/Hellx/AppData/Local/Programs/MiKTeX/fonts/type1/public/amsfonts/cm/cmr6.p
+fb><C:/Users/Hellx/AppData/Local/Programs/MiKTeX/fonts/type1/public/amsfonts/cm
+/cmr7.pfb><C:/Users/Hellx/AppData/Local/Programs/MiKTeX/fonts/type1/public/amsf
+onts/cm/cmr9.pfb><C:/Users/Hellx/AppData/Local/Programs/MiKTeX/fonts/type1/publ
+ic/amsfonts/cm/cmsy10.pfb><C:/Users/Hellx/AppData/Local/Programs/MiKTeX/fonts/t
+ype1/public/amsfonts/cm/cmsy7.pfb><C:/Users/Hellx/AppData/Local/Programs/MiKTeX
+/fonts/type1/public/amsfonts/cm/cmsy9.pfb><C:/Users/Hellx/AppData/Local/Program
+s/MiKTeX/fonts/type1/public/amsfonts/symbols/msbm10.pfb><C:/Users/Hellx/AppData
+/Local/Programs/MiKTeX/fonts/type1/urw/times/utmb8a.pfb><C:/Users/Hellx/AppData
+/Local/Programs/MiKTeX/fonts/type1/urw/times/utmr8a.pfb><C:/Users/Hellx/AppData
+/Local/Programs/MiKTeX/fonts/type1/urw/times/utmri8a.pfb>
 Output written on C:\Users\Hellx\Documents\Programming\python\Project\iron\bc\S
-PECTRA\working\paper\build\main.pdf (21 pages, 981334 bytes).
+PECTRA\working\paper\build\main.pdf (26 pages, 1049064 bytes).
 PDF statistics:
- 806 PDF objects out of 1000 (max. 8388607)
- 117 named destinations out of 1000 (max. 500000)
- 40682 words of extra memory for PDF output out of 42996 (max. 10000000)
+ 897 PDF objects out of 1000 (max. 8388607)
+ 143 named destinations out of 1000 (max. 500000)
+ 40730 words of extra memory for PDF output out of 42996 (max. 10000000)
 

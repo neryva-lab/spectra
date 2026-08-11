@@ -251,9 +251,21 @@ analysis scripts (new or updated):
    uniform clip across methods.
 5. **Δ_M for Nash-MTL is negative** (≈ −0.038) — bold/underline only positive best values.
 6. All "≈" values (0.033, 0.074, −0.038) must be recomputed by scripts from raw data, not typed.
-7. Two stale ×10 items in the current source (both from the pre-WI-7 3-seed era; the table
-   values are already 10-seed): (a) the Appendix B figure caption `fig:appendix_scale_stress`
-   says BPGS is strongest "at ×1, ×100, and ×1000" — it omits ×10, where the 10-seed table
-   also ranks BPGS first (0.616 vs 0.607); (b) Table 5 (`tab:stress_scale`) still bolds
-   **Kendall** at ×10, but with the 10-seed values BPGS is highest there (0.616 ± 0.039 vs
-   0.607 ± 0.038) — the bold must move to BPGS. Fix both in the final consistency pass.
+ 7. Two stale ×10 items in the current source (both from the pre-WI-7 3-seed era; the table
+    values are already 10-seed): (a) the Appendix B figure caption `fig:appendix_scale_stress`
+    says BPGS is strongest "at ×1, ×100, and ×1000" — it omits ×10, where the 10-seed table
+    also ranks BPGS first (0.616 vs 0.607); (b) Table 5 (`tab:stress_scale`) still bolds
+    **Kendall** at ×10, but with the 10-seed values BPGS is highest there (0.616 ± 0.039 vs
+    0.607 ± 0.038) — the bold must move to BPGS. Fix both in the final consistency pass.
+
+**RESOLVED 2026-08-11 (verified against the compiled PDF and raw 10-seed runs):**
+- (a) Appendix B caption rephrased to "BPGS retains the strongest macro score at the largest
+  scale-stress factors" (covers every tested factor).
+- (b) `scale_stress_scale_table.tex` now bolds BPGS at ×10 (`\mathbf{0.616 \pm 0.039}`);
+  Kendall ×10 un-bolded. Raw 10-seed means verified: BPGS 0.6159 > Kendall 0.6071; the
+  paper's stds match numpy ddof=0 aggregation (e.g., ×1000 BPGS 0.0340→0.032).
+- Caption markers `(02)`, `(06)`, `(07)` removed from the three stress table captions
+  (`scale_stress_scale_table.tex`, `scale_stress_rescaling_table.tex`,
+  `heterogeneous_table.tex`). The generator `analysis/studies/stress/table.py` still emits
+  them and hardcodes "over 3 seeds" — fix the generator so regeneration does not reintroduce
+  the markers or the wrong seed count (scale table is now "over 10 seeds").

@@ -1,4 +1,4 @@
-\begin{thebibliography}{11}
+\begin{thebibliography}{15}
 \providecommand{\natexlab}[1]{#1}
 \providecommand{\url}[1]{\texttt{#1}}
 \expandafter\ifx\csname urlstyle\endcsname\relax
@@ -45,10 +45,35 @@ Ozan Sener and Vladlen Koltun.
 \newblock Multi-task learning as multi-objective optimization.
 \newblock In \emph{Advances in Neural Information Processing Systems}, 2018.
 
-\bibitem[Liu et~al.(2021)Liu, Liu, Jin, Stone, and Liu]{liu2021cagrad}
+\bibitem[Liu et~al.(2021{\natexlab{a}})Liu, Liu, Jin, Stone, and
+  Liu]{liu2021cagrad}
 Bo~Liu, Xingchao Liu, Xiaojie Jin, Peter Stone, and Qiang Liu.
 \newblock Conflict-averse gradient descent for multi-task learning.
-\newblock In \emph{Advances in Neural Information Processing Systems}, 2021.
+\newblock In \emph{Advances in Neural Information Processing Systems},
+  2021{\natexlab{a}}.
+
+\bibitem[Navon et~al.(2022)Navon, Shamsian, Achituve, Maron, Kawaguchi,
+  Chechik, and Fetaya]{navon2022nash}
+Aviv Navon, Aviv Shamsian, Idan Achituve, Haggai Maron, Kenji Kawaguchi, Gal
+  Chechik, and Ethan Fetaya.
+\newblock Multi-task learning as a bargaining game.
+\newblock In \emph{Proceedings of the 39th International Conference on Machine
+  Learning}, volume 162 of \emph{Proceedings of Machine Learning Research},
+  pages 16428--16446, 2022.
+
+\bibitem[Liu et~al.(2021{\natexlab{b}})Liu, Li, Davison, and
+  Johns]{liu2021imtl}
+Liyang Liu, Yanqi Li, Andrew~J. Davison, and Edward Johns.
+\newblock Independent component alignment for multi-task learning.
+\newblock In \emph{Proceedings of the IEEE/CVF Conference on Computer Vision
+  and Pattern Recognition}, pages 2008--2017, 2021{\natexlab{b}}.
+
+\bibitem[Liu et~al.(2023)Liu, Feng, Fernando, Rodr{\'i}guez-Opazo, Reid, and
+  Gould]{liu2023famo}
+Bo~Liu, Yihua Feng, Chrisantha Fernando, Cesar Rodr{\'i}guez-Opazo, Ian Reid,
+  and Stephen Gould.
+\newblock {FAMO}: Fast adaptive multitask optimization.
+\newblock In \emph{Advances in Neural Information Processing Systems}, 2023.
 
 \bibitem[Silberman et~al.(2012)Silberman, Hoiem, Kohli, and
   Fergus]{silberman2012nyuv2}
@@ -75,5 +100,10 @@ Shikun Liu, Edward Johns, and Andrew~J. Davison.
 \newblock End-to-end multi-task learning with attention.
 \newblock In \emph{Proceedings of the IEEE/CVF Conference on Computer Vision
   and Pattern Recognition}, 2019.
+
+\bibitem[Liu et~al.(2022)Liu, James, Davison, and Johns]{liu2022autolambda}
+Shikun Liu, Stephen James, Andrew~J. Davison, and Edward Johns.
+\newblock Auto-lambda: Disentangling dynamic task relationships.
+\newblock \emph{Transactions on Machine Learning Research}, 2022.
 
 \end{thebibliography}
