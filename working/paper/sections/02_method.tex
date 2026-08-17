@@ -1,4 +1,23 @@
 \section{Method}
+
+\begin{figure*}[t]\centering
+\input{data/diagram/bpgs_overview.tex}
+\caption{Schematic overview of BPGS. For each batch, the shared encoder $f_w$ produces $T$ task
+losses $L_1,\dots,L_T$. A stop-gradient branch computes log-loss statistics $\mu(L)$ and
+$\bar\varsigma(L)$, which anchor a batch-conditional bounded chart: each learnable coordinate
+$\theta_i$ is squashed to $z_i=\tau_T(2\sigma(\theta_i)-1)\in(-\tau_T,\tau_T)$ with
+$\tau_T=\sqrt{T-1}+0.1$ and mapped affinely to
+$s_i=\mu(L)+\bar\varsigma(L)z_i\in(\mu-\bar\varsigma\tau_T,\,\mu+\bar\varsigma\tau_T)$.
+Precisions $\omega_i=e^{-s_i}$ are L1-normalized into weights $\alpha_i$. Optimization is split:
+the network pass minimizes $J_{\mathrm{net}}=\sum_i\mathrm{sg}[\alpha_i]L_i$ w.r.t.\ $w$ with
+detached weights, while the uncertainty pass minimizes
+$J_{\mathrm{unc}}=\sum_i[\tfrac12\omega_i\mathrm{sg}[L_i]+\tfrac12 s_i]$ w.r.t.\ $\theta$ using
+detached losses and statistics with gradient scale $g_\theta=100$. A one-shot inverse-sigmoid
+auto-calibration initializes $\theta$ from the first batch; both passes use current-batch losses
+at every iteration.}
+\label{fig:bpgs_overview}
+\end{figure*}
+
 \subsection{Problem setup}
 Let $T$ denote the number of tasks, let $w$ denote the shared network parameters, and let
 \begin{equation}
