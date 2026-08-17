@@ -1,0 +1,5 @@
+\section{Conclusion}
+
+We presented Bounded Precision-Geometry Scaling (BPGS), a bounded and batch-aware uncertainty-weighting method for multi-task learning under loss-scale mismatch. Its normalized weights are exactly invariant to uniform loss rescaling when safeguards are inactive, and experiments show stable pure-rescaling behavior plus stronger degradation resistance under synthetic scale stress. On NYUv2, BPGS provides the strongest depth metrics and lowest total loss without dominating every task; on Yeast and RF1, it remains competitive beyond synthetic stress.
+
+The evidence supports a targeted conclusion rather than a universal ranking: BPGS is most useful when robustness to heterogeneous loss scales is the primary concern. Its behavior under gradient conflict, broader dense-prediction benchmarks, and combinations with conflict-aware optimizers remain open directions.

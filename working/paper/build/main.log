@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.141592653-2.6-1.40.28 (MiKTeX 25.12) (preloaded format=pdflatex 2026.5.28)  11 AUG 2026 06:27
+This is pdfTeX, Version 3.141592653-2.6-1.40.28 (MiKTeX 25.12) (preloaded format=pdflatex 2026.5.28)  12 AUG 2026 01:07
 entering extended mode
  restricted \write18 enabled.
  %&-line parsing enabled.
@@ -599,7 +599,7 @@ Package microtype Info: Loading generic protrusion settings for font family
 (microtype)             See the microtype manual for details.
 ) (sections/04_results.tex
 (data/stress/rescaling/tables/scale_stress_rescaling_table.tex)
-<data/stress/combined/figures/pdf/stress_robustness_summary.pdf, id=207, 502.63
+<data/stress/combined/figures/pdf/stress_robustness_summary.pdf, id=211, 502.63
 786pt x 403.64175pt>
 File: data/stress/combined/figures/pdf/stress_robustness_summary.pdf Graphic fi
 le (type pdf)
@@ -614,15 +614,15 @@ Underfull \vbox (badness 10000) has occurred while \output is active []
 (data/nyuv2/tables/nyuv2_main_table.tex)
 (data/ablation/tables/ablation_table.tex) [8]
 (data/full_data/tables/real_data_table.tex))
-(sections/05_discussion_limitations.tex [9])
+(sections/05_discussion_limitations.tex [9]) (sections/06_conclusion.tex)
 (C:\Users\Hellx\Documents\Programming\python\Project\iron\bc\SPECTRA\working\pa
-per\build\main.bbl [10]) (appendix/A_reproducibility_details.tex)
-(appendix/B_additional_stress_results.tex [11]
+per\build\main.bbl [10]) (appendix/A_reproducibility_details.tex [11])
+(appendix/B_additional_stress_results.tex
 (data/stress/scale/tables/scale_stress_scale_table.tex)
 (data/stress/combined/tables/degradation_table.tex)
 (data/stress/heterogeneous/tables/heterogeneous_table.tex)
 (data/norm_ablation/tables/norm_ablation_table.tex)
-<data/stress/scale/figures/pdf/scale_stress_curves.pdf, id=319, 502.63786pt x 2
+<data/stress/scale/figures/pdf/scale_stress_curves.pdf, id=321, 502.63786pt x 2
 15.04883pt>
 File: data/stress/scale/figures/pdf/scale_stress_curves.pdf Graphic file (type 
 pdf)
@@ -630,7 +630,7 @@ pdf)
 Package pdftex.def Info: data/stress/scale/figures/pdf/scale_stress_curves.pdf 
  used on input line 10.
 (pdftex.def)             Requested size: 397.48499pt x 170.06389pt.
-<data/stress/rescaling/figures/pdf/rescaling_stress_curves.pdf, id=320, 502.637
+<data/stress/rescaling/figures/pdf/rescaling_stress_curves.pdf, id=322, 502.637
 86pt x 215.04883pt>
 File: data/stress/rescaling/figures/pdf/rescaling_stress_curves.pdf Graphic fil
 e (type pdf)
@@ -638,7 +638,7 @@ e (type pdf)
 Package pdftex.def Info: data/stress/rescaling/figures/pdf/rescaling_stress_cur
 ves.pdf  used on input line 17.
 (pdftex.def)             Requested size: 397.48499pt x 170.06389pt.
-<data/stress/combined/figures/pdf/degradation_comparison.pdf, id=321, 502.63786
+<data/stress/combined/figures/pdf/degradation_comparison.pdf, id=323, 502.63786
 pt x 279.16058pt>
 File: data/stress/combined/figures/pdf/degradation_comparison.pdf Graphic file 
 (type pdf)
@@ -646,7 +646,7 @@ File: data/stress/combined/figures/pdf/degradation_comparison.pdf Graphic file
 Package pdftex.def Info: data/stress/combined/figures/pdf/degradation_compariso
 n.pdf  used on input line 24.
 (pdftex.def)             Requested size: 397.48499pt x 220.76445pt.
-<data/stress/heterogeneous/figures/pdf/heterogeneous_panel.pdf, id=322, 502.637
+<data/stress/heterogeneous/figures/pdf/heterogeneous_panel.pdf, id=324, 502.637
 86pt x 215.07034pt>
 File: data/stress/heterogeneous/figures/pdf/heterogeneous_panel.pdf Graphic fil
 e (type pdf)
@@ -656,7 +656,7 @@ nel.pdf  used on input line 31.
 (pdftex.def)             Requested size: 397.48499pt x 170.0809pt.
 )
 (appendix/C_ablation_and_nyuv2_figures.tex
-<data/ablation/figures/pdf/ablation_per_task_val_curves.pdf, id=323, 502.63786p
+<data/ablation/figures/pdf/ablation_per_task_val_curves.pdf, id=325, 502.63786p
 t x 219.85463pt>
 File: data/ablation/figures/pdf/ablation_per_task_val_curves.pdf Graphic file (
 type pdf)
@@ -664,7 +664,7 @@ type pdf)
 Package pdftex.def Info: data/ablation/figures/pdf/ablation_per_task_val_curves
 .pdf  used on input line 8.
 (pdftex.def)             Requested size: 397.48499pt x 173.8644pt.
-<data/ablation/figures/pdf/ablation_weight_dynamics.pdf, id=324, 502.63786pt x 
+<data/ablation/figures/pdf/ablation_weight_dynamics.pdf, id=326, 502.63786pt x 
 244.88991pt>
 File: data/ablation/figures/pdf/ablation_weight_dynamics.pdf Graphic file (type
  pdf)
@@ -672,7 +672,7 @@ File: data/ablation/figures/pdf/ablation_weight_dynamics.pdf Graphic file (type
 Package pdftex.def Info: data/ablation/figures/pdf/ablation_weight_dynamics.pdf
   used on input line 15.
 (pdftex.def)             Requested size: 397.48499pt x 193.66267pt.
-<data/nyuv2/figures/pdf/nyuv2_performance_comparison.pdf, id=325, 502.63786pt x
+<data/nyuv2/figures/pdf/nyuv2_performance_comparison.pdf, id=327, 502.63786pt x
  278.93103pt>
 File: data/nyuv2/figures/pdf/nyuv2_performance_comparison.pdf Graphic file (typ
 e pdf)
@@ -680,7 +680,7 @@ e pdf)
 Package pdftex.def Info: data/nyuv2/figures/pdf/nyuv2_performance_comparison.pd
 f  used on input line 22.
 (pdftex.def)             Requested size: 397.48499pt x 220.58292pt.
-<data/nyuv2/figures/pdf/nyuv2_performance_heatmap.pdf, id=326, 501.90245pt x 22
+<data/nyuv2/figures/pdf/nyuv2_performance_heatmap.pdf, id=328, 501.90245pt x 22
 9.36691pt>
 File: data/nyuv2/figures/pdf/nyuv2_performance_heatmap.pdf Graphic file (type p
 df)
@@ -688,7 +688,7 @@ df)
 Package pdftex.def Info: data/nyuv2/figures/pdf/nyuv2_performance_heatmap.pdf  
 used on input line 29.
 (pdftex.def)             Requested size: 397.48499pt x 181.65634pt.
-<data/nyuv2/figures/pdf/nyuv2_task_training_curves.pdf, id=327, 502.63786pt x 2
+<data/nyuv2/figures/pdf/nyuv2_task_training_curves.pdf, id=329, 502.63786pt x 2
 15.06964pt>
 File: data/nyuv2/figures/pdf/nyuv2_task_training_curves.pdf Graphic file (type 
 pdf)
@@ -696,7 +696,7 @@ pdf)
 Package pdftex.def Info: data/nyuv2/figures/pdf/nyuv2_task_training_curves.pdf 
  used on input line 36.
 (pdftex.def)             Requested size: 397.48499pt x 170.08034pt.
-<data/nyuv2/figures/pdf/nyuv2_delta_m_comparison.pdf, id=328, 240.65909pt x 111
+<data/nyuv2/figures/pdf/nyuv2_delta_m_comparison.pdf, id=330, 240.65909pt x 111
 .47647pt>
 File: data/nyuv2/figures/pdf/nyuv2_delta_m_comparison.pdf Graphic file (type pd
 f)
@@ -705,22 +705,22 @@ Package pdftex.def Info: data/nyuv2/figures/pdf/nyuv2_delta_m_comparison.pdf  u
 sed on input line 43.
 (pdftex.def)             Requested size: 397.48499pt x 184.12044pt.
 ) (appendix/D_real_data_figures.tex
-<data/full_data/yeast/figures/pdf/yeast_training_curves.pdf, id=329, 502.63786p
-t x 303.57854pt>
+<data/full_data/yeast/figures/pdf/yeast_training_curves.pdf, id=331, 502.63786p
+t x 303.17392pt>
 File: data/full_data/yeast/figures/pdf/yeast_training_curves.pdf Graphic file (
 type pdf)
 <use data/full_data/yeast/figures/pdf/yeast_training_curves.pdf>
 Package pdftex.def Info: data/full_data/yeast/figures/pdf/yeast_training_curves
 .pdf  used on input line 5.
-(pdftex.def)             Requested size: 397.48499pt x 240.07455pt.
-<data/full_data/river_flow/figures/pdf/rf1_training_curves.pdf, id=330, 502.637
-86pt x 303.57854pt>
+(pdftex.def)             Requested size: 397.48499pt x 239.75456pt.
+<data/full_data/river_flow/figures/pdf/rf1_training_curves.pdf, id=332, 502.637
+86pt x 303.17392pt>
 File: data/full_data/river_flow/figures/pdf/rf1_training_curves.pdf Graphic fil
 e (type pdf)
 <use data/full_data/river_flow/figures/pdf/rf1_training_curves.pdf>
 Package pdftex.def Info: data/full_data/river_flow/figures/pdf/rf1_training_cur
 ves.pdf  used on input line 12.
-(pdftex.def)             Requested size: 397.48499pt x 240.07455pt.
+(pdftex.def)             Requested size: 397.48499pt x 239.75456pt.
 )
 (appendix/E_sensitivity_analyses.tex
 (data/stop_gradient/tables/stop_gradient_table.tex)
@@ -728,17 +728,17 @@ ves.pdf  used on input line 12.
 (data/first_batch/tables/first_batch_table.tex))
 (appendix/F_computational_overhead.tex (data/overhead/tables/overhead_table.tex
 )) (appendix/G_bounded_chart_behavior.tex
-(data/saturation/tables/saturation_table.tex)) [12] [13 <./data/stress/scale/fi
-gures/pdf/scale_stress_curves.pdf>] [14 <./data/stress/rescaling/figures/pdf/re
-scaling_stress_curves.pdf> <./data/stress/combined/figures/pdf/degradation_comp
-arison.pdf>] [15 <./data/stress/heterogeneous/figures/pdf/heterogeneous_panel.p
-df> <./data/ablation/figures/pdf/ablation_per_task_val_curves.pdf>] [16 <./data
-/ablation/figures/pdf/ablation_weight_dynamics.pdf> <./data/nyuv2/figures/pdf/n
-yuv2_performance_comparison.pdf>] [17 <./data/nyuv2/figures/pdf/nyuv2_performan
-ce_heatmap.pdf> <./data/nyuv2/figures/pdf/nyuv2_task_training_curves.pdf>]
-[18 <./data/nyuv2/figures/pdf/nyuv2_delta_m_comparison.pdf> <./data/full_data/y
-east/figures/pdf/yeast_training_curves.pdf>] [19 <./data/full_data/river_flow/f
-igures/pdf/rf1_training_curves.pdf>] (checklist.tex
+(data/saturation/tables/saturation_table.tex [12])) [13] [14 <./data/stress/sca
+le/figures/pdf/scale_stress_curves.pdf> <./data/stress/rescaling/figures/pdf/re
+scaling_stress_curves.pdf>] [15 <./data/stress/combined/figures/pdf/degradation
+_comparison.pdf> <./data/stress/heterogeneous/figures/pdf/heterogeneous_panel.p
+df>] [16 <./data/ablation/figures/pdf/ablation_per_task_val_curves.pdf> <./data
+/ablation/figures/pdf/ablation_weight_dynamics.pdf>] [17 <./data/nyuv2/figures/
+pdf/nyuv2_performance_comparison.pdf> <./data/nyuv2/figures/pdf/nyuv2_performan
+ce_heatmap.pdf>] [18 <./data/nyuv2/figures/pdf/nyuv2_task_training_curves.pdf> 
+<./data/nyuv2/figures/pdf/nyuv2_delta_m_comparison.pdf>] [19 <./data/full_data/
+yeast/figures/pdf/yeast_training_curves.pdf> <./data/full_data/river_flow/figur
+es/pdf/rf1_training_curves.pdf>] (checklist.tex
 LaTeX Font Info:    Trying to load font information for TS1+ptm on input line 1
 1.
 
@@ -755,13 +755,13 @@ LaTeX2e <2025-11-01>
 L3 programming layer <2025-12-24>
  ***********
 Package rerunfilecheck Info: File `main.out' has not changed.
-(rerunfilecheck)             Checksum: C9C73002E108A28D093259B41674DDA3;4530.
+(rerunfilecheck)             Checksum: 71E2C49A9370C435EA44E6D222464C8D;4624.
  ) 
 Here is how much of TeX's memory you used:
- 14789 strings out of 467870
- 244818 string characters out of 5418355
- 709695 words of memory out of 5000000
- 42994 multiletter control sequences out of 15000+600000
+ 14799 strings out of 467870
+ 245157 string characters out of 5418355
+ 712410 words of memory out of 5000000
+ 43000 multiletter control sequences out of 15000+600000
  667259 words of font info for 220 fonts, out of 8000000 for 9000
  1141 hyphenation exceptions out of 8191
  75i,12n,79p,1667b,836s stack positions out of 10000i,1000n,20000p,200000b,200000s
@@ -787,9 +787,9 @@ s/MiKTeX/fonts/type1/public/amsfonts/symbols/msbm10.pfb><C:/Users/Hellx/AppData
 /Local/Programs/MiKTeX/fonts/type1/urw/times/utmr8a.pfb><C:/Users/Hellx/AppData
 /Local/Programs/MiKTeX/fonts/type1/urw/times/utmri8a.pfb>
 Output written on C:\Users\Hellx\Documents\Programming\python\Project\iron\bc\S
-PECTRA\working\paper\build\main.pdf (26 pages, 1049064 bytes).
+PECTRA\working\paper\build\main.pdf (26 pages, 1059117 bytes).
 PDF statistics:
- 897 PDF objects out of 1000 (max. 8388607)
- 143 named destinations out of 1000 (max. 500000)
- 40730 words of extra memory for PDF output out of 42996 (max. 10000000)
+ 901 PDF objects out of 1000 (max. 8388607)
+ 144 named destinations out of 1000 (max. 500000)
+ 40738 words of extra memory for PDF output out of 42996 (max. 10000000)
 

@@ -1,6 +1,4 @@
 \section{Results}
-We organize the evaluation around four questions: whether BPGS is robust to explicit scale perturbations, whether that robustness transfers to a standard dense-prediction benchmark, which parts of the method matter in ablation, and whether the method remains competitive outside the synthetic stress setting.
-
 \subsection{Robustness to loss-scale mismatch}
 Figure~\ref{fig:stress_summary} separates two perturbation types. The right column isolates pure post-hoc loss rescaling, where only the numerical scale changes. In that setting, BPGS is effectively invariant: its macro score stays at 0.777, 0.784, 0.781, and 0.778 from $\times 1$ through $\times 1000$ (Table~\ref{tab:stress_rescaling} and Appendix Figure~\ref{fig:appendix_rescaling}). Proposition~\ref{prop:invariance} shows that the normalized weights themselves are invariant under this rescaling when the safeguards are inactive; the table is an empirical diagnostic of the resulting training behavior. Kendall-style uncertainty weighting starts slightly higher at $\times 1$ but drops monotonically to 0.637 at $\times 1000$, while UWSO improves modestly from a much weaker starting point.
 
@@ -20,24 +18,30 @@ normalization alone is insufficient, not as a seed-matched estimate of the main-
 \label{fig:stress_summary}
 \end{figure*}
 
-The left column of Figure~\ref{fig:stress_summary} is the harder test because the perturbation changes the optimization problem rather than only its units. All three methods degrade as the factor increases, but BPGS is best at $\times 1$, $\times 10$, $\times 100$, and $\times 1000$, reaching 0.543 at $\times 1000$ versus 0.499 for Kendall and 0.494 for UWSO. The relative drop from $\times 1$ to $\times 1000$ is 27.0\% for BPGS, compared with 32.3\% for Kendall and 28.5\% for UWSO (Appendix Table~\ref{tab:degradation}; see also Appendix Figure~\ref{fig:appendix_scale_stress}). The BPGS--Kendall gap at $\times 1000$ is 0.043, or 1.07 combined standard deviations, so the updated 10-seed estimate is directionally stronger than the original 3-seed result but still should be read as a comparison of means rather than a formal significance test. In our experiments, this provides the strongest support for the bounded, batch-aware construction.
+The left column of Figure~\ref{fig:stress_summary} is the harder test because the perturbation changes the optimization problem rather than only its units. All three methods degrade as the factor increases, but BPGS is best at $\times 1$, $\times 10$, $\times 100$, and $\times 1000$, reaching 0.543 at $\times 1000$ versus 0.499 for Kendall and 0.494 for UWSO. The relative drop from $\times 1$ to $\times 1000$ is 27.0\% for BPGS, compared with 32.3\% for Kendall and 28.5\% for UWSO (Appendix Table~\ref{tab:degradation}; see also Appendix Figure~\ref{fig:appendix_scale_stress}). The BPGS--Kendall gap at $\times 1000$ is 0.043, or 1.07 combined standard deviations. This updated 10-seed estimate is directionally stronger than the original 3-seed result, but remains a comparison of means rather than a formal significance test.
 
 The heterogeneous mixed-stress study is less favorable to BPGS than the explicit scale-mismatch studies (Appendix Table~\ref{tab:stress_heterogeneous} and Appendix Figure~\ref{fig:appendix_heterogeneous}). Kendall and PCGrad attain higher macro scores in the noisy and conflict regimes, whereas BPGS gives the strongest worst-task score in the clean regime at 0.301 and remains far above the UWSO worst-task score of 0 throughout. We therefore interpret BPGS as a method targeted at loss-scale robustness rather than as a general solution to heterogeneous task interaction.
 
 \subsection{Main NYUv2 benchmark}
-Table~\ref{tab:nyuv2_main} shows that no method dominates every metric. Static achieves the best segmentation mIoU, and UWSO is strongest on the two surface-normal metrics. BPGS, however, gives the strongest depth results and a strong aggregate trade-off by the reported summary metrics: it attains the best absolute relative depth error (0.223), the best depth RMSE (0.790), the lowest total loss (1.891), and the highest $\Delta_M$ (0.078). The same trade-off pattern is visible in Appendix Figures~\ref{fig:appendix_nyuv2_bars}--\ref{fig:appendix_nyuv2_delta}.
+Table~\ref{tab:nyuv2_main} shows that no method dominates every metric. Static achieves the best
+segmentation mIoU, and UWSO is strongest on both surface-normal metrics. BPGS gives the strongest
+depth results and aggregate trade-off: best absolute relative error (0.223), depth RMSE (0.790),
+total loss (1.891), and $\Delta_M$ (0.078). Appendix Figures~\ref{fig:appendix_nyuv2_bars}--\ref{fig:appendix_nyuv2_delta} show the same trade-off.
 
 \input{data/nyuv2/tables/nyuv2_main_table}
 
 Relative to the strongest competing values, BPGS improves absolute relative error from 0.228 under UWSO to 0.223 and RMSE from 0.808 under Kendall to 0.790, while also lowering total loss from 1.936 to 1.891. The NYUv2 result therefore supports a specific claim: the robustness-oriented BPGS parameterization does not have to trade away standard benchmark performance to control scale sensitivity.
 
-Nash-MTL has the weakest mean mIoU (0.252) and largest mIoU standard deviation (0.027) in this
-comparison, while its within-$11.25^\circ$ accuracy (0.211) exceeds that of Static (0.169). This
-does not establish a general ranking between the methods; it supplies a recent multi-objective
-baseline under the same NYUv2 protocol.
+Nash-MTL has the weakest mean mIoU (0.252) and largest mIoU standard deviation (0.027), while its
+within-$11.25^\circ$ accuracy (0.211) exceeds Static (0.169). This supplies a recent
+multi-objective baseline under the same NYUv2 protocol without establishing a general ranking.
 
 \subsection{Ablation on chart and initialization}
-Table~\ref{tab:ablation} isolates the role of the batch-aware chart and the initialization rule. The stateless auto-calibrated variant degrades severely, with mIoU 0.058 and total loss 6.142. This shows that first-batch auto-calibration is not sufficient on its own; in these ablations, the batch-aware chart that re-expresses the uncertainty variables in current log-loss coordinates is necessary for stable behavior. Appendix Figure~\ref{fig:appendix_ablation_val_curves} shows this failure in the validation dynamics, while Appendix Figure~\ref{fig:appendix_ablation_weights} shows the contrasting task-weight behavior of the stable variants.
+Table~\ref{tab:ablation} isolates the batch-aware chart from initialization. The stateless
+auto-calibrated variant degrades severely (mIoU 0.058; total loss 6.142), indicating that
+first-batch calibration alone is insufficient for stable behavior. Appendix
+Figure~\ref{fig:appendix_ablation_val_curves} shows the failure in validation dynamics, and
+Figure~\ref{fig:appendix_ablation_weights} shows the contrasting task-weight behavior.
 
 \input{data/ablation/tables/ablation_table}
 
@@ -55,7 +59,7 @@ The batch-aware chart was stable over the tested batch sizes. Across batch sizes
 the seed-averaged validation metrics have coefficients of variation below 3.5\%, with most below
 1.2\%; final $\theta_{\max}$ changes modestly from 2.40 to 2.59
 (Appendix~\ref{app:sensitivity}). When only the first loader batch is changed, all reported
-metrics have coefficients of variation below 2\%, and the final $\theta_{\max}$ values differ by
+task metrics have coefficients of variation below 2\%, and the final $\theta_{\max}$ values differ by
 at most 0.3\%. These studies bound the claim to the tested ranges; they do not establish
 insensitivity to arbitrary batch statistics.
 
@@ -70,5 +74,3 @@ On the NYUv2 50\% subset, BPGS takes 40.979 seconds per epoch versus 40.916 for 
 (Appendix~\ref{app:overhead}). The method adds three task-level parameters to an
 18.9M-parameter network. Under this controlled setting, the batch statistics and separate
 uncertainty update do not impose a material efficiency cost.
-
-Taken together, these results bound the scope of the paper's empirical claim. BPGS is strongest where loss-scale mismatch is the central difficulty, remains strong on NYUv2, and stays competitive on two additional real-data multi-output problems. The results do not support a stronger statement that BPGS is uniformly best across all benchmarks and metrics.

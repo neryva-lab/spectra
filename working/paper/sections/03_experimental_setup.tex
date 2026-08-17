@@ -1,6 +1,6 @@
 \section{Experimental Setup}
 \subsection{Benchmarks}
-We evaluate BPGS on five benchmark settings that serve different roles in the paper. First, we use the standard NYUv2 multi-task benchmark \cite{silberman2012nyuv2} for the main dense-prediction comparison. The benchmark contains 795 training images and 654 validation images, with three tasks: semantic segmentation, depth estimation, and surface-normal prediction. The main NYUv2 comparison uses a 120-epoch budget and reports final-epoch metrics aggregated over seeds.
+We evaluate BPGS across benchmark and stress settings that serve different roles in the paper. First, we use the standard NYUv2 multi-task benchmark \cite{silberman2012nyuv2} for the main dense-prediction comparison. The benchmark contains 795 training images and 654 validation images, with three tasks: semantic segmentation, depth estimation, and surface-normal prediction. The main NYUv2 comparison uses a 120-epoch budget and reports final-epoch metrics aggregated over seeds.
 
 Second, we run a separate NYUv2 ablation study on a fixed 50\% training subset while keeping the validation split unchanged. This study isolates the role of the bounded chart and the initialization rule by comparing four BPGS variants against Kendall uncertainty weighting: the canonical batch-aware auto-calibrated form, a batch-aware fixed-initialization form, a stateless fixed-initialization form, and a stateless auto-calibrated form. The ablation runs use a 60-epoch budget and the same three training seeds.
 
@@ -15,10 +15,9 @@ per-epoch wall-clock time and peak CUDA memory.
 
 Finally, we use three synthetic robustness studies. The pure loss-rescaling study applies post-hoc scale multipliers $\times 1$, $\times 10$, $\times 100$, and $\times 1000$ to test invariance to raw loss magnitude. The scale-stress study uses the same scale grid in a synthetic multi-task setting designed to probe degradation under scale imbalance. The heterogeneous mixed-stress study evaluates three regimes, denoted \emph{clean}, \emph{conflict}, and \emph{noisy}, to test robustness when tasks differ not only in scale but also in interaction structure.
 
-To test whether normalization alone explains the rescaling result, we additionally compare BPGS,
-Kendall, and Kendall with L1-normalized precision weights on the pure-rescaling grid. This
-completed diagnostic uses seeds 42, 123, and 999, so it is reported separately from the main
-rescaling table rather than as a seed-matched replacement.
+To test whether normalization alone explains the rescaling result, we compare BPGS, Kendall, and
+Kendall with L1-normalized precision weights on the pure-rescaling grid. This diagnostic uses seeds
+42, 123, and 999 and is reported separately from the main rescaling table.
 
 \subsection{Compared methods and metrics}
 The exact comparison set depends on the benchmark. The main NYUv2 benchmark compares BPGS against Static, Kendall uncertainty weighting \cite{kendall2018}, UWSO, and Nash-MTL \cite{navon2022nash}. The NYUv2 ablation compares the four BPGS variants against Kendall. The Yeast and RF1 benchmarks compare BPGS against Static, Kendall, PCGrad \cite{yu2020pcgrad}, a GradNorm-inspired gradient-norm proxy \cite{chen2018gradnorm}, and UWSO. The pure loss-rescaling and scale-stress studies compare BPGS, Kendall, and UWSO, while the heterogeneous mixed-stress study compares BPGS, Kendall, PCGrad, and UWSO.
@@ -26,6 +25,15 @@ The exact comparison set depends on the benchmark. The main NYUv2 benchmark comp
 For NYUv2, we report segmentation mIoU, depth absolute relative error, depth RMSE, mean angular error for normals, normal accuracy within $11.25^\circ$, total validation loss, and in the main benchmark also $\Delta_M$ against the Static baseline \cite{liu2019mtan}. For Yeast, we report macro-F1, micro-F1, and Hamming accuracy. For RF1, we report $R^2$, RMSE, and MAE. For the synthetic stress studies, the primary statistic is macro score, with worst-task score used in the heterogeneous analysis and the stress diagnostics.
 
 \subsection{Reporting protocol}
-Unless stated otherwise, values are reported as mean $\pm$ standard deviation across seeds. For the main NYUv2, Yeast, and RF1 tables, and the rescaling and heterogeneous stress studies, we aggregate over seeds 42, 43, and 44. For the synthetic scale-stress study in Table~5, we reran the grid with 10 seeds to strengthen the statistical comparison against Kendall. For the synthetic stress studies, we aggregate per-seed summary statistics. For NYUv2, Yeast, and RF1, we report the final recorded epoch of each run. The anonymized supplementary materials contain the code, configurations, and reproduction instructions.
+Unless stated otherwise, values are means $\pm$ standard deviations across seeds. The main NYUv2,
+Yeast, RF1, rescaling, and heterogeneous-stress results use seeds 42, 43, and 44; the synthetic
+scale-stress study in Table~5 uses 10 seeds. Synthetic stress results aggregate per-seed summaries,
+whereas NYUv2, Yeast, and RF1 tables use the final recorded epoch. The anonymized supplementary
+materials contain the code, configurations, and reproduction instructions.
 
-One reporting rule is important for fairness on NYUv2. Checkpoint summaries are not uniformly available across methods, so mixing best-checkpoint and final-checkpoint numbers would introduce method-dependent extraction rules. We therefore compute all main NYUv2 results from final-epoch metrics for every method. The real-data tables are also reported from final task metrics. Final NYUv2 benchmark runs select checkpoints by \texttt{val/miou} in max mode, whereas the ablation and controlled studies use the dataset default \texttt{val/total\_loss} in min mode; in all cases, the paper tables use the final recorded epoch. The uncertainty update uses $g_\theta=100$; full configuration details are in Appendix~\ref{app:reproducibility}.
+Because checkpoint summaries are not uniformly available across methods, mixing best- and
+final-checkpoint numbers would introduce method-dependent extraction rules. We therefore use final
+epoch metrics for all paper tables. Final NYUv2 runs select checkpoints by \texttt{val/miou} in max
+mode, while the ablation and controlled studies use the dataset default
+\texttt{val/total\_loss} in min mode. The uncertainty update uses $g_\theta=100$; full settings are
+in Appendix~\ref{app:reproducibility}.
