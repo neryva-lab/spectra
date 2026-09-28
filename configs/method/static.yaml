@@ -1,0 +1,4 @@
+# @package _global_
+method_name: static
+method:
+  name: static

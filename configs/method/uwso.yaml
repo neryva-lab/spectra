@@ -1,0 +1,10 @@
+# @package _global_
+method_name: uwso
+
+method:
+  name: uwso
+  params:
+    temperature: 2.0
+
+train:
+  grad_clip: 1.0

@@ -1,0 +1,41 @@
+name: 09_nyuv2_overhead
+group: optional
+kind: training
+description: Half-NYUv2 runtime and memory overhead check for BPGS versus Kendall.
+requires_nyuv2_subsets: true
+notes: Lightweight practical-cost benchmark on the same 50% NYUv2 subset used by the ablation study.
+variants:
+  - label: kendall
+    dataset: nyuv2
+    method: kendall
+    epochs: 60
+    seeds: [42, 43, 44]
+    early_stop: false
+    subset_budget: "50"
+    subset_seed: 11
+    use_subset_file: true
+    extra_overrides:
+      - batch_augmentation=cpu
+      - train.deterministic=true
+      - train.deterministic_warn_only=true
+      - train.save_ckpt=false
+      - train.measure_overhead=true
+      - train.progress.type=minimal
+      - train.progress.update_interval_seconds=15
+  - label: bpgs
+    dataset: nyuv2
+    method: bpgs
+    epochs: 60
+    seeds: [42, 43, 44]
+    early_stop: false
+    subset_budget: "50"
+    subset_seed: 11
+    use_subset_file: true
+    extra_overrides:
+      - batch_augmentation=cpu
+      - train.deterministic=true
+      - train.deterministic_warn_only=true
+      - train.save_ckpt=false
+      - train.measure_overhead=true
+      - train.progress.type=minimal
+      - train.progress.update_interval_seconds=15

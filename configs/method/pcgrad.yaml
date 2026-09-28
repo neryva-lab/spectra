@@ -1,0 +1,18 @@
+# @package _global_
+method_name: pcgrad
+
+method:
+  name: pcgrad
+
+module:
+  engine:
+    _target_: spectra.engine.optimizers.PCGradEngine
+
+train:
+  grad_clip: 1.0
+  save_ckpt: true
+  checkpoint_every_minutes: 10
+
+logging:
+  use_wandb: false
+  wandb_mode: offline

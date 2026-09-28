@@ -1,0 +1,49 @@
+name: 12_nyuv2_stop_gradient
+group: optional
+kind: training
+description: Half-NYUv2 stop-gradient ablation for canonical BPGS.
+requires_nyuv2_subsets: true
+notes: Compare canonical split optimization against a coupled no-stop-gradient variant while keeping the bounded chart and batch-aware calibration fixed.
+variants:
+  - label: split_stopgrad_on
+    dataset: nyuv2
+    method: bpgs
+    epochs: 60
+    seeds: [42, 43, 44]
+    early_stop: false
+    subset_budget: "50"
+    subset_seed: 11
+    use_subset_file: true
+    extra_overrides:
+      - method.s_mode=batch_aware
+      - method.init_mode=auto_calibrate
+      - method.split_stop_gradient=true
+      - train.batch_size=8
+      - train.devices=1
+      - batch_augmentation=cpu
+      - train.deterministic=true
+      - train.deterministic_warn_only=true
+      - train.save_ckpt=false
+      - train.progress.type=minimal
+      - train.progress.update_interval_seconds=15
+  - label: split_stopgrad_off
+    dataset: nyuv2
+    method: bpgs
+    epochs: 60
+    seeds: [42, 43, 44]
+    early_stop: false
+    subset_budget: "50"
+    subset_seed: 11
+    use_subset_file: true
+    extra_overrides:
+      - method.s_mode=batch_aware
+      - method.init_mode=auto_calibrate
+      - method.split_stop_gradient=false
+      - train.batch_size=8
+      - train.devices=1
+      - batch_augmentation=cpu
+      - train.deterministic=true
+      - train.deterministic_warn_only=true
+      - train.save_ckpt=false
+      - train.progress.type=minimal
+      - train.progress.update_interval_seconds=15
